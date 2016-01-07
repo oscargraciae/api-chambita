@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  </head>
+  <body>
+    <h3>Esta es una prueba......2</h3>
+
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $.ajax({
+          method: "GET",
+          url: "http://api.localhost:3000/api/v1/users",
+          success: function(data){
+            console.log(data);
+          }
+        });
+      });
+    </script>
+
+  </body>
+</html>
