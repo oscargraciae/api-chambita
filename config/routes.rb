@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :services, only: [:index, :show, :create, :update, :destroy]
       resources :locations, only: :index
       resources :authentication, only: [:create, :destroy]
+      resources :me, only: :index, only: :index
     end
   end
 end

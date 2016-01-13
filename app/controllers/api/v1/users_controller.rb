@@ -4,23 +4,14 @@ class Api::V1::UsersController < BaseController
 
   # GET api/v1/users
   def index
-    json = {:message => User.all}
-    render json: json, status: :ok
+    # json = {:message => User.all}
+    # render json: json, status: :ok
   end
 
 # GET api/v1/users/:id
  def show
-
    user = User.find(params[:id])
-   puts user.services
-   puts user.as_json
-
-   render json: Api::V1::UserSerializer.new(user).to_json
-   #respond_with User.find(params[:id])
-
-   # json = { :user => User.find(params[:id]) }
-
-   # render json: json, status: 200
+   render json: user
  end
 
 # POST api/v1/users

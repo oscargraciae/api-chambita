@@ -27,6 +27,8 @@ gem 'bower-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
+gem 'tzinfo-data', platforms: [:mingw, :mswin]
+
 # Use PUMA as the app server
 gem 'puma'
 
