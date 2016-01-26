@@ -1,0 +1,79 @@
+@import '../utilities/utilities.styl'
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,100italic,300italic,400italic,500,700);
+
+header
+  background: secondary_color
+  border-bottom: 1px solid #DDDDDD
+
+.Navbar
+  height: 55px
+  &-logo
+    float: left
+    line-height: 55px
+    padding: 0px 10px
+    height: 55px
+    background: principal_color
+    a
+      color: secondary_color
+      font-size: 21px
+      text-decoration: none
+
+  &-logo:hover
+    opacity: 0.9
+
+  &-searchBar
+    float: left
+
+    background: green
+    input
+      font-size: 14px
+      height: 55px
+      width: 400px
+      padding 25px 10px
+      line-height: 50px
+      border:none
+      color: #565a5c
+
+  &-navigation
+    float: right
+    height: 55px
+    > ul
+      line-height: 55px
+      $resetUl()
+      > li
+        display: inline
+        a
+          padding: 10px
+          text-decoration: none
+          color: #333333
+        a:hover
+          color: principal_color
+
+  &-imageProfile
+    display: inline-block
+    line-height: 50px
+
+    img
+      width: 35px
+      $borderRadius(50%)
+
+  &-panelMenu
+    display: none
+    width: 250px
+    position: absolute
+    right: 10px
+    border: 1px solid #DDDDDD
+    > ul
+      line-height: 20px
+      $resetUl()
+      > li
+        display: block
+        > a
+          width: 100%
+          float: left
+          padding: 10px
+          border-bottom: 1px solid #DDDDDD
+
+    &--show
+      display: block
