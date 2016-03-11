@@ -30,7 +30,17 @@ class Api::V1::ServicesController < BaseController
     if service.update(service_params)
         render json: service, status: :ok
     else
-        render json: {errors: user.errors}, status: 422
+        render json: {errors: service.errors}, status: 422
+    end
+  end
+
+  def published
+    service = Service.find(params[:id])
+    # puts service_params[:publish]
+    if service.update_attribute(:published, params[:publish])
+      render json: {status: true, published: service.published}, status: 200
+    else
+      render json: {errors: service.errors}, status: 422
     end
   end
 

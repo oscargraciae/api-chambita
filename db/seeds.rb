@@ -18,7 +18,8 @@
     state: Faker::Address.state,
     locality: Faker::Address.city,
     price: Faker::Commerce.price,
-    user_id: 1
+    user_id: 1,
+    published: 1
   )
 end
 
