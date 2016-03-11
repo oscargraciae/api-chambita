@@ -6,13 +6,21 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-"""10.times do
+# :name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id
+
+10.times do
   Service.create(
     name:  Faker::Lorem.words.join(' '),
     description: Faker::Lorem.paragraph,
-    subcategory_id: 1
+    category_id: 1,
+    sub_category_id: Faker::Number.between(1, 5),
+    country: Faker::Address.country,
+    state: Faker::Address.state,
+    locality: Faker::Address.city,
+    price: Faker::Commerce.price,
+    user_id: 1
   )
-end"""
+end
 
 """10.times do
   User.create(

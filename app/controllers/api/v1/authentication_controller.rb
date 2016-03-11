@@ -13,7 +13,7 @@ class Api::V1::AuthenticationController < BaseController
       user.save
       render json: {:user => user, :token => user.token}, status: 200
     else
-      render json: { errors: "Correo electrónico o contraseña incorrecto" }, status: 422
+      render json: { :errors => user.errors, :message => "Correo electrónico o contraseña incorrecto" }, status: 200
     end
   end
 

@@ -19,7 +19,12 @@ class Api::V1::UsersController < BaseController
    if user.save
 	    render json: user, status: 201
 	  else
-	    render json: { errors: user.errors }, status: 422
+
+      msj = ""
+      msj += user.errors[:email].any? ? "Esa dirección de correo electrónico ya está en uso. " : " "
+      msj += user.errors[:password].any? ? "Tu contraseña debe tener al menos 8 caracteres. " : " "
+
+	    render json: { :errors => user.errors, :message => msj  }, status: 422
 	  end
  end
 
@@ -30,7 +35,7 @@ class Api::V1::UsersController < BaseController
    if user.update(user_params)
       render json: user, status: 200
    else
-      render json: { errors: user.errors  }, status: 422
+      render json: { :errors => user.errors, :message => "Esa dirección de correo electrónico ya está en uso."  }, status: 200
    end
  end
 

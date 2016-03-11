@@ -3,6 +3,8 @@ class Service < ActiveRecord::Base
   belongs_to :category
   belongs_to :sub_category
 
+  before_create :total_service_for_user
+
   scope :user, -> (user_id) { where user_id: user_id }
 
   scope :top, -> {
@@ -26,6 +28,16 @@ class Service < ActiveRecord::Base
     services = services.recent() if params[:recent].present?
 
     services
+  end
+
+  # Aqui validamos el limite de servicios permitidos por usuario, el maximo son 15
+  def total_service_for_user
+    total = 0
+    total = Service.count
+    if total > 15
+      errors.add("general" , "Ha superado el limite de servicios permitidos")
+      return false
+    end
   end
 
 end

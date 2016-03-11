@@ -2,6 +2,7 @@ class Api::V1::ServicesController < BaseController
 
   before_filter :auth, only: [:index, :show, :update, :destroy]
 
+
   def index
 
     services = Service.search(params)
@@ -31,6 +32,17 @@ class Api::V1::ServicesController < BaseController
     else
         render json: {errors: user.errors}, status: 422
     end
+  end
+
+  def destroy
+    service = Service.find(params[:id])
+    service.destroy
+    head 204
+  end
+
+  private 
+  def set_service
+    @ser = Service.find(params[:id])
   end
 
   # Parametros con permiso de entrada para registro de servicio
