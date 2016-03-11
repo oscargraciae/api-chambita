@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/rails-api/active_model_serializers.git
+  revision: 6b50b5d92fa69765d593af9ac154a24d15433958
+  specs:
+    active_model_serializers (0.10.0.rc4)
+      actionpack (>= 4.0)
+      activemodel (>= 4.0)
+      railties (>= 4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -20,8 +29,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    active_model_serializers (0.9.3)
-      activemodel (>= 3.2)
     activejob (4.2.3)
       activesupport (= 4.2.3)
       globalid (>= 0.3.0)
@@ -67,7 +74,9 @@ GEM
     factory_girl_rails (4.5.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    ffaker (2.1.0)
+    faker (1.6.1)
+      i18n (~> 0.5)
+    ffaker (2.2.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
@@ -104,6 +113,7 @@ GEM
       pry (>= 0.9.10)
     puma (2.15.3)
     rack (1.6.4)
+    rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.3)
@@ -133,7 +143,7 @@ GEM
       activesupport (= 4.2.3)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.4.2)
+    rake (10.5.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     rspec-core (3.4.1)
@@ -185,18 +195,20 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  active_model_serializers
+  active_model_serializers!
   bower-rails
   byebug
   devise
   email_spec
   factory_girl_rails
+  faker
   ffaker
   jbuilder
   kaminari
   pg
   pry-rails
   puma
+  rack-cors
   rails (= 4.2.3)
   rails-api
   rspec-rails

@@ -4,8 +4,7 @@ class Api::V1::UsersController < BaseController
 
   # GET api/v1/users
   def index
-    # json = {:message => User.all}
-    # render json: json, status: :ok
+    render json: User.all, status: :ok
   end
 
 # GET api/v1/users/:id
@@ -26,8 +25,8 @@ class Api::V1::UsersController < BaseController
 
 # PUT api/v1/users/:id
  def update
-   user = @user
-
+   # user = @user
+   user = User.find(params[:id])
    if user.update(user_params)
       render json: user, status: 200
    else
@@ -41,7 +40,7 @@ class Api::V1::UsersController < BaseController
 
  # Validamos los parametros de entrada
  def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :birthdate, :cellphone, :description, :avatar, :encrypted_password)
+    params.permit(:first_name, :last_name, :email, :password, :birthdate, :cellphone, :description, :avatar, :encrypted_password)
  end
 
 end

@@ -10,8 +10,8 @@ class BaseController < ApplicationController
   # Este metodo nos validara el token del usuaro
   private
     def auth
-      token = request.headers["Authorization"]
-      puts token
+      token = request.headers["Authorization"].split(' ')[1]
+
       if !token
         json = {:code => "unauthorized", :message => "Acceso no autorizado", :object => "error", :type => nil}
         render json: json, status: :unauthorized
