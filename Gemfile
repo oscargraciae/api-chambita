@@ -40,6 +40,16 @@ gem 'kaminari'
 
 gem 'faker'
 
+gem 'carrierwave', '0.10.0'
+#gem "mini_magick"
+gem "fog"
+
+gem "paperclip", "~> 4.2"
+
+
+# gem 'rmagick'
+gem 'aws-sdk', '~> 1.5.7'
+
 #Api gems
 gem 'active_model_serializers', github: "rails-api/active_model_serializers"
 

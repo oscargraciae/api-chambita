@@ -3,7 +3,11 @@ Rails.application.routes.draw do
 
   namespace "api",  defaults: {format: :json} do
     namespace "v1" do
-      resources :users, only: [:index, :show, :create, :update, :destroy]
+      resources :users, only: [:index, :show, :create, :update, :destroy] do
+        member do
+          put 'avatar'
+        end
+      end
       resources :services, only: [:index, :show, :create, :update, :destroy] do
         member do
           put 'published'

@@ -39,6 +39,23 @@ class Api::V1::UsersController < BaseController
    end
  end
 
+ def avatar
+    user = User.find(params[:id])
+    
+    """File.open('app/assets/profile_avatar'+params[:id]+'.jpg', 'wb') do|f|
+      f.write(Base64.decode64(params[:avatar]))
+    end"""
+
+    #image = Base64.decode64(params[:avatar])
+    # image.original_filename = "something1.png"
+
+    if user.update_attribute(:avatar, params[:avatar])
+      render json: {status: true, user: user}, status: 200
+    else
+      render json: {errors: user.errors}, status: 422
+    end
+ end
+
  # DELETE api/v1/users/:id
  def destroy
  end
