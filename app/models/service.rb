@@ -1,8 +1,8 @@
 class Service < ActiveRecord::Base
   belongs_to :user
-  belongs_to :category
   belongs_to :sub_category
-
+  belongs_to :category
+  
   before_create :total_service_for_user
   before_create :default_values
 
@@ -36,8 +36,6 @@ class Service < ActiveRecord::Base
   # Aqui validamos el limite de servicios permitidos por usuario, el maximo son 15
   def total_service_for_user
     total = 0
-    puts user_id
-    puts "-------------------------------"
     total = Service.where(user_id: user_id).count
     if total >= 15
       errors.add("general" , "Ha superado el limite de servicios permitidos")

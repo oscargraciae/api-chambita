@@ -1,12 +1,3 @@
-GIT
-  remote: git://github.com/rails-api/active_model_serializers.git
-  revision: 6b50b5d92fa69765d593af9ac154a24d15433958
-  specs:
-    active_model_serializers (0.10.0.rc4)
-      actionpack (>= 4.0)
-      activemodel (>= 4.0)
-      railties (>= 4.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -30,6 +21,8 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    active_model_serializers (0.9.4)
+      activemodel (>= 3.2)
     activejob (4.2.3)
       activesupport (= 4.2.3)
       globalid (>= 0.3.0)
@@ -343,7 +336,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  active_model_serializers!
+  active_model_serializers
   aws-sdk (~> 1.5.7)
   bower-rails
   byebug

@@ -1,7 +1,6 @@
 class Api::V1::UsersController < BaseController
   before_filter :auth, only: [:show, :update, :destroy]
-  respond_to :json
-
+  
   # GET api/v1/users
   def index
     render json: User.all, status: :ok

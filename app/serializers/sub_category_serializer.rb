@@ -1,4 +1,3 @@
 class SubCategorySerializer < ActiveModel::Serializer
-  attributes :id, :name, :category
-  belongs_to :service
+  attributes :id, :name
 end
