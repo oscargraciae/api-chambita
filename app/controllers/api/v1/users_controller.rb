@@ -9,7 +9,9 @@ class Api::V1::UsersController < BaseController
 # GET api/v1/users/:id
  def show
    user = User.find(params[:id])
+   # user.avatar = user.avatar.path(:thumb)
    render json: user
+   #render json: {user: user, avatar: user.avatar, url: user.avatar.url(:thumb)}
  end
 
 # POST api/v1/users
@@ -44,10 +46,7 @@ class Api::V1::UsersController < BaseController
     """File.open('app/assets/profile_avatar'+params[:id]+'.jpg', 'wb') do|f|
       f.write(Base64.decode64(params[:avatar]))
     end"""
-
-    #image = Base64.decode64(params[:avatar])
-    # image.original_filename = "something1.png"
-
+    
     if user.update_attribute(:avatar, params[:avatar])
       render json: {status: true, user: user}, status: 200
     else

@@ -2,6 +2,7 @@ class Service < ActiveRecord::Base
   belongs_to :user
   belongs_to :sub_category
   belongs_to :category
+  has_many :service_images
   
   before_create :total_service_for_user
   before_create :default_values

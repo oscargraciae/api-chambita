@@ -13,6 +13,7 @@ Rails.application.routes.draw do
           put 'published'
         end
       end
+      resources :service_images, only: [:index, :create]
       resources :locations, only: :index
       resources :authentication, only: [:create, :destroy]
       resources :me, only: :index

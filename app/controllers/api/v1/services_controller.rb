@@ -6,7 +6,7 @@ class Api::V1::ServicesController < BaseController
   def index
 
     services = Service.search(params)
-
+    # services.service_images = services.service_images.path(:thumb)
     render json: services, status: :ok
   end
 

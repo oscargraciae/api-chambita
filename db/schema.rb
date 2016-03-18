@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160312081334) do
+ActiveRecord::Schema.define(version: 20160318053450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,20 @@ ActiveRecord::Schema.define(version: 20160312081334) do
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
   end
+
+  create_table "service_images", force: :cascade do |t|
+    t.string   "caption"
+    t.integer  "service_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.text     "photo"
+  end
+
+  add_index "service_images", ["service_id"], name: "index_service_images_on_service_id", using: :btree
 
   create_table "services", force: :cascade do |t|
     t.string   "name"
@@ -93,6 +107,7 @@ ActiveRecord::Schema.define(version: 20160312081334) do
   add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "service_images", "services"
   add_foreign_key "services", "users"
   add_foreign_key "sub_categories", "categories"
   add_foreign_key "users", "locations"

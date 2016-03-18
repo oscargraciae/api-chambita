@@ -6,14 +6,15 @@ class User < ActiveRecord::Base
 
   before_create :generate_authentication_token!
 
+  #http://chambita1236.s3.amazonaws.com/uploads/users/55/meddium/data.jpg?1458253361
   do_not_validate_attachment_file_type :avatar
   has_attached_file   :avatar,
-                        :default_url => '/assets/user_default.png',
-                        :styles => { :small => ["90x90!",:jpg], :meddium => ["230x230!",:jpg]},
+                        :styles => { :small => ["216x144!",:jpg], :meddium => ["230x230!",:jpg], :thumb => ["216x144#", :jpg]},
                         :default_style => :meddium,
                         :storage => :s3,
                         :url  => ':s3_domain_url',
-                        :path => "uploads/:file_id/:style/:filename"
+                        :default_url => 'http://chambita1236.s3.amazonaws.com/uploads/users/:style/user_default.png',
+                        :path => "uploads/users/:file_id/:style/:filename"
 
 
   def generate_authentication_token!
