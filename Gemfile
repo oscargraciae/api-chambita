@@ -28,7 +28,8 @@ gem 'rack-cors'
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
-
+gem 'geocoder'
+gem "rails-geocoder", :require => "geocoder"
 # Use PUMA as the app server
 gem 'puma'
 

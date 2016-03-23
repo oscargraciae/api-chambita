@@ -3,7 +3,7 @@ class ServiceImage < ActiveRecord::Base
 
   do_not_validate_attachment_file_type :photo
   has_attached_file   :photo,
-                        :styles => { :small => ["216x144!",:jpg], :meddium => ["230x230!",:jpg], :thumb => ["460x230#", :jpg]},
+                        :styles => { :small => ["216x144!",:jpg], :meddium => ["230x230!",:jpg], :thumb => ["90x90#", :jpg]},
                         :default_style => :thumb,
                         :storage => :s3,
                         :url  => ':s3_domain_url',
