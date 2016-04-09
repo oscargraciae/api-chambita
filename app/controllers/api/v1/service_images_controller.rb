@@ -20,4 +20,10 @@ class Api::V1::ServiceImagesController < BaseController
 	      	render json: {errors: service_image.errors}, status: 422
 	    end
 	end
+
+	def destroy
+    	service_image = ServiceImage.find(params[:id])
+    	service_image.destroy
+    	head 204
+  	end
 end

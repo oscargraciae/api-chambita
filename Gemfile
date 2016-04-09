@@ -29,7 +29,7 @@ gem 'rack-cors'
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'geocoder'
-gem "rails-geocoder", :require => "geocoder"
+# gem "rails-geocoder", :require => "geocoder"
 # Use PUMA as the app server
 gem 'puma'
 
@@ -57,9 +57,14 @@ gem 'aws-sdk', '~> 1.5.7'
 gem "active_model_serializers"
 # gem "active_model_serializers"
 group :development do
-gem 'sqlite3'
-gem 'web-console', '~> 2.0'
-
+	gem 'sqlite3'
+	gem 'web-console', '~> 2.0'
+	gem 'capistrano'
+	gem 'capistrano-rvm'
+	gem 'capistrano-rails'
+	gem 'capistrano-bundler'
+	gem 'capistrano'
+	gem 'capistrano3-puma'
 end
 
 group :development, :test do

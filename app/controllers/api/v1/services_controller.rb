@@ -1,12 +1,23 @@
 class Api::V1::ServicesController < BaseController
 
-  before_filter :auth, only: [:index, :show, :update, :destroy]
+  before_filter :auth, only: [:create, :update, :destroy]
 
 
   def index
-
     services = Service.search(params)
-    # services.service_images = services.service_images.path(:thumb)
+    
+    render json: services, status: :ok
+  end
+
+  def search
+    query = params[:q]
+    lat = params[:lat]
+    lng = params[:lng]
+    
+    # a = Geocoder.search("204.57.220.1")
+    
+    services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])
+    services = services.joins(:user).near([lat, lng], 100*0.62)
     render json: services, status: :ok
   end
 
@@ -57,7 +68,7 @@ class Api::V1::ServicesController < BaseController
 
   # Parametros con permiso de entrada para registro de servicio
   def service_params
-    params.permit(:name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id)
+    params.permit(:name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id, :lat, :lng, :cover)
   end
 
 end

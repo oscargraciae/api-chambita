@@ -9,9 +9,7 @@ class Api::V1::UsersController < BaseController
 # GET api/v1/users/:id
  def show
    user = User.find(params[:id])
-   # user.avatar = user.avatar.path(:thumb)
    render json: user
-   #render json: {user: user, avatar: user.avatar, url: user.avatar.url(:thumb)}
  end
 
 # POST api/v1/users
@@ -31,8 +29,17 @@ class Api::V1::UsersController < BaseController
 
 # PUT api/v1/users/:id
  def update
-   # user = @user
+
    user = User.find(params[:id])
+
+   location = Geocoder.search(params[:address])[0]
+
+   user.lat = location.coordinates[0]
+   user.lng = location.coordinates[1]
+   user.country = location.country
+   user.state = location.state
+   user.city = location.city
+
    if user.update(user_params)
       render json: user, status: 200
    else
@@ -40,19 +47,24 @@ class Api::V1::UsersController < BaseController
    end
  end
 
- def avatar
+  def avatar
     user = User.find(params[:id])
-    
-    """File.open('app/assets/profile_avatar'+params[:id]+'.jpg', 'wb') do|f|
-      f.write(Base64.decode64(params[:avatar]))
-    end"""
-    
     if user.update_attribute(:avatar, params[:avatar])
       render json: {status: true, user: user}, status: 200
     else
       render json: {errors: user.errors}, status: 422
     end
- end
+  end
+
+  def password
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+
+      sign_in @user, :bypass => true
+      
+      render json: {status: true}, status: 200
+    end
+  end
 
  # DELETE api/v1/users/:id
  def destroy
@@ -60,7 +72,7 @@ class Api::V1::UsersController < BaseController
 
  # Validamos los parametros de entrada
  def user_params
-    params.permit(:first_name, :last_name, :email, :password, :birthdate, :cellphone, :description, :avatar, :encrypted_password, :lat, :lng)
+    params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :birthdate, :cellphone, :description, :avatar, :encrypted_password)
  end
 
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323015325) do
+ActiveRecord::Schema.define(version: 20160409022547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,16 +52,15 @@ ActiveRecord::Schema.define(version: 20160323015325) do
     t.integer  "category_id"
     t.decimal  "price"
     t.boolean  "is_fixed_price"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.integer  "user_id"
-    t.string   "part_number"
-    t.string   "country"
-    t.string   "state"
-    t.string   "locality"
-    t.string   "url"
     t.integer  "sub_category_id"
     t.boolean  "published"
+    t.string   "cover_file_name"
+    t.string   "cover_content_type"
+    t.integer  "cover_file_size"
+    t.datetime "cover_updated_at"
   end
 
   add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
@@ -103,6 +102,9 @@ ActiveRecord::Schema.define(version: 20160323015325) do
     t.datetime "avatar_updated_at"
     t.float    "lat"
     t.float    "lng"
+    t.string   "country"
+    t.string   "state"
+    t.string   "city"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

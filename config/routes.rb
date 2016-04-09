@@ -6,14 +6,18 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :show, :create, :update, :destroy] do
         member do
           put 'avatar'
+          put 'password'
         end
       end
       resources :services, only: [:index, :show, :create, :update, :destroy] do
         member do
           put 'published'
         end
+        collection do
+          get 'search'
+        end
       end
-      resources :service_images, only: [:index, :create]
+      resources :service_images, only: [:index, :create, :destroy]
       resources :locations, only: :index
       resources :authentication, only: [:create, :destroy]
       resources :me, only: :index
