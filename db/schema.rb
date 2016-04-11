@@ -74,6 +74,15 @@ ActiveRecord::Schema.define(version: 20160409022547) do
 
   add_index "sub_categories", ["category_id"], name: "index_sub_categories_on_category_id", using: :btree
 
+  create_table "table_categories", force: :cascade do |t|
+    t.string "name", null: false
+  end
+
+  create_table "tests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"

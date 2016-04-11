@@ -226,7 +226,10 @@ GEM
     jbuilder (2.3.1)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
+    jmespath (1.2.4)
+      json_pure (>= 1.8.1)
     json (1.8.3)
+    json_pure (1.8.3)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -360,7 +363,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
-  aws-sdk (~> 1.5.7)
+  aws-sdk (< 2)
   bower-rails
   byebug
   capistrano
@@ -377,6 +380,8 @@ DEPENDENCIES
   fog
   geocoder
   jbuilder
+  jmespath
+  json_pure
   kaminari
   paperclip (~> 4.2)
   pg

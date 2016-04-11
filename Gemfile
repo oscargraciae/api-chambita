@@ -46,11 +46,12 @@ gem 'carrierwave', '0.10.0'
 gem "fog"
 
 gem "paperclip", "~> 4.2"
-
-
+gem 'json_pure'
+gem 'jmespath'
 # gem 'rmagick'
-gem 'aws-sdk', '~> 1.5.7'
-
+#gem 'aws-sdk', '~> 1.5.7'
+gem 'aws-sdk', '< 2'
+# gem 'aws-sdk-core'
 #Api gems
 # gem 'active_model_serializers', github: "rails-api/active_model_serializers"
 # gem "active_model_serializers", github: "rails-api/active_model_serializers"

@@ -8,7 +8,31 @@
 
 # :name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id
 
-10.times do
+#Category.create(name: 'Hogar')
+#Category.create(name: 'Eventos y entretenimiento')
+
+"""SubCategory.create(name: 'Plomeria', category_id: 1)
+SubCategory.create(name: 'Electricista', category_id: 1)
+SubCategory.create(name: 'Pintura', category_id: 1)
+SubCategory.create(name: 'Carpinteria', category_id: 1)
+SubCategory.create(name: 'Cerrajería', category_id: 1)
+SubCategory.create(name: 'Jardineria', category_id: 1)
+SubCategory.create(name: 'Albañileria', category_id: 1)
+SubCategory.create(name: 'Impermiabilización', category_id: 1)
+SubCategory.create(name: 'Reparacion de computadoras', category_id: 1)
+SubCategory.create(name: 'Reparacion de equipos electrónicos', category_id: 1)
+SubCategory.create(name: 'Limpieza', category_id: 1)
+SubCategory.create(name: 'Fletes y mudanza', category_id: 1)
+
+SubCategory.create(name: 'Ambientación', category_id: 2)
+SubCategory.create(name: 'Fotorafia y video', category_id: 2)
+SubCategory.create(name: 'Juegos infantiles', category_id: 2)
+SubCategory.create(name: 'Banquetes', category_id: 2)
+SubCategory.create(name: 'Personajes', category_id: 2)"""
+
+
+
+"""10.times do
   Service.create(
     name:  Faker::Lorem.words.join(' '),
     description: Faker::Lorem.paragraph,
@@ -21,7 +45,7 @@
     user_id: 1,
     published: 1
   )
-end
+end"""
 
 """10.times do
   User.create(
