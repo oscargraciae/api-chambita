@@ -21,8 +21,6 @@ class Api::V1::ServicesController < BaseController
     lat = location.coordinates[0]
     lng = location.coordinates[1]
     
-
-    
     puts location.as_json
 
     services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])

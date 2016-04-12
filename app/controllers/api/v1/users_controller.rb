@@ -9,8 +9,7 @@ class Api::V1::UsersController < BaseController
 # GET api/v1/users/:id
  def show
    user = User.find(params[:id])
-   puts user.as_json
-   puts "---------------------------"
+  
    render json: user
  end
 
@@ -60,11 +59,22 @@ class Api::V1::UsersController < BaseController
 
   def password
     @user = User.find(params[:id])
-    if @user.update(user_params)
 
-      sign_in @user, :bypass => true
-      
-      render json: {status: true}, status: 200
+    # validamos que la nueva contraseña
+    if params[:password] == params[:password_confirmation]
+
+      # validamos la contraseña actual
+      if @user.valid_password? params[:current_password]
+
+        # actualizamos la contraseña
+        if @user.update_attribute(:password, params[:password])
+          render json: {status: true}, status: 200
+        end
+      else
+        render json: {status: false, message: "Tu antigua contraseña era incorrecta. Por favor, inténtalo de nuevo."}, status: 422
+      end
+    else
+      render json: {status: false, message: "Tus nuevas contraseñas no coinciden. Por favor, inténtalo de nuevo."}, status: 422
     end
   end
 
