@@ -9,6 +9,8 @@ class Api::V1::UsersController < BaseController
 # GET api/v1/users/:id
  def show
    user = User.find(params[:id])
+   puts user.as_json
+   puts "---------------------------"
    render json: user
  end
 
