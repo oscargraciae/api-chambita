@@ -1,4 +1,5 @@
 class ServiceSerializer < ActiveModel::Serializer
+
   #has_one :user
   attributes :id, :name, :description, :price, :created_at, :updated_at, :published, :cover, :cover_thumb, :user_name, :user_avatar, :user_id, :user_address
   has_one :sub_category
@@ -25,5 +26,6 @@ class ServiceSerializer < ActiveModel::Serializer
   def user_address
     [object.user.city, object.user.state, object.user.country].compact.join(', ')
   end
+
 
 end

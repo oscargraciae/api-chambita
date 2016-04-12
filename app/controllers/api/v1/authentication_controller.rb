@@ -13,7 +13,6 @@ class Api::V1::AuthenticationController < BaseController
       user.save
 
       us = MeSerializer.new(User.find(user.id))
-      puts us.to_json
 
       render json: {:user => us, :token => user.token}, status: 200
     else

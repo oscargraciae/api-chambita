@@ -26,6 +26,8 @@ gem 'rack-cors'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
+gem 'dalli'
+gem 'memcachier'
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'geocoder'

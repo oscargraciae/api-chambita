@@ -4,33 +4,28 @@ class Api::V1::ServicesController < BaseController
 
 
   def index
-    services = Service.search(params)
-    
+    services = Service.all
+    puts services
     render json: services, status: :ok
   end
 
   def search
     query = params[:q]
     
-    location = Geocoder.search(params[:location])
-
-    #user.country = location.country
-    #user.state = location.state
-    #user.city = location.city
-
+    location = Geocoder.search(params[:location])[0]
+    
     lat = location.coordinates[0]
     lng = location.coordinates[1]
-    
-    puts location.as_json
 
     services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])
     services = services.joins(:user).near([lat, lng], 100*0.62)
-    
+
     render json: services, status: :ok
   end
 
   def show
     ser = Service.find(params[:id])
+
     render json: ser, status: :ok
   end
 

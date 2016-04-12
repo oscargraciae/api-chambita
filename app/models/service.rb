@@ -40,6 +40,9 @@ class Service < ActiveRecord::Base
   # scope :location, -> (location_id) { where location_id: location_id }
   # scope :starts_with, -> (name) { where("name like ?", "#{name}%")}
 
+  def self.all_cached
+    Rails.cache.fetch('Service.all') { all }
+  end
 
   def self.search(params = {})
     services = params[:services_ids].present? ? Service.where(id: params[:services_ids]) : Service.all
