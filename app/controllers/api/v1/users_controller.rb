@@ -43,7 +43,7 @@ class Api::V1::UsersController < BaseController
    user.city = location.city
 
    if user.update(user_params)
-      render json: user, status: 200
+      render json: MeSerializer.new(user), status: 200
    else
       render json: { :errors => user.errors, :message => "Esa dirección de correo electrónico ya está en uso."  }, status: 200
    end
@@ -52,7 +52,7 @@ class Api::V1::UsersController < BaseController
   def avatar
     user = User.find(params[:id])
     if user.update_attribute(:avatar, params[:avatar])
-      render json: {status: true, user: user}, status: 200
+      render json: {status: true, user: MeSerializer.new(user) }, status: 200
     else
       render json: {errors: user.errors}, status: 422
     end
