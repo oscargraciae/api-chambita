@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
                         :default_style => :meddium,
                         :storage => :s3,
                         :url  => ':s3_domain_url',
-                        :default_url => 'http://chambita1236.s3.amazonaws.com/uploads/users/:style/user_default.png',
+                        :default_url => 'http://chambita.s3.amazonaws.com/uploads/users/user_default.png',
                         :path => "uploads/users/:file_id/:style/:filename"
 
 

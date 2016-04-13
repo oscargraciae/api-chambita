@@ -1,4 +1,9 @@
 Rails.application.configure do
+  
+  Paperclip.options[:content_type_mappings]
+  
+  config.cache_store = :dalli_store
+
   # Settings specified here will take precedence over those in config/application.rb.
   # Paperclip.options[:command_path] = 'C:\Program%20Files%20(x86)\GnuWin32\bin'
   Paperclip.options[:command_path] = 'C:\Program Files\ImageMagick-6.9.3-Q16'
@@ -13,7 +18,7 @@ Rails.application.configure do
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+  config.action_controller.perform_caching = true
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false

@@ -84,6 +84,7 @@ GEM
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.0)
     concurrent-ruby (1.0.0)
+    dalli (2.7.6)
     debug_inspector (0.0.2)
     devise (3.5.2)
       bcrypt (~> 3.0)
@@ -230,7 +231,10 @@ GEM
     jbuilder (2.3.1)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
+    jmespath (1.2.4)
+      json_pure (>= 1.8.1)
     json (1.8.3)
+    json_pure (1.8.3)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -240,6 +244,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    memcachier (0.0.2)
     method_source (0.8.2)
     mime-types (2.99)
     mimemagic (0.3.0)
@@ -364,9 +369,13 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+<<<<<<< HEAD
   aws-sdk (~> 1.5.7)
   bcrypt (~> 3.1.11)
   bcrypt-ruby (= 3.1.5)
+=======
+  aws-sdk (< 2)
+>>>>>>> 2083ad3f9189e9b04fa63bf141f4776d03bdbffc
   bower-rails
   byebug
   capistrano
@@ -375,6 +384,7 @@ DEPENDENCIES
   capistrano-rvm
   capistrano3-puma
   carrierwave (= 0.10.0)
+  dalli
   devise
   email_spec
   factory_girl_rails
@@ -383,7 +393,10 @@ DEPENDENCIES
   fog
   geocoder
   jbuilder
+  jmespath
+  json_pure
   kaminari
+  memcachier
   paperclip (~> 4.2)
   pg
   pry-rails

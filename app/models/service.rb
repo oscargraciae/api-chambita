@@ -16,7 +16,8 @@ class Service < ActiveRecord::Base
 
   do_not_validate_attachment_file_type :cover
   has_attached_file   :cover,
-                        :styles => { :small => ["128x128!",:jpg], :meddium => ["230x230!",:jpg], :thumb => ["90x90#", :jpg]},
+                        #:styles => { :small => ["128x128!",:jpg], :meddium => ["230x230!",:jpg], :thumb => ["90x90#", :jpg]},
+                        :styles => { :small => ["128x128!",:jpg], :meddium => ["230x230!",:jpg] },
                         :default_style => :meddium,
                         :storage => :s3,
                         :url  => ':s3_domain_url',
@@ -39,6 +40,9 @@ class Service < ActiveRecord::Base
   # scope :location, -> (location_id) { where location_id: location_id }
   # scope :starts_with, -> (name) { where("name like ?", "#{name}%")}
 
+  def self.all_cached
+    Rails.cache.fetch('Service.all') { all }
+  end
 
   def self.search(params = {})
     services = params[:services_ids].present? ? Service.where(id: params[:services_ids]) : Service.all
@@ -48,6 +52,28 @@ class Service < ActiveRecord::Base
     services = services.user(params[:user_id]) if params[:user_id].present?
     services = services.top() if params[:top].present?
     services = services.recent() if params[:recent].present?
+
+    services
+  end
+
+  def self.search_service(params)
+    query = params[:q]
+
+    # services = Service.all
+
+    # Consultamos la informacion de la ubicacion al API de Google maps 
+    location = Geocoder.search(params[:location])[0]
+    # obtenemos las cordenadas de la ubicacion
+    lat = location.coordinates[0]
+    lng = location.coordinates[1]
+
+    services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])
+
+    services = services.where(category_id: params[:category]) if params[:category].present?
+    services = services.where(sub_category_id: params[:sub_category]) if params[:sub_category].present?
+    
+    # obtenemos los servicios que esten a 60 kilometros a la redonda de las cordeandas
+    services = services.joins(:user).near([lat, lng], 100*0.62)
 
     services
   end

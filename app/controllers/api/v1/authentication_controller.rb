@@ -11,7 +11,10 @@ class Api::V1::AuthenticationController < BaseController
       # sign_in user, store: false
       user.generate_authentication_token!
       user.save
-      render json: {:user => user, :token => user.token}, status: 200
+
+      us = MeSerializer.new(User.find(user.id))
+
+      render json: {:user => us, :token => user.token}, status: 200
     else
       render json: { :errors => user.errors, :message => "Correo electrónico o contraseña incorrecto" }, status: 422
     end
