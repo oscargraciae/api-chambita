@@ -56,6 +56,28 @@ class Service < ActiveRecord::Base
     services
   end
 
+  def self.search_service(params)
+    query = params[:q]
+
+    # services = Service.all
+
+    # Consultamos la informacion de la ubicacion al API de Google maps 
+    location = Geocoder.search(params[:location])[0]
+    # obtenemos las cordenadas de la ubicacion
+    lat = location.coordinates[0]
+    lng = location.coordinates[1]
+
+    services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])
+
+    services = services.where(category_id: params[:category]) if params[:category].present?
+    services = services.where(sub_category_id: params[:sub_category]) if params[:sub_category].present?
+    
+    # obtenemos los servicios que esten a 60 kilometros a la redonda de las cordeandas
+    services = services.joins(:user).near([lat, lng], 100*0.62)
+
+    services
+  end
+
   # Aqui validamos el limite de servicios permitidos por usuario, el maximo son 15
   def total_service_for_user
     total = 0

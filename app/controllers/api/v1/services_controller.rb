@@ -10,17 +10,20 @@ class Api::V1::ServicesController < BaseController
   end
 
   def search
-    query = params[:q]
+    #query = params[:q]
     
-    location = Geocoder.search(params[:location])[0]
+    services = Service.search_service(params)
+
+    #location = Geocoder.search(params[:location])[0]
     
-    lat = location.coordinates[0]
-    lng = location.coordinates[1]
+    #lat = location.coordinates[0]
+    #lng = location.coordinates[1]
 
-    services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])
-    services = services.joins(:user).near([lat, lng], 100*0.62)
+    #services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])
+    #services = services.joins(:user).near([lat, lng], 100*0.62)
 
-    render json: services, status: :ok
+    render json: services, status: :ok  
+
   end
 
   def show
