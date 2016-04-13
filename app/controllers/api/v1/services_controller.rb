@@ -10,6 +10,7 @@ class Api::V1::ServicesController < BaseController
   end
 
   def search
+    query = params[:q]
     #query = params[:q]
     
     services = Service.search_service(params)

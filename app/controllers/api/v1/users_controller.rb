@@ -32,7 +32,7 @@ class Api::V1::UsersController < BaseController
  def update
 
    user = User.find(params[:id])
-
+   puts "cualquiermamada"
    location = Geocoder.search(params[:address])[0]
 
    user.lat = location.coordinates[0]
@@ -84,7 +84,7 @@ class Api::V1::UsersController < BaseController
 
  # Validamos los parametros de entrada
  def user_params
-    params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :birthdate, :cellphone, :description, :avatar, :encrypted_password)
+    params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :birthdate, :cellphone, :description, :encrypted_password)
  end
 
 end

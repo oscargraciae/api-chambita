@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   before_create :generate_authentication_token!
 
   do_not_validate_attachment_file_type :avatar
+  #validates_attachment :avatar, :content_type => { :content_type => ["image/jpeg", "image/gif", "image/png"] }
+  #validates_attachment :avatar, presence: true, content_type: { content_type: "image/jpeg" }, size: { in: 0..10.kilobytes }
   has_attached_file   :avatar,
                         :styles => { :small => ["216x144!",:jpg], :meddium => ["230x230!",:jpg], :thumb => ["216x144#", :jpg]},
                         :default_style => :meddium,
