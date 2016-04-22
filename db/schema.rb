@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160409022547) do
+ActiveRecord::Schema.define(version: 20160422041405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,38 @@ ActiveRecord::Schema.define(version: 20160409022547) do
     t.string   "country"
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
+  end
+
+  create_table "request_messages", force: :cascade do |t|
+    t.text     "text"
+    t.integer  "sender_id"
+    t.integer  "recipient_id"
+    t.integer  "request_service_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "request_messages", ["request_service_id"], name: "index_request_messages_on_request_service_id", using: :btree
+
+  create_table "request_services", force: :cascade do |t|
+    t.text     "message"
+    t.date     "request_date"
+    t.time     "request_time"
+    t.integer  "request_status_id"
+    t.integer  "service_id"
+    t.integer  "user_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "request_services", ["request_status_id"], name: "index_request_services_on_request_status_id", using: :btree
+  add_index "request_services", ["service_id"], name: "index_request_services_on_service_id", using: :btree
+  add_index "request_services", ["user_id"], name: "index_request_services_on_user_id", using: :btree
+
+  create_table "request_statuses", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "service_images", force: :cascade do |t|
@@ -120,6 +152,10 @@ ActiveRecord::Schema.define(version: 20160409022547) do
   add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "request_messages", "request_services"
+  add_foreign_key "request_services", "request_statuses"
+  add_foreign_key "request_services", "services"
+  add_foreign_key "request_services", "users"
   add_foreign_key "service_images", "services"
   add_foreign_key "services", "users"
   add_foreign_key "sub_categories", "categories"
