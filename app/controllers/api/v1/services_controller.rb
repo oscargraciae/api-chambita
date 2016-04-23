@@ -4,8 +4,8 @@ class Api::V1::ServicesController < BaseController
 
 
   def index
-    services = Service.all
-    puts services
+    services = Service.search(params)
+    
     render json: services, status: :ok
   end
 

@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  has_many :sent_messages, class_name: "RequestMessage", foreign_key: "sender_id"
+  has_many :received_messages, class_name: "RequestMessage", foreign_key: "recipient_id"
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
@@ -14,7 +17,7 @@ class User < ActiveRecord::Base
                         :default_style => :meddium,
                         :storage => :s3,
                         :url  => ':s3_domain_url',
-                        :default_url => 'http://chambita.s3.amazonaws.com/uploads/users/user_default.png',
+                        :default_url => 'https://s3-us-west-1.amazonaws.com/chambita1236/uploads/users/user_default.png',
                         :path => "uploads/users/:file_id/:style/:filename"
 
 
