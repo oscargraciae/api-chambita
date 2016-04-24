@@ -1,5 +1,5 @@
 class RequestServiceSerializer < ActiveModel::Serializer
-  attributes :id, :message, :request_date, :request_time
+  attributes :id, :message, :request_date, :request_time, :price, :fee, :created_at
   has_one :service
   has_one :user
   has_one :request_status
@@ -8,5 +8,7 @@ class RequestServiceSerializer < ActiveModel::Serializer
   def request_message
     object.request_message.order(created_at: :desc)
   end
+
+  
 
 end
