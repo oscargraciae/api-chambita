@@ -22,6 +22,12 @@ class Api::V1::RequestServicesController < ApplicationController
   	end
   end
 
+  def jobs
+    jobs = RequestService.jobs(params)
+
+    render json: jobs, status: :ok
+  end
+
   def request_params
   	params.permit(:request_date, :request_time, :message, :user_id, :service_id)
   end

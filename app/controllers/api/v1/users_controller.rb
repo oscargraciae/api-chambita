@@ -32,7 +32,6 @@ class Api::V1::UsersController < BaseController
  def update
 
    user = User.find(params[:id])
-   puts "cualquiermamada"
    location = Geocoder.search(params[:address])[0]
 
    user.lat = location.coordinates[0]

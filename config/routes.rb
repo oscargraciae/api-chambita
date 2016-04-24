@@ -22,7 +22,11 @@ Rails.application.routes.draw do
       resources :authentication, only: [:create, :destroy]
       resources :me, only: :index
       resources :categories, only: :index
-      resources :request_services, only: [:index, :show, :create]
+      resources :request_services, only: [:index, :show, :create] do 
+        collection do
+            get 'jobs'
+          end
+      end
       resources :request_message, only: [:create]
     end
   end
