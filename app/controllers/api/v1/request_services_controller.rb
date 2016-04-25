@@ -3,8 +3,8 @@ class Api::V1::RequestServicesController < ApplicationController
   def index
 		#requests = RequestService.all
 
-    requests = RequestService.joins(:service).where(services: {user_id: 3})
-	  	
+    # requests = RequestService.joins(:service).where(services: {user_id: 3})
+  	requests = RequestService.where(user_id: params[:user_id]).order(created_at: :desc)
   	render json: requests, status: :ok
   end
 
