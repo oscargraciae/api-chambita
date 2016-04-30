@@ -8,6 +8,9 @@ Rails.application.routes.draw do
           put 'avatar'
           put 'password'
         end
+        collection do 
+            post 'prueba'
+          end
       end
       resources :services, only: [:index, :show, :create, :update, :destroy] do
         member do
@@ -28,6 +31,7 @@ Rails.application.routes.draw do
           end
       end
       resources :request_message, only: [:create]
+      resources :credit_cards, except: [:new, :edit]
     end
   end
 end

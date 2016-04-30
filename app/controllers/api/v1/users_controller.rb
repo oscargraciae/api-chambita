@@ -86,4 +86,8 @@ class Api::V1::UsersController < BaseController
     params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :birthdate, :cellphone, :description, :encrypted_password)
  end
 
+ def prueba
+  render json: params, status: :ok
+ end
+
 end

@@ -395,6 +395,7 @@ DEPENDENCIES
   rack-cors
   rails (= 4.2.3)
   rails-api
+  rake (= 10.4.2)
   rspec-rails
   shoulda-matchers
   spring

@@ -4,8 +4,8 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.3'
 
 gem 'rails-api'
-
-gem 'spring', :group => :development
+gem 'rake', '10.4.2'
+#gem 'spring', :group => :development
 
 # Use postgresql as the database for Active Record
 gem 'pg'
@@ -66,7 +66,6 @@ group :development do
 	gem 'capistrano-rvm'
 	gem 'capistrano-rails'
 	gem 'capistrano-bundler'
-	gem 'capistrano'
 	gem 'capistrano3-puma'
 end
 
