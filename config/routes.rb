@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         member do
           put 'avatar'
           put 'password'
+          get 'me_show'
         end
         collection do 
             post 'prueba'
@@ -26,9 +27,14 @@ Rails.application.routes.draw do
       resources :me, only: :index
       resources :categories, only: :index
       resources :request_services, only: [:index, :show, :create] do 
+        member do
+          put 'status'
+          put 'accept_job'
+          put 'finish_job'
+        end
         collection do
-            get 'jobs'
-          end
+          get 'jobs'
+        end
       end
       resources :request_message, only: [:create]
       resources :credit_cards, except: [:new, :edit]

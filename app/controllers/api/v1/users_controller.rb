@@ -9,8 +9,13 @@ class Api::V1::UsersController < BaseController
 # GET api/v1/users/:id
  def show
    user = User.find(params[:id])
-  
    render json: user
+ end
+
+ # GET api/v1/users/:id
+ def me_show
+   user = User.find(params[:id])
+   render json: MeSerializer.new(user), status: :ok
  end
 
 # POST api/v1/users
@@ -83,7 +88,7 @@ class Api::V1::UsersController < BaseController
 
  # Validamos los parametros de entrada
  def user_params
-    params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :birthdate, :cellphone, :description, :encrypted_password)
+    params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :birthdate, :cellphone, :description, :encrypted_password, :address_street, :address_area, :address_zipcode, :cellphone)
  end
 
  def prueba

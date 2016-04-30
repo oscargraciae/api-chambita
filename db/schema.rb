@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20160430193911) do
+=======
+ActiveRecord::Schema.define(version: 20160430034702) do
+>>>>>>> 92d122cad2b452a472c08eef8549456d196e5c82
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,7 +196,10 @@ ActiveRecord::Schema.define(version: 20160430193911) do
   add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+<<<<<<< HEAD
   add_foreign_key "credit_cards", "users"
+=======
+>>>>>>> 92d122cad2b452a472c08eef8549456d196e5c82
   add_foreign_key "orders", "order_statuses"
   add_foreign_key "orders", "request_services"
   add_foreign_key "request_messages", "request_services"
