@@ -404,11 +404,8 @@ DEPENDENCIES
   railroady
   rails (= 4.2.3)
   rails-api
-<<<<<<< HEAD
-  rake (= 10.4.2)
-=======
   rails-erd
->>>>>>> 92d122cad2b452a472c08eef8549456d196e5c82
+  rake (= 10.4.2)
   rspec-rails
   shoulda-matchers
   spring
