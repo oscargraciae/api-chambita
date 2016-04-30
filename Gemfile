@@ -68,6 +68,8 @@ group :development do
 	gem 'capistrano-bundler'
 	gem 'capistrano'
 	gem 'capistrano3-puma'
+	gem 'railroady'
+	gem "rails-erd"
 end
 
 group :development, :test do
