@@ -40,9 +40,12 @@ class Api::V1::RequestServicesController < ApplicationController
   def accept_job
     request = RequestService.find(params[:id])
     
-    if request.update_attribute(:request_status_id, REQUEST_STATUS_ACEPTED)
-      req_status = RequestStatus.find(REQUEST_STATUS_ACEPTED)
-      render json: req_status, status: :ok
+    if request.update_attribute(:request_status_id, REQUEST_STATUS_INPROCESS)
+      # req_status = RequestStatus.find(REQUEST_STATUS_ACEPTED)
+
+      Order.create(request.id, 3, request.price, request.fee)
+
+      render json: request, status: :ok
     end
   end
 
@@ -50,11 +53,27 @@ class Api::V1::RequestServicesController < ApplicationController
     request = RequestService.find(params[:id])
 
     if params[:finish_type] == 'supplier'
+
       request.update_attribute(:is_finish_supplier, true)
-      render json: {status: true}, status: :ok
+      render json: request, status: :ok
+
     elsif params[:finish_type] == 'customer'
+
+      # Cuando el cliente valida el trabajo se cambia la bandera
       request.update_attribute(:is_finish_customer, true)
-      render json: {status: true}, status: :ok
+
+      #se actualiza el estatus de la solicitud
+      request.update_attribute(:request_status_id, REQUEST_STATUS_FINISH)
+
+      puts request.id
+      #Se actualia la orden de compra
+      order = Order.where(request_service_id: request.id)
+      puts order.as_json
+      order.order_status_id = 1
+      order.save
+      
+      # regresamos la solicitud con los campos actualizados
+      render json: request, status: :ok
     else
 
     end

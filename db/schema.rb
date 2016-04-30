@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160428234720) do
+ActiveRecord::Schema.define(version: 20160430034702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,26 @@ ActiveRecord::Schema.define(version: 20160428234720) do
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
   end
+
+  create_table "order_statuses", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer  "request_service_id"
+    t.integer  "order_status_id"
+    t.decimal  "service_price"
+    t.decimal  "fee"
+    t.decimal  "total"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "orders", ["order_status_id"], name: "index_orders_on_order_status_id", using: :btree
+  add_index "orders", ["request_service_id"], name: "index_orders_on_request_service_id", using: :btree
 
   create_table "request_messages", force: :cascade do |t|
     t.text     "text"
@@ -160,6 +180,8 @@ ActiveRecord::Schema.define(version: 20160428234720) do
   add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "orders", "order_statuses"
+  add_foreign_key "orders", "request_services"
   add_foreign_key "request_messages", "request_services"
   add_foreign_key "request_services", "request_statuses"
   add_foreign_key "request_services", "services"
