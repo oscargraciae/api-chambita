@@ -14,6 +14,7 @@ Rails.application.routes.draw do
           end
       end
       resources :services, only: [:index, :show, :create, :update, :destroy] do
+        resources :evaluations, only: [:index, :create]
         member do
           put 'published'
         end

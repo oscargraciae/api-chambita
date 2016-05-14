@@ -1,12 +1,22 @@
-class Api::V1::RequestServicesController < ApplicationController
-  
-  def index
-		#requests = RequestService.all
+class Api::V1::RequestServicesController < BaseController
+  before_filter :auth, only: [:index, :show, :create, :jobs, :accept_job, :finish_job, :status]
 
-    # requests = RequestService.joins(:service).where(services: {user_id: 3})
-    status_ids = params[:status]
-  	requests = RequestService.where({ user_id: params[:user_id], request_status_id: status_ids }).order(created_at: :desc)
-  	render json: requests, status: :ok
+  # la variable @user contiene el usuario autenticado
+
+  def index
+    requests_finish = RequestService.all_finish(@user.id)
+    requests_pending = RequestService.all_pending(@user.id)
+    requests_inprocess = RequestService.all_inprogress(@user.id)
+
+    render json: {
+      requests_finish: ActiveModel::ArraySerializer.new(requests_finish.page(1).per(10), each_serializer: RequestServiceSerializer),
+      requests_inprocess: ActiveModel::ArraySerializer.new(requests_inprocess.page(1).per(10), each_serializer: RequestServiceSerializer),
+      requests_pending: ActiveModel::ArraySerializer.new(requests_pending.page(1).per(10), each_serializer: RequestServiceSerializer),
+      total_finished: requests_finish.length,
+      total_pending: requests_pending.length,
+      total_inprocess: requests_inprocess.length
+    }, status: :ok
+
   end
 
   def show
@@ -31,10 +41,23 @@ class Api::V1::RequestServicesController < ApplicationController
   	end
   end
 
-  def jobs
-    jobs = RequestService.jobs(params)
 
-    render json: jobs, status: :ok
+  def jobs
+    #jobs = RequestService.jobs(@user.id)
+
+    jobs_finished = RequestService.jobs_finished(@user.id)
+    jobs_pending = RequestService.jobs_pending(@user.id)
+    jobs_inprocess = RequestService.jobs_inprocess(@user.id)
+
+    render json: {
+      jobs_finished: ActiveModel::ArraySerializer.new(jobs_finished.page(1).per(10), each_serializer: RequestServiceSerializer),
+      jobs_inprocess: ActiveModel::ArraySerializer.new(jobs_inprocess.page(1).per(10), each_serializer: RequestServiceSerializer),
+      jobs_pending: ActiveModel::ArraySerializer.new(jobs_pending.page(1).per(10), each_serializer: RequestServiceSerializer),
+      total_finished: jobs_finished.length,
+      total_pending: jobs_pending.length,
+      total_inprocess: jobs_inprocess.length
+    }, status: :ok
+    # render json: jobs, status: :ok
   end
 
   def accept_job
@@ -65,10 +88,10 @@ class Api::V1::RequestServicesController < ApplicationController
       #se actualiza el estatus de la solicitud
       request.update_attribute(:request_status_id, REQUEST_STATUS_FINISH)
 
-      puts request.id
       #Se actualia la orden de compra
       order = Order.where(request_service_id: request.id)
-      puts order.as_json
+      
+      order = Order.find_by(request_service_id: 47)
       order.order_status_id = 1
       order.save
       

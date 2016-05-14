@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20160430193911) do
-=======
-ActiveRecord::Schema.define(version: 20160430034702) do
->>>>>>> 92d122cad2b452a472c08eef8549456d196e5c82
+ActiveRecord::Schema.define(version: 20160512225809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +31,17 @@ ActiveRecord::Schema.define(version: 20160430034702) do
   end
 
   add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
+
+  create_table "evaluations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "service_id"
+    t.string   "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "evaluations", ["service_id"], name: "index_evaluations_on_service_id", using: :btree
+  add_index "evaluations", ["user_id"], name: "index_evaluations_on_user_id", using: :btree
 
   create_table "locations", force: :cascade do |t|
     t.string   "location"
@@ -68,6 +75,24 @@ ActiveRecord::Schema.define(version: 20160430034702) do
   add_index "orders", ["order_status_id"], name: "index_orders_on_order_status_id", using: :btree
   add_index "orders", ["request_service_id"], name: "index_orders_on_request_service_id", using: :btree
 
+  create_table "rating_types", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "ratings", force: :cascade do |t|
+    t.integer  "rating_type_id"
+    t.integer  "value"
+    t.integer  "evaluation_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "ratings", ["evaluation_id"], name: "index_ratings_on_evaluation_id", using: :btree
+  add_index "ratings", ["rating_type_id"], name: "index_ratings_on_rating_type_id", using: :btree
+
   create_table "request_messages", force: :cascade do |t|
     t.text     "text"
     t.integer  "sender_id"
@@ -93,6 +118,7 @@ ActiveRecord::Schema.define(version: 20160430034702) do
     t.integer  "supplier_id"
     t.boolean  "is_finish_supplier", default: false
     t.boolean  "is_finish_customer", default: false
+    t.boolean  "is_evaluated",       default: false
   end
 
   add_index "request_services", ["request_status_id"], name: "index_request_services_on_request_status_id", using: :btree
@@ -190,18 +216,20 @@ ActiveRecord::Schema.define(version: 20160430034702) do
     t.string   "address_street"
     t.string   "address_area"
     t.string   "address_zipcode"
+    t.string   "conektaid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["location_id"], name: "index_users_on_location_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-<<<<<<< HEAD
   add_foreign_key "credit_cards", "users"
-=======
->>>>>>> 92d122cad2b452a472c08eef8549456d196e5c82
+  add_foreign_key "evaluations", "services"
+  add_foreign_key "evaluations", "users"
   add_foreign_key "orders", "order_statuses"
   add_foreign_key "orders", "request_services"
+  add_foreign_key "ratings", "evaluations"
+  add_foreign_key "ratings", "rating_types"
   add_foreign_key "request_messages", "request_services"
   add_foreign_key "request_services", "request_statuses"
   add_foreign_key "request_services", "services"

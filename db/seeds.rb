@@ -9,7 +9,11 @@
 # :name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id
 
 
+# rating
 
+#RatingType.create(name: 'Precio')
+#RatingType.create(name: 'Calidad')
+#RatingType.create(name: 'Tiempo')
 
 # Categorias (Carga inicial)
 #Category.create(name: 'Hogar')
