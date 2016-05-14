@@ -43,9 +43,14 @@ class Api::V1::CreditCardsController < BaseController
   end
 
   def index
-    customer = Conekta::Customer.find(@user.conektaid)
+
+    if @user.conektaid
+      customer = Conekta::Customer.find(@user.conektaid)
+      render json: customer.cards, status: 200
+    else
+      render json: {errors: "" , message: "Usuario no registrado en Conekta"} , status: 500
+    end   
     
-    render json: customer.cards, status: 200
   end
 
   def destroy
