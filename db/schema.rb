@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20160509024026) do
     t.integer  "supplier_id"
     t.boolean  "is_finish_supplier", default: false
     t.boolean  "is_finish_customer", default: false
+    t.boolean  "is_evaluated",       default: false
   end
 
   add_index "request_services", ["request_status_id"], name: "index_request_services_on_request_status_id", using: :btree
