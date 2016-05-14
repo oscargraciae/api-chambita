@@ -30,7 +30,7 @@ class Api::V1::ServicesController < BaseController
   def show
     ser = Service.find(params[:id])
 
-    render json: ser, status: :ok
+    render json: ser, serializer: ServiceDetailSerializer, status: :ok
   end
 
   def create

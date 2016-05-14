@@ -72,14 +72,14 @@ group :development do
 end
 
 group :development, :test do
-gem 'pry-rails'
-gem 'byebug'
-gem "rspec-rails"
-gem "factory_girl_rails"
-gem "ffaker"
-gem 'shoulda-matchers'
-gem 'spring'
-gem "email_spec"
+	gem 'pry-rails'
+	gem 'byebug'
+	gem "rspec-rails"
+	gem "factory_girl_rails"
+	gem "ffaker"
+	gem 'shoulda-matchers'
+	gem 'spring'
+	gem "email_spec"
 end
 
 gem 'devise'
