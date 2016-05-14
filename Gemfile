@@ -42,7 +42,7 @@ gem 'jbuilder'
 gem 'kaminari'
 
 gem 'faker'
-
+gem 'conekta'
 gem 'carrierwave', '0.10.0'
 #gem "mini_magick"
 gem "fog"
