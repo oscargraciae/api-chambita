@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160512225809) do
+ActiveRecord::Schema.define(version: 20160517004039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,21 @@ ActiveRecord::Schema.define(version: 20160512225809) do
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
   end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "notified_by_id"
+    t.integer  "request_service_id"
+    t.integer  "identifier"
+    t.string   "type_notification"
+    t.boolean  "read"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "notifications", ["notified_by_id"], name: "index_notifications_on_notified_by_id", using: :btree
+  add_index "notifications", ["request_service_id"], name: "index_notifications_on_request_service_id", using: :btree
+  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "order_statuses", force: :cascade do |t|
     t.string   "name"
@@ -226,6 +241,9 @@ ActiveRecord::Schema.define(version: 20160512225809) do
   add_foreign_key "credit_cards", "users"
   add_foreign_key "evaluations", "services"
   add_foreign_key "evaluations", "users"
+  add_foreign_key "notifications", "request_services"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "notifications", "users", column: "notified_by_id"
   add_foreign_key "orders", "order_statuses"
   add_foreign_key "orders", "request_services"
   add_foreign_key "ratings", "evaluations"
