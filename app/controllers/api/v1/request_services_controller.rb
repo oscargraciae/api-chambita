@@ -125,7 +125,8 @@ class Api::V1::RequestServicesController < BaseController
                         notified_by_id: from,
                         request_service_id: request.id,
                         identifier: request.id,
-                        type_notification: message)
+                        type_notification: message,
+                        read: false)
   end
 
   def request_params
