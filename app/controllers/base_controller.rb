@@ -13,12 +13,14 @@ class BaseController < ApplicationController
   # Este metodo nos validara el token del usuaro
   private
     def auth
-      token = request.headers["Authorization"].split(' ')[1]
+      #token = request.headers["Authorization"].split(' ')[1]
+      token = request.headers["Authorization"]
 
       if !token
         json = {:code => "unauthorized", :message => "Acceso no autorizado", :object => "error", :type => nil}
         render json: json, status: :unauthorized
       else
+        token = token.split(' ')[1]
         # Validamos que el token exista y si existe almacenamos el usuario en una variable, si no existe retornamos el error
         @user = User.find_by(token: token)
         if !@user

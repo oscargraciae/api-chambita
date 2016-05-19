@@ -5,6 +5,7 @@ class RequestService < ActiveRecord::Base
   belongs_to :user
   belongs_to :request_status
   has_many :request_message
+  has_many :notifications, dependent: :destroy  
   
   scope :me, -> (user_id) { where user_id: user_id }
   scope :status, -> (status_id) { where request_status_id: status_id }

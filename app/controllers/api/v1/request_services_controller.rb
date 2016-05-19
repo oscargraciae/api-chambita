@@ -35,6 +35,8 @@ class Api::V1::RequestServicesController < BaseController
     request.supplier_id = service.user_id
 
   	if request.save
+      create_notification(request, "ha solicitado el servicio", request.user.id, request.supplier.id)
+
   		render json: request, status: :ok
   	else
   		render json: "Error", status: 422
@@ -64,7 +66,8 @@ class Api::V1::RequestServicesController < BaseController
     request = RequestService.find(params[:id])
     
     if request.update_attribute(:request_status_id, REQUEST_STATUS_INPROCESS)
-      # req_status = RequestStatus.find(REQUEST_STATUS_ACEPTED)
+      
+      create_notification(request, "acepto el trabajo", request.supplier.id, request.user.id)
 
       Order.create(request.id, 3, request.price, request.fee)
 
@@ -77,10 +80,14 @@ class Api::V1::RequestServicesController < BaseController
 
     if params[:finish_type] == 'supplier'
 
+      create_notification(request, "ha terminado", request.supplier.id, request.user.id)
+
       request.update_attribute(:is_finish_supplier, true)
       render json: request, status: :ok
 
     elsif params[:finish_type] == 'customer'
+
+      create_notification(request, "aprobó el trabajo", request.user.id, request.supplier.id)
 
       # Cuando el cliente valida el trabajo se cambia la bandera
       request.update_attribute(:is_finish_customer, true)
@@ -110,6 +117,16 @@ class Api::V1::RequestServicesController < BaseController
       req_status = RequestStatus.find(params[:status_id])
       render json: req_status, status: :ok
     end
+  end
+
+  def create_notification(request, message, from, to)
+    puts request.as_json
+    Notification.create(user_id: to,
+                        notified_by_id: from,
+                        request_service_id: request.id,
+                        identifier: request.id,
+                        type_notification: message,
+                        read: false)
   end
 
   def request_params

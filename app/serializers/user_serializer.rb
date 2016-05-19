@@ -3,6 +3,7 @@ class UserSerializer < ActiveModel::Serializer
   attributes :id, :first_name, :last_name, :full_name, :email, :description, :avatar, :avatar_thumb, :address, :address_street, :address_area, :address_zipcode, :cellphone
   # root 'data'
   has_many :services
+  has_many :notifications
 
   def avatar_thumb
   	object.avatar.url(:thumb)

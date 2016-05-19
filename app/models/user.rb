@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   has_many :sent_messages, class_name: "RequestMessage", foreign_key: "sender_id"
   has_many :received_messages, class_name: "RequestMessage", foreign_key: "recipient_id"
-
+  has_many :notifications, dependent: :destroy  
+  
   belongs_to :supplier, class_name: "RequestService", foreign_key: "supplier_id"
 
   # Include default devise modules. Others available are:
