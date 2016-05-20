@@ -39,7 +39,11 @@ Rails.application.routes.draw do
       end
       resources :request_message, only: [:create]
       resources :credit_cards, except: [:new, :edit]
-      resources :notification, only: [:index]
+      resources :notification, only: [:index] do
+        collection do
+          get 'read'
+        end
+      end
     end
   end
 end
