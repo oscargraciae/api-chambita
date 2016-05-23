@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       resources :request_message, only: [:create]
       resources :credit_cards, except: [:new, :edit]
       resources :notification, only: [:index]
+      resources :inbox, only: [:index, :create]
     end
   end
 end

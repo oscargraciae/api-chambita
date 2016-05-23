@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160517004039) do
+ActiveRecord::Schema.define(version: 20160519061821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,23 @@ ActiveRecord::Schema.define(version: 20160517004039) do
 
   add_index "evaluations", ["service_id"], name: "index_evaluations_on_service_id", using: :btree
   add_index "evaluations", ["user_id"], name: "index_evaluations_on_user_id", using: :btree
+
+  create_table "inbox_messages", force: :cascade do |t|
+    t.string   "message"
+    t.integer  "sender_user"
+    t.integer  "inbox_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "inbox_messages", ["inbox_id"], name: "index_inbox_messages_on_inbox_id", using: :btree
+
+  create_table "inboxes", force: :cascade do |t|
+    t.integer  "sender_id"
+    t.integer  "recipient_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
 
   create_table "locations", force: :cascade do |t|
     t.string   "location"
@@ -241,6 +258,7 @@ ActiveRecord::Schema.define(version: 20160517004039) do
   add_foreign_key "credit_cards", "users"
   add_foreign_key "evaluations", "services"
   add_foreign_key "evaluations", "users"
+  add_foreign_key "inbox_messages", "inboxes"
   add_foreign_key "notifications", "request_services"
   add_foreign_key "notifications", "users"
   add_foreign_key "notifications", "users", column: "notified_by_id"
