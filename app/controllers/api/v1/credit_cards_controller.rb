@@ -3,7 +3,8 @@ class Api::V1::CreditCardsController < BaseController
 
   def create
     if @user.conektaid
-      conektaResp = customer.create_card(:token => credit_cards_parms[:conektaTokenId])
+      customer = Conekta::Customer.find(@user.conektaid)
+      conektaResp = customer.create_card(:token => params[:conektaTokenId])
 
       card = CreditCard.new
       card.last4 = conektaResp.last4
@@ -22,7 +23,7 @@ class Api::V1::CreditCardsController < BaseController
           :name => @user.first_name + " " + @user.last_name,
           :email => @user.email,
           :phone => @cellphone,
-          cards: [credit_cards_parms[:conektaTokenId]]
+          cards: [params[:conektaTokenId]]
       })
 
       card = CreditCard.new
@@ -46,7 +47,7 @@ class Api::V1::CreditCardsController < BaseController
 
     if @user.conektaid
       customer = Conekta::Customer.find(@user.conektaid)
-      render json: customer.cards, status: 200
+      render json: customer, status: 200
     else
       render json: {errors: "" , message: "Usuario no registrado en Conekta"} , status: 500
     end   
