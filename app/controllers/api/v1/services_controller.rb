@@ -54,7 +54,7 @@ class Api::V1::ServicesController < BaseController
 
   def published
     service = Service.find(params[:id])
-    # puts service_params[:publish]
+    
     if service.update_attribute(:published, params[:publish])
       render json: {status: true, published: service.published}, status: 200
     else

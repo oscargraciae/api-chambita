@@ -53,8 +53,6 @@ class Service < ActiveRecord::Base
     services = services.top() if params[:top].present?
     services = services.recent() if params[:recent].present?
 
-    puts services.as_json
-
     services
   end
 
