@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: notifications
+#
+#  id                 :integer          not null, primary key
+#  user_id            :integer
+#  notified_by_id     :integer
+#  request_service_id :integer
+#  identifier         :integer
+#  type_notification  :string
+#  read               :boolean
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+
 class NotificationSerializer < ActiveModel::Serializer
 	attributes :id, :message, :type_notification, :user_name, :service_name, :user_avatar, :request_id, :read
 
@@ -14,7 +29,7 @@ class NotificationSerializer < ActiveModel::Serializer
 	end
 
 	def service_name
-		object.request_service.service.name
+		#object.request_service.service.name
 	end
 
 	def request_id
@@ -23,6 +38,7 @@ class NotificationSerializer < ActiveModel::Serializer
 	
 	def message
 		[object.user.first_name]
-		"#{object.notified_by.first_name} #{object.type_notification} #{object.request_service.service.name}"
+		"#{object.notified_by.first_name} #{object.type_notification}"
 	end
+	# #{object.request_service.service.name}
 end

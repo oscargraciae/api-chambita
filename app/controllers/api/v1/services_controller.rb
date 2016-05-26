@@ -4,8 +4,33 @@ class Api::V1::ServicesController < BaseController
 
 
   def index
-    services = Service.search(params)
-    
+
+    if params[:location]
+
+      location = Geocoder.search(params[:location])[0]
+      lat = location.coordinates[0]
+      lng = location.coordinates[1]
+
+      services = Service.all_services(lat, lng)
+
+    elsif params[:user_id]
+      user = User.find(params[:user_id])
+      lat = user.lat
+      lng = user.lng
+
+      services = Service.all_services(lat, lng)
+
+    elsif params[:lat] && params[:lng]
+      services = Service.all_services(params[:lat], params[:lng])
+
+    else
+      location = Geocoder.search("Monterrey, Nuevo León, México")[0]      
+      lat = location.coordinates[0]
+      lng = location.coordinates[1]
+      
+      services = Service.all_services(lat, lng)
+    end
+
     render json: services, status: :ok
   end
 

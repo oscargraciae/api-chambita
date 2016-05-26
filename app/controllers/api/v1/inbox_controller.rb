@@ -1,12 +1,12 @@
 class Api::V1::InboxController < BaseController
   before_filter  :auth, only: [:index ,:create]
 
-  def index
+  """def index
   	#listado de conversacioness
-    @inb = Inbox.find(sender_id: @user.id or recipient_id: @user.id)
+    #@inb = Inbox.find(sender_id: @user.id or recipient_id: @user.id)
 
   	render json: @inb, status: 200
-  end
+  end"""
 
   #validacion de primer mensaje
   def create

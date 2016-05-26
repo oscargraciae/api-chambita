@@ -1,8 +1,25 @@
+# == Schema Information
+#
+# Table name: services
+#
+#  id                 :integer          not null, primary key
+#  name               :string
+#  description        :text
+#  category_id        :integer
+#  price              :decimal(, )
+#  is_fixed_price     :boolean
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  user_id            :integer
+#  sub_category_id    :integer
+#  published          :boolean
+#  cover_file_name    :string
+#  cover_content_type :string
+#  cover_file_size    :integer
+#  cover_updated_at   :datetime
+#
+
 class Service < ActiveRecord::Base
-  
-  # after_validation :geocode
-  
-  #geocoded_by :address, :latitude  => :lat, :longitude => :lng # ActiveRecord
 
   reverse_geocoded_by "users.lat", "users.lng"
 
@@ -25,20 +42,17 @@ class Service < ActiveRecord::Base
                         :path => "uploads/services/cover/:file_id/:style/:filename"
 
 
+  #default_scope -> { order(avg_rating: :desc) }
+  
   scope :user, -> (user_id) { where user_id: user_id }
+  scope :top, -> { limit(2) }
+  scope :recent, -> { order(updated_at: :desc) }
 
-  scope :top, -> {
-    limit(2)
-  }
-
-  scope :recent, -> {
-    order(updated_at: :desc)
-  }
-  # scope :top, -> (top) { limit user_id: user_id }
-
-  # scope :status, -> (status) { where status: status }
-  # scope :location, -> (location_id) { where location_id: location_id }
-  # scope :starts_with, -> (name) { where("name like ?", "#{name}%")}
+  def self.all_services(lat, lng)
+    services = Service.all
+    services = services.joins(:user).near([lat, lng], 100*0.30, user:{:order => :distance}).includes(:category, :user, :sub_category, :service_images)
+    services
+  end
 
   def self.all_cached
     Rails.cache.fetch('Service.all') { all }
@@ -46,20 +60,16 @@ class Service < ActiveRecord::Base
 
   def self.search(params = {})
     services = params[:services_ids].present? ? Service.where(id: params[:services_ids]) : Service.all
-
     services = services.order(id: :desc)
-
     services = services.user(params[:user_id]) if params[:user_id].present?
     services = services.top() if params[:top].present?
     services = services.recent() if params[:recent].present?
-
+    services = services.joins(:user).near([lat, lng], 100*0.25, user:{:order => :distance})
     services
   end
 
   def self.search_service(params)
     query = params[:q]
-
-    # services = Service.all
 
     # Consultamos la informacion de la ubicacion al API de Google maps 
     location = Geocoder.search(params[:location])[0]
@@ -68,13 +78,11 @@ class Service < ActiveRecord::Base
     lng = location.coordinates[1]
 
     services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])
-
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.where(sub_category_id: params[:sub_category]) if params[:sub_category].present?
-    
     # obtenemos los servicios que esten a 60 kilometros a la redonda de las cordeandas
-    services = services.joins(:user).near([lat, lng], 100*0.62)
-
+    services = services.joins(:user).near([lat, lng], 100*0.25, user:{:order => :distance})
+    puts services.as_json
     services
   end
 
@@ -86,6 +94,67 @@ class Service < ActiveRecord::Base
       errors.add("general" , "Ha superado el limite de servicios permitidos")
       return false
     end
+  end
+
+  def service_ratings
+    Rating.get_ratings_by_service_id(self.id)
+  end
+
+  def total_jobs
+    total = RequestService.where({service_id: self.id, request_status_id: 4}).size
+
+    total
+  end
+
+  # def avg_rating_price
+  #   ratings = Rating.joins(:evaluation).where(evaluations: {service_id: self.id}, ratings: {rating_type_id: 1})
+    
+  #   if ratings.length > 0
+
+  #     total = ratings.sum(:value).to_f / ratings.size
+  #   else
+
+  #     total = 0
+  #   end
+    
+  #   total
+  # end
+
+  # def avg_rating_quality
+  #   ratings = Rating.joins(:evaluation).where(evaluations: {service_id: self.id}, ratings: {rating_type_id: 2})
+
+  #   if ratings.length > 0
+  #     total = ratings.sum(:value).to_f / ratings.size
+  #   else
+  #     total = 0
+  #   end
+    
+  #   total
+
+  # end
+
+  # def avg_rating_time
+  #   ratings = Rating.joins(:evaluation).where(evaluations: {service_id: self.id}, ratings: {rating_type_id: 3})
+
+  #   if ratings.length > 0
+  #     total = ratings.sum(:value).to_f / ratings.size
+  #   else
+  #     total = 0
+  #   end
+    
+  #   total
+  # end
+
+
+  def avg_rating
+    #sum = avg_rating_time + avg_rating_price + avg_rating_quality
+
+    #total = sum / 3
+
+    #total.round(1)
+
+    0
+
   end
 
 

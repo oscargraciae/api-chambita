@@ -17,17 +17,16 @@ source 'https://rubygems.org'
 gem 'active_model_serializers'
 gem 'aws-sdk', '< 2'
 gem 'bcrypt', '~> 3.1.11'
-gem 'bower-rails'
+#gem 'bower-rails'
 gem 'carrierwave', '0.10.0'
 gem 'conekta'
 gem 'dalli'
 gem 'devise'
-gem 'faker'
 gem 'fog'
 gem 'geocoder'
-gem 'jbuilder'
+#gem 'jbuilder'
 gem 'jmespath'
-gem 'json_pure'
+#gem 'json_pure'
 gem 'kaminari'
 gem 'memcachier'
 gem 'paperclip', '~> 4.2'
@@ -40,6 +39,8 @@ gem 'rake', '10.4.2'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'websocket-rails'
 
+gem 'annotate'
+gem "bullet", :group => "development"
 group :development do
 	gem 'capistrano'
 	gem 'capistrano-bundler'
@@ -50,6 +51,7 @@ group :development do
 	gem 'rails-erd'
 	gem 'sqlite3'
 	gem 'web-console', '~> 2.0'
+	gem 'faker'
 end
 
 group :development, :test do
