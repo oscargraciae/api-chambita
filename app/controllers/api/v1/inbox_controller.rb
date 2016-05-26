@@ -3,9 +3,9 @@ class Api::V1::InboxController < BaseController
 
   def index
   	#listado de conversacioness
-    @inb = Inbox.find(sender_id: @user.id or recipient_id: @user.id)
-
-  	render json: @inb, status: 200
+    inb = Inbox.where(sender_id: @user.id)#, or(recipient_id: @user.id)))
+    
+    render json: {inbox: ActiveModel::ArraySerializer.new(inb), count: inb.size}, status: :ok
   end
 
   #validacion de primer mensaje
