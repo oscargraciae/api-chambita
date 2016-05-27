@@ -1,18 +1,16 @@
 class ServiceDetailSerializer < ActiveModel::Serializer
   
+  # INFORMAION DE SERVICIO PUBLICA 
+
   #has_one :user
-  attributes :id, :name, :description, :price, :created_at, :updated_at, :published, :cover, :cover_thumb, :fee, :rating_general
+  attributes :id, :name, :description, :price, :created_at, :cover, :fee, :rating_general, :service_ratings
   has_one :sub_category
-  has_one :category, serializer: CategoryShortSerializer
+  #has_one :category, serializer: CategoryShortSerializer
   # has_many :service_images
   has_one :user, serializer: UserShortSerializer
 
-  def cover_thumb
-  	object.cover.url(:thumb)
-  end
-
   def price
-  	object.price.round(2)
+  	object.price
   end
 
   def fee

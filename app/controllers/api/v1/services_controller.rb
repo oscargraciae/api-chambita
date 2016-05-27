@@ -1,29 +1,13 @@
 class Api::V1::ServicesController < BaseController
 
-  before_filter :auth, only: [:create, :update, :destroy]
-
+  before_filter :auth, only: [:create, :update, :destroy, :my_services, :show_service]
 
   def index
 
-    if params[:location]
-
-      location = Geocoder.search(params[:location])[0]
-      lat = location.coordinates[0]
-      lng = location.coordinates[1]
-
-      services = Service.all_services(lat, lng)
-
-    elsif params[:user_id]
-      user = User.find(params[:user_id])
-      lat = user.lat
-      lng = user.lng
-
-      services = Service.all_services(lat, lng)
-
-    elsif params[:lat] && params[:lng]
+    if params[:lat] && params[:lng]
       services = Service.all_services(params[:lat], params[:lng])
-
     else
+      # colocamos una ubicacion default, en caso de no enviar parametros de latitud y longitud
       location = Geocoder.search("Monterrey, Nuevo León, México")[0]      
       lat = location.coordinates[0]
       lng = location.coordinates[1]
@@ -35,26 +19,22 @@ class Api::V1::ServicesController < BaseController
   end
 
   def search
-    query = params[:q]
-    #query = params[:q]
-    
     services = Service.search_service(params)
+    render json: services, status: :ok
+  end
 
-    #location = Geocoder.search(params[:location])[0]
-    
-    #lat = location.coordinates[0]
-    #lng = location.coordinates[1]
+  def my_services
+    services = Service.service_by_user_id(@user.id)
+    render json: services, status: :ok
+  end
 
-    #services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])
-    #services = services.joins(:user).near([lat, lng], 100*0.62)
-
-    render json: services, status: :ok  
-
+  def show_service
+    ser = Service.find_by(id: params[:id], user_id: @user.id)
+    render json: ser, status: :ok
   end
 
   def show
     ser = Service.find(params[:id])
-
     render json: ser, serializer: ServiceDetailSerializer, status: :ok
   end
 

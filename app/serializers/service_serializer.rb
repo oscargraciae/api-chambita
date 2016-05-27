@@ -21,17 +21,14 @@
 
 class ServiceSerializer < ActiveModel::Serializer
 
-  #has_one :user
-  attributes :id, :name, :description, :price, :created_at, :updated_at, :published, :cover, :cover_thumb, :rating_general
+  #INFORMACION PRIVADA DE SERVICIO
+
+  attributes :id, :name, :description, :price, :created_at, :updated_at, :published, :cover, :rating_general, :total_jobs
   #, :total_jobs
   #, :service_ratings
   has_one :sub_category
-  # has_one :category, serializer: CategoryShortSerializer
-  has_many :service_images
+  has_one :category, serializer: CategoryShortSerializer
+  #has_many :service_images
   has_one :user, serializer: UserShortSerializer
-
-  def cover_thumb
-  	object.cover.url(:thumb)
-  end
 
 end

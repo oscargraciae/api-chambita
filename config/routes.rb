@@ -16,10 +16,12 @@ Rails.application.routes.draw do
       resources :services, only: [:index, :show, :create, :update, :destroy] do
         resources :evaluations, only: [:index, :create]
         member do
+          get 'show_service'
           put 'published'
         end
         collection do
           get 'search'
+          get 'my_services'
         end
       end
       resources :service_images, only: [:index, :create, :destroy]

@@ -102,6 +102,10 @@ class Api::V1::RequestServicesController < BaseController
       order.order_status_id = ORDER_STATUS_PAID
       order.save
       
+      request_size = RequestService.where({service_id: request.service_id, request_status_id: REQUEST_STATUS_FINISH}).size
+      s = Service.find(request.service_id)
+      s.update_attribute(:total_jobs, request_size)
+
       # regresamos la solicitud con los campos actualizados
       render json: request, status: :ok
     else

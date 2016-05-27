@@ -41,49 +41,38 @@ class Service < ActiveRecord::Base
                         :default_url => 'http://chambita1236.s3.amazonaws.com/uploads/users/user_default.png',
                         :path => "uploads/services/cover/:file_id/:style/:filename"
 
-
-  #default_scope -> { order(avg_rating: :desc) }
-  
   scope :user, -> (user_id) { where user_id: user_id }
   scope :top, -> { limit(2) }
   scope :recent, -> { order(updated_at: :desc) }
+  scope :add_include, -> { includes(:category, :user, :sub_category) }
+  scope :location, -> (km, lat, lng) { joins(:user).near([lat, lng], km, :order => false).where(published: true).order rating_general: :desc }
 
   def self.all_services(lat, lng)
-    services = Service.all
-    services = services.joins(:user).near([lat, lng], 100*0.30, user:{:order => :distance}).includes(:category, :user, :sub_category, :service_images)
-    services
+    Service.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include()
   end
 
-  def self.all_cached
-    Rails.cache.fetch('Service.all') { all }
-  end
-
-  def self.search(params = {})
-    services = params[:services_ids].present? ? Service.where(id: params[:services_ids]) : Service.all
-    services = services.order(id: :desc)
-    services = services.user(params[:user_id]) if params[:user_id].present?
-    services = services.top() if params[:top].present?
-    services = services.recent() if params[:recent].present?
-    services = services.joins(:user).near([lat, lng], 100*0.25, user:{:order => :distance})
-    services
+  def self.service_by_user_id(user_id)
+    Service.where(user_id: user_id).recent().add_include
   end
 
   def self.search_service(params)
     query = params[:q]
 
-    # Consultamos la informacion de la ubicacion al API de Google maps 
+    puts params[:sub_category]
     location = Geocoder.search(params[:location])[0]
-    # obtenemos las cordenadas de la ubicacion
     lat = location.coordinates[0]
     lng = location.coordinates[1]
 
-    services = Service.where(["lower(name) LIKE ? ", "%#{query.downcase}%"])
+    services = Service.where(["lower(services.name) LIKE ? ", "%#{query.downcase}%"])
     services = services.where(category_id: params[:category]) if params[:category].present?
-    services = services.where(sub_category_id: params[:sub_category]) if params[:sub_category].present?
-    # obtenemos los servicios que esten a 60 kilometros a la redonda de las cordeandas
-    services = services.joins(:user).near([lat, lng], 100*0.25, user:{:order => :distance})
-    puts services.as_json
-    services
+    #services = services.where(sub_category_id: params[:sub_category]) if params[:sub_category].present?
+    services = services.joins(:sub_category).where(sub_categories: {name: params[:sub_category]}) if params[:sub_category].present?
+    services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include()
+    
+  end
+
+  def self.all_cached
+    Rails.cache.fetch('Service.all') { all }
   end
 
   # Aqui validamos el limite de servicios permitidos por usuario, el maximo son 15
@@ -99,64 +88,6 @@ class Service < ActiveRecord::Base
   def service_ratings
     Rating.get_ratings_by_service_id(self.id)
   end
-
-  def total_jobs
-    total = RequestService.where({service_id: self.id, request_status_id: 4}).size
-
-    total
-  end
-
-  # def avg_rating_price
-  #   ratings = Rating.joins(:evaluation).where(evaluations: {service_id: self.id}, ratings: {rating_type_id: 1})
-    
-  #   if ratings.length > 0
-
-  #     total = ratings.sum(:value).to_f / ratings.size
-  #   else
-
-  #     total = 0
-  #   end
-    
-  #   total
-  # end
-
-  # def avg_rating_quality
-  #   ratings = Rating.joins(:evaluation).where(evaluations: {service_id: self.id}, ratings: {rating_type_id: 2})
-
-  #   if ratings.length > 0
-  #     total = ratings.sum(:value).to_f / ratings.size
-  #   else
-  #     total = 0
-  #   end
-    
-  #   total
-
-  # end
-
-  # def avg_rating_time
-  #   ratings = Rating.joins(:evaluation).where(evaluations: {service_id: self.id}, ratings: {rating_type_id: 3})
-
-  #   if ratings.length > 0
-  #     total = ratings.sum(:value).to_f / ratings.size
-  #   else
-  #     total = 0
-  #   end
-    
-  #   total
-  # end
-
-
-  def avg_rating
-    #sum = avg_rating_time + avg_rating_price + avg_rating_quality
-
-    #total = sum / 3
-
-    #total.round(1)
-
-    0
-
-  end
-
 
   def default_values
     self.published = true

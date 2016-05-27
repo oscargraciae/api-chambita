@@ -1,5 +1,5 @@
 class MeSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :last_name, :email, :description, :avatar, :avatar_thumb, :address, :address_street, :address_area, :address_zipcode, :cellphone
+  attributes :id, :first_name, :last_name, :email, :description, :avatar, :avatar_thumb, :address, :address_street, :address_area, :address_zipcode, :cellphone, :lat, :lng
   # root 'data'
   #has_many :notifications
   

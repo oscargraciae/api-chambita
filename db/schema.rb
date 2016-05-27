@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160525193032) do
+ActiveRecord::Schema.define(version: 20160526232906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -183,8 +183,8 @@ ActiveRecord::Schema.define(version: 20160525193032) do
     t.integer  "category_id"
     t.decimal  "price",              precision: 8, scale: 2
     t.boolean  "is_fixed_price"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
     t.integer  "user_id"
     t.integer  "sub_category_id"
     t.boolean  "published"
@@ -192,8 +192,8 @@ ActiveRecord::Schema.define(version: 20160525193032) do
     t.string   "cover_content_type"
     t.integer  "cover_file_size"
     t.datetime "cover_updated_at"
-    t.decimal  "rating_general",     precision: 8, scale: 1
-    t.integer  "total_jobs"
+    t.decimal  "rating_general",     precision: 8, scale: 1, default: 0.0
+    t.integer  "total_jobs",                                 default: 0
   end
 
   add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
