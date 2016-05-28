@@ -23,6 +23,11 @@ class Api::V1::ServicesController < BaseController
     render json: services, status: :ok
   end
 
+  def user_services
+    services = Service.service_by_user_id(params[:user_id])
+    render json: services, status: :ok
+  end
+
   def my_services
     services = Service.service_by_user_id(@user.id)
     render json: services, status: :ok
@@ -30,7 +35,12 @@ class Api::V1::ServicesController < BaseController
 
   def show_service
     ser = Service.find_by(id: params[:id], user_id: @user.id)
-    render json: ser, status: :ok
+    if ser
+      render json: ser, status: :ok
+    else
+      render json: {message: "No tiene aceso a este servicio."}, status: 500
+    end
+    
   end
 
   def show

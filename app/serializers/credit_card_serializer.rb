@@ -14,5 +14,12 @@
 
 class CreditCardSerializer < ActiveModel::Serializer
   attributes :id, :last4, :brand, :active
-  has_one :user
+  #has_one :user
+
+  def brand
+    if object.brand == "MC"
+      "MasterCard"      
+    end  
+  end
+
 end

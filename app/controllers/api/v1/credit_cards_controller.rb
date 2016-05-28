@@ -1,5 +1,5 @@
 class Api::V1::CreditCardsController < BaseController
-	before_filter  :auth, only: [:create, :index, :destroy]
+	before_filter  :auth, only: [:create, :index, :destroy, :my_cards]
 
   def create
     if @user.conektaid
@@ -52,6 +52,11 @@ class Api::V1::CreditCardsController < BaseController
       render json: {errors: "" , message: "Usuario no registrado en Conekta"} , status: :ok
     end   
     
+  end
+
+  def my_cards
+    cards = CreditCard.where(user_id: @user.id)
+    render json: cards, status: :ok
   end
 
   def destroy

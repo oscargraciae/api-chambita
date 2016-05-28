@@ -22,6 +22,7 @@ Rails.application.routes.draw do
         collection do
           get 'search'
           get 'my_services'
+          get 'user_services'
         end
       end
       resources :service_images, only: [:index, :create, :destroy]
@@ -40,7 +41,11 @@ Rails.application.routes.draw do
         end
       end
       resources :request_message, only: [:create]
-      resources :credit_cards, except: [:new, :edit]
+      resources :credit_cards, except: [:new, :edit] do
+        collection do
+          get 'my_cards'
+        end
+      end
       resources :inbox, only: [:index, :create]
       resources :notification, only: [:index] do
         collection do
