@@ -1,12 +1,11 @@
 class Api::V1::InboxController < BaseController
-  before_filter  :auth, only: [:index ,:create]
-
-  """def index
-  	#listado de conversacioness
-    #@inb = Inbox.find(sender_id: @user.id or recipient_id: @user.id)
-
-  	render json: @inb, status: 200
-  end"""
+  before_filter  :auth, only: [:index, :create, :all_messages]
+  
+  def index
+    #listado de conversacioness
+    inb = Inbox.where('SENDER_ID = ? OR RECIPIENT_ID = ?', @user.id, @user.id).includes(:sender, :recipient)
+    render json: {inbox: ActiveModel::ArraySerializer.new(inb), count: inb.size}, status: :ok
+  end
 
   #validacion de primer mensaje
   def create
@@ -43,5 +42,9 @@ class Api::V1::InboxController < BaseController
     
   end
 
-  #metodo converación
+  #metodo conversación
+  def all_messages
+    inb = InboxMessage.where(inbox_id: params[:inboxId])
+    render json: inb, status: :ok
+  end
 end
