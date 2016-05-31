@@ -9,7 +9,7 @@ Rails.application.routes.draw do
           put 'password'
           get 'me_show'
         end
-        collection do 
+        collection do
             post 'prueba'
           end
       end
@@ -30,17 +30,17 @@ Rails.application.routes.draw do
       resources :authentication, only: [:create, :destroy]
       resources :me, only: :index
       resources :categories, only: :index
-      resources :request_services, only: [:index, :show, :create] do 
+      resources :request_services, only: [:index, :show, :create] do
         member do
-          put 'status'
-          put 'accept_job'
-          put 'finish_job'
+          get 'cancel'
+          put 'accept'
+          put 'finish'
         end
         collection do
           get 'jobs'
         end
       end
-      resources :request_message, only: [:create]
+      resources :request_message, only: [:index, :create]
       resources :credit_cards, except: [:new, :edit] do
         collection do
           get 'my_cards'

@@ -8,6 +8,7 @@ class ServiceDetailSerializer < ActiveModel::Serializer
   #has_one :category, serializer: CategoryShortSerializer
   # has_many :service_images
   has_one :user, serializer: UserShortSerializer
+  has_many :service_images, includes: true
 
   def price
   	object.price

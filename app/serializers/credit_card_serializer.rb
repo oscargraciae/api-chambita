@@ -18,7 +18,9 @@ class CreditCardSerializer < ActiveModel::Serializer
 
   def brand
     if object.brand == "MC"
-      "MasterCard"      
+      object.brand = "MasterCard"
+    else
+      object.brand
     end  
   end
 

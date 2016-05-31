@@ -1,5 +1,13 @@
-class Api::V1::RequestMessageController < ApplicationController
-	
+class Api::V1::RequestMessageController < BaseController
+	before_filter :auth, only: [:index, :create]
+
+	def index
+		messages = RequestMessage.get_by_request_id(params[:request_id])
+
+		#messages = RequestMessage.where(request_service_id: params[:request_id])
+		render json: messages, status: :ok
+	end
+
 	def create
 		m = RequestMessage.new(message_params)
 		if m.save

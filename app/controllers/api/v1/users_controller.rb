@@ -1,5 +1,5 @@
 class Api::V1::UsersController < BaseController
-  before_filter :auth, only: [:show, :update, :destroy]
+  before_filter :auth, only: [:show, :update, :destroy, :me_show, :avatar, :password]
   
   # GET api/v1/users
   def index
@@ -14,7 +14,7 @@ class Api::V1::UsersController < BaseController
 
  # GET api/v1/users/:id
  def me_show
-   user = User.find(params[:id])
+   user = User.find(@user.id)
    render json: MeSerializer.new(user), status: :ok
  end
 
@@ -36,7 +36,7 @@ class Api::V1::UsersController < BaseController
 # PUT api/v1/users/:id
  def update
 
-   user = User.find(params[:id])
+   user = User.find(@user.id)
    location = Geocoder.search(params[:address])[0]
 
    user.lat = location.coordinates[0]
@@ -53,7 +53,7 @@ class Api::V1::UsersController < BaseController
  end
 
   def avatar
-    user = User.find(params[:id])
+    user = User.find(@user.id)
     if user.update_attribute(:avatar, params[:avatar])
       render json: {status: true, user: MeSerializer.new(user) }, status: 200
     else
@@ -62,7 +62,7 @@ class Api::V1::UsersController < BaseController
   end
 
   def password
-    @user = User.find(params[:id])
+    @user = User.find(@user.id)
 
     # validamos que la nueva contraseña
     if params[:password] == params[:password_confirmation]

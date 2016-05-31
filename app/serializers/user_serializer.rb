@@ -40,11 +40,9 @@
 #
 
 class UserSerializer < ActiveModel::Serializer
-  # embed :ids, include: true
   attributes :id, :first_name, :last_name, :full_name, :email, :description, :avatar, :avatar_thumb, :address
-  has_many :services
-  #has_many :notifications
-
+  has_many :services, serializer: ServicePublicDetailSerializer
+  
   def avatar_thumb
   	object.avatar.url(:thumb)
   end
