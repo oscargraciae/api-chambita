@@ -11,6 +11,14 @@
 
 class Inbox < ActiveRecord::Base
 	belongs_to :recipient, class_name: "User"
-  	belongs_to :sender, class_name: "User"
-  	has_many :inbox_message
+	belongs_to :sender, class_name: "User"
+	has_many :inbox_message
+
+  scope :add_include, -> { includes(:sender, :recipient) }
+  #scope :User_inbox, -> 
+
+  def self.all_inbox_by_user(user_id)
+    Inbox.where('SENDER_ID = ? OR RECIPIENT_ID = ?', user_id, user_id).add_include()
+  end
+
 end
