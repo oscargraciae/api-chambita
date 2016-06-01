@@ -28,7 +28,7 @@ class ServiceSerializer < ActiveModel::Serializer
   #, :service_ratings
   has_one :sub_category
   has_one :category, serializer: CategoryShortSerializer
-  #has_many :service_images
+  has_many :service_images
   has_one :user, serializer: UserShortSerializer
 
 end

@@ -1,9 +1,9 @@
 class Api::V1::ServicesController < BaseController
 
-  before_filter :auth, only: [:create, :update, :destroy, :my_services, :show_service]
+  before_filter :auth, only: [:create, :update, :destroy, :my_services, :show_service, :published]
 
+  # METODOS PUBLICOS -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
   def index
-
     if params[:lat] && params[:lng]
       services = Service.all_services(params[:lat], params[:lng])
     else
@@ -15,19 +15,26 @@ class Api::V1::ServicesController < BaseController
       services = Service.all_services(lat, lng)
     end
 
-    render json: services, status: :ok
+    render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
   end
 
   def search
     services = Service.search_service(params)
-    render json: services, status: :ok
+    render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
   end
 
   def user_services
     services = Service.service_by_user_id(params[:user_id])
-    render json: services, status: :ok
+    render json: services, each_serializer: ServiceDetailSerializer, status: :ok
   end
 
+  def show
+    ser = Service.find(params[:id])
+    render json: ser, serializer: ServiceDetailSerializer, status: :ok
+  end
+
+  # METODOS PRIVADOR -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
+  
   def my_services
     services = Service.service_by_user_id(@user.id)
     render json: services, status: :ok
@@ -41,11 +48,6 @@ class Api::V1::ServicesController < BaseController
       render json: {message: "No tiene aceso a este servicio."}, status: 500
     end
     
-  end
-
-  def show
-    ser = Service.find(params[:id])
-    render json: ser, serializer: ServiceDetailSerializer, status: :ok
   end
 
   def create
