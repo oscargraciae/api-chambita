@@ -3,17 +3,20 @@ class Api::V1::InboxController < BaseController
   
   def index
     #listado de conversacioness
-    inb = Inbox.where('SENDER_ID = ? OR RECIPIENT_ID = ?', @user.id, @user.id).includes(:sender, :recipient)
+    inb = Inbox.all_inbox_by_user(@user.id)
+
     render json: {inbox: ActiveModel::ArraySerializer.new(inb), count: inb.size}, status: :ok
   end
-
-  #validacion de primer mensaje
+  
   def create
+    #validacion de primer mensaje
   	@inb = Inbox.where(sender_id: [@user.id, params[:user_id]] , recipient_id: [@user.id, params[:user_id]]).first
-	
+    puts @inb.as_json
   	if @inb
+      puts "solo mensaje"
         save_inbMessage()
   	else
+      puts "inbox y mensaje"
   		save_inbox()
 	  	save_inbMessage()
     end
@@ -22,7 +25,7 @@ class Api::V1::InboxController < BaseController
   end
 
   def save_inbox
-  	puts params[:user_id]
+
   	inbox = Inbox.new
   	inbox.sender_id = @user.id
   	inbox.recipient_id = params[:user_id]
@@ -33,6 +36,7 @@ class Api::V1::InboxController < BaseController
   end
 
   def save_inbMessage
+
   	@inbMess = InboxMessage.new
     @inbMess.message = params[:message]
     @inbMess.sender_user = @user.id 
@@ -45,6 +49,9 @@ class Api::V1::InboxController < BaseController
   #metodo conversación
   def all_messages
     inb = InboxMessage.where(inbox_id: params[:inboxId])
+    read = inb.where('sender_user != ?', @user.id)
+    puts read.as_json
+
     render json: inb, status: :ok
   end
 end
