@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160526232906) do
+ActiveRecord::Schema.define(version: 20160601041822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,8 +47,9 @@ ActiveRecord::Schema.define(version: 20160526232906) do
     t.string   "message"
     t.integer  "sender_user"
     t.integer  "inbox_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "readit",      default: false
   end
 
   add_index "inbox_messages", ["inbox_id"], name: "index_inbox_messages_on_inbox_id", using: :btree
@@ -151,6 +152,8 @@ ActiveRecord::Schema.define(version: 20160526232906) do
     t.boolean  "is_finish_supplier", default: false
     t.boolean  "is_finish_customer", default: false
     t.boolean  "is_evaluated",       default: false
+    t.decimal  "total"
+    t.string   "token_card"
   end
 
   add_index "request_services", ["request_status_id"], name: "index_request_services_on_request_status_id", using: :btree

@@ -8,10 +8,10 @@ class Api::V1::ServicesController < BaseController
       services = Service.all_services(params[:lat], params[:lng])
     else
       # colocamos una ubicacion default, en caso de no enviar parametros de latitud y longitud
-      location = Geocoder.search("Monterrey, Nuevo León, México")[0]      
+      location = Geocoder.search("Monterrey, Nuevo León, México")[0]
       lat = location.coordinates[0]
       lng = location.coordinates[1]
-      
+
       services = Service.all_services(lat, lng)
     end
 
@@ -34,7 +34,7 @@ class Api::V1::ServicesController < BaseController
   end
 
   # METODOS PRIVADOR -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
-  
+
   def my_services
     services = Service.service_by_user_id(@user.id)
     render json: services, status: :ok
@@ -47,7 +47,7 @@ class Api::V1::ServicesController < BaseController
     else
       render json: {message: "No tiene aceso a este servicio."}, status: 500
     end
-    
+
   end
 
   def create
@@ -71,7 +71,7 @@ class Api::V1::ServicesController < BaseController
 
   def published
     service = Service.find(params[:id])
-    
+
     if service.update_attribute(:published, params[:publish])
       render json: {status: true, published: service.published}, status: 200
     else
@@ -85,7 +85,7 @@ class Api::V1::ServicesController < BaseController
     head 204
   end
 
-  private 
+  private
   def set_service
     @ser = Service.find(params[:id])
   end

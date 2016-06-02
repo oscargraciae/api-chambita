@@ -20,15 +20,15 @@
 #
 
 class RequestServiceSerializer < ActiveModel::Serializer
-  attributes :id, :message, :request_date, :request_time, :price, :fee, :created_at, :is_finish_supplier, :is_finish_customer, :is_evaluated
-  
+  attributes :id, :message, :request_date, :request_time, :price, :fee, :total, :created_at, :is_finish_supplier, :is_finish_customer, :is_evaluated
+
   has_one :request_status
   has_one :user, serializer: UserShortSerializer
   has_one :supplier, serializer: UserShortSerializer
 	has_one :service, serializer: ServiceOnlySerializer
-	
+
   def request_message
     object.request_message.order(created_at: :desc)
-  end  
+  end
 
 end

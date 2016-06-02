@@ -12,17 +12,21 @@ class Api::V1::RequestServicesController < BaseController
   end
 
   def show
-      request = RequestService.find(params[:id])
-      render json: request, status: :ok
+    request = RequestService.find(params[:id])
+    render json: request, status: :ok
   end
 
   def create
      request = RequestService.new(request_params)
 
+     card = CreditCard.find(params[:card_id])
      service = Service.find(request.service_id)
+     
      request.price = service.price
      request.fee = service.price * CHAMBITA_FEED
+     request.total = request.price + request.fee
      request.supplier_id = service.user_id
+     request.token_card = card.token
 
      if request.save
       create_notification(request, "ha solicitado el servicio", request.user.id, request.supplier.id)
@@ -34,15 +38,20 @@ class Api::V1::RequestServicesController < BaseController
   end
 
   def accept
-    request = RequestService.find(params[:id])
+    @request = RequestService.joins(:service).find(params[:id])
 
-    if request.update_attribute(:request_status_id, REQUEST_STATUS_INPROCESS)
+    payment_conekta()
 
-      create_notification(request, "acepto el trabajo", request.supplier.id, request.user.id)
+    if @message_error
+      render json: @message_error, status: 500  
+    else
 
-      Order.create(request.id, ORDER_STATUS_PENDING, request.price, request.fee)
-
-      render json: request, status: :ok
+      if @request.update_attribute(:request_status_id, REQUEST_STATUS_INPROCESS)
+        create_notification(@request, "acepto el trabajo", @request.supplier.id, @request.user.id)
+        Order.create(@request.id, ORDER_STATUS_PAID, @request.price, @request.fee)
+        render json: @request, status: :ok
+      end
+      
     end
   end
 
@@ -50,38 +59,14 @@ class Api::V1::RequestServicesController < BaseController
     request = RequestService.find(params[:id])
 
     if params[:finish_type] == 'supplier'
-
-      create_notification(request, "ha terminado", request.supplier.id, request.user.id)
-
-      request.update_attribute(:is_finish_supplier, true)
-      render json: request, status: :ok
-
+      request = finish_supplier(request)
     elsif params[:finish_type] == 'customer'
-
-      create_notification(request, "aprobó el trabajo", request.user.id, request.supplier.id)
-
-      # Cuando el cliente valida el trabajo se cambia la bandera
-      request.update_attribute(:is_finish_customer, true)
-
-      #se actualiza el estatus de la solicitud
-      request.update_attribute(:request_status_id, REQUEST_STATUS_FINISH)
-
-      #Se actualia la orden de compra
-      order = Order.find_by(request_service_id: request.id)
-      #order = Order.find_by(request_service_id: 47)
-      order.order_status_id = ORDER_STATUS_PAID
-      order.save
-
-      request_size = RequestService.where({service_id: request.service_id, request_status_id: REQUEST_STATUS_FINISH}).size
-      s = Service.find(request.service_id)
-      s.update_attribute(:total_jobs, request_size)
-
-      # regresamos la solicitud con los campos actualizados
-      render json: request, status: :ok
+      request = finish_customer(request)
     else
-
+      puts "Ha ocurrido un error."
     end
 
+    render json: request, status: :ok
   end
 
   def status
@@ -98,12 +83,75 @@ class Api::V1::RequestServicesController < BaseController
     if request.update_attribute(:request_status_id, REQUEST_STATUS_CANCELED)
       render json: request, status: :ok
     else
-      rener json: {error: "Ocurrio un error."}, status: 500
+      render json: {error: "Ocurrio un error."}, status: 500
     end
   end
 
   def request_params
   	params.permit(:request_date, :request_time, :message, :user_id, :service_id)
+  end
+
+  private
+  def finish_customer(request)
+    create_notification(request, "aprobó el trabajo", request.user.id, request.supplier.id)
+
+    request.update_attributes(:is_finish_customer => true, :request_status_id => REQUEST_STATUS_FINISH)
+
+    order = Order.find_by(request_service_id: request.id)
+    order.update_attribute(:order_status_id, ORDER_STATUS_PAID)
+
+    request_size = RequestService.where({service_id: request.service_id, request_status_id: REQUEST_STATUS_FINISH}).size
+    s = Service.find(request.service_id)
+    s.update_attribute(:total_jobs, request_size)
+
+    request
+  end
+
+  private
+  def finish_supplier(request)
+    create_notification(request, "ha terminado", request.supplier.id, request.user.id)
+    request.update_attribute(:is_finish_supplier, true)
+    request
+  end
+
+  private
+  def payment_conekta()
+    begin
+      @charge = Conekta::Charge.create({
+        "amount"=> (@request.total * 100).to_i,
+        "currency"=> "MXN",
+        "description"=>  @request.message,
+        "reference_id"=> @request.id,
+        "card"=> @request.token_card,
+        "details"=> {
+          "name"=> @user.first_name,
+          "phone"=> "8182002386",
+          "email"=> @user.email,
+          "line_items"=> [{
+            "name"=> @request.service.name,
+            "description"=> @request.service.description,
+            "unit_price"=> (@request.price * 100).to_i,
+            "quantity"=> 1
+          },
+          {
+            "name"=> "Comision chambita",
+            "description"=> "Cobro por uso de plataforma",
+            "unit_price"=> (@request.fee * 100).to_i,
+            "quantity"=> 1
+          }]
+        }
+      })
+    rescue Conekta::ParameterValidationError => e
+      @message_error = e 
+      #render json: @message_error, status: 422
+      #alguno de los parámetros fueron inválidos
+    rescue Conekta::ProcessingError => e
+      @message_error = e
+      #render json: @message_error, status: 422
+      #la tarjeta no pudo ser procesada
+    rescue Conekta::Error => e
+      #un error ocurrió que no sucede en el flujo normal de cobros como por ejemplo un auth_key incorrecto
+    end
   end
 
   private

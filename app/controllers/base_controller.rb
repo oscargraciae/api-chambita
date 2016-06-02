@@ -8,7 +8,7 @@ class BaseController < ApplicationController
   # 500 api_error => Error con la aplicacion o con los servidores
 
   #Objeto API Conekta
-  Conekta.api_key="key_jaiWQwqGqEkQqqkUqhdy2A" #Llave privada de usuario
+  #Conekta.api_key="key_jaiWQwqGqEkQqqkUqhdy2A" #Llave privada de usuario
 
   # Este metodo nos validara el token del usuaro
   private
