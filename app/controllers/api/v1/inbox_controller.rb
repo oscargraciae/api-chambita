@@ -49,9 +49,10 @@ class Api::V1::InboxController < BaseController
   #metodo conversación
   def all_messages
     inb = InboxMessage.where(inbox_id: params[:inboxId])
-    read = inb.where('sender_user != ?', @user.id)
-    puts read.as_json
 
-    render json: inb, status: :ok
+    read = inb.where('sender_user != ?', @user.id)
+    read.update_all "readit = 'true'"
+
+    render json: inb.order(id: :asc), status: :ok
   end
 end
