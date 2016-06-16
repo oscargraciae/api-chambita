@@ -25,4 +25,11 @@ class ServiceImage < ActiveRecord::Base
                         :url  => ':s3_domain_url',
                         :default_url => 'http://chambita1236.s3.amazonaws.com/uploads/users/:style/user_default.png',
                         :path => "uploads/services/:file_id/:style/:filename"
+
+
+  def self.delete_by_service_id(service_id)
+    ServiceImage.where(service_id: service_id).destroy_all
+  end
+
+
 end

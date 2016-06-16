@@ -29,7 +29,7 @@ class NotificationSerializer < ActiveModel::Serializer
 	end
 
 	def service_name
-		#object.request_service.service.name
+		object.request_service.service.name
 	end
 
 	def request_id

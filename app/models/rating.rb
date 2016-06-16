@@ -60,8 +60,6 @@ class Rating < ActiveRecord::Base
 		end
 		
 		avg = rating_total / ratings.count
-		puts "&&&&&&&&&&&&&&"
-		puts avg
 		Service.find(service_id).update_attribute(:rating_general, avg)
 
 	end

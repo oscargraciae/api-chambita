@@ -23,7 +23,8 @@ class Api::V1::RequestServicesController < BaseController
      service = Service.find(request.service_id)
      
      request.price = service.price
-     request.fee = service.price * CHAMBITA_FEED
+     #request.fee = service.price * CHAMBITA_FEED
+     request.fee = calculate_fee(service.price)
      request.total = request.price + request.fee
      request.supplier_id = service.user_id
      request.token_card = card.token
@@ -163,6 +164,28 @@ class Api::V1::RequestServicesController < BaseController
       identifier: request.id,
       type_notification: message,
       read: false)
+  end
+
+  private
+  def calculate_fee(price)
+    fee = 0
+    amex = 0.045
+    visa_mastercard = 0.029
+
+    if price < 2000
+      feed_percent = 0.09 + visa_mastercard
+      fee = price * feed_percent
+    elsif price > 2001 && price < 5000
+      feed_percent = 0.07 + visa_mastercard
+      fee = price * feed_percent
+    elsif price > 5001
+      feed_percent = 0.05 + visa_mastercard
+      fee = price * feed_percent
+    else
+      puts "Error al calcular comision"
+    end
+
+    fee
   end
 
 end

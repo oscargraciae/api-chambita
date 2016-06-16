@@ -41,6 +41,8 @@ class Service < ActiveRecord::Base
                         :default_url => 'http://chambita1236.s3.amazonaws.com/uploads/users/user_default.png',
                         :path => "uploads/services/cover/:file_id/:style/:filename"
 
+  #default_scope 
+  scope :active, -> { where(isActive: true) }
   scope :user, -> (user_id) { where user_id: user_id }
   scope :top, -> { limit(2) }
   scope :recent, -> { order(updated_at: :desc) }
@@ -48,17 +50,15 @@ class Service < ActiveRecord::Base
   scope :location, -> (km, lat, lng) { joins(:user).near([lat, lng], km, :order => false).where(published: true).order rating_general: :desc }
 
   def self.all_services(lat, lng)
-    Service.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include()
+    Service.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
   end
 
   def self.service_by_user_id(user_id)
-    Service.where(user_id: user_id).recent().add_include
+    Service.where(user_id: user_id).recent().add_include.active()
   end
 
   def self.search_service(params)
     query = params[:q]
-
-    puts params[:sub_category]
     location = Geocoder.search(params[:location])[0]
     lat = location.coordinates[0]
     lng = location.coordinates[1]
@@ -67,7 +67,7 @@ class Service < ActiveRecord::Base
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: {name: params[:sub_category]}) if params[:sub_category].present?
     
-    services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include()
+    services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
     
   end
 

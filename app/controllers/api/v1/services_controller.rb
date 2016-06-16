@@ -29,8 +29,13 @@ class Api::V1::ServicesController < BaseController
   end
 
   def show
-    ser = Service.find(params[:id])
-    render json: ser, serializer: ServiceDetailSerializer, status: :ok
+    ser = Service.find_by(id: params[:id], isActive: true)
+    if ser
+      render json: ser, serializer: ServiceDetailSerializer, status: :ok 
+    else
+      render json: {message: 'Este servicio ya no está disponible.'}, status: 404
+    end
+    
   end
 
   # METODOS PRIVADOR -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
@@ -41,7 +46,7 @@ class Api::V1::ServicesController < BaseController
   end
 
   def show_service
-    ser = Service.find_by(id: params[:id], user_id: @user.id)
+    ser = Service.find_by(id: params[:id], user_id: @user.id, isActive: true)
     if ser
       render json: ser, status: :ok
     else
@@ -81,8 +86,14 @@ class Api::V1::ServicesController < BaseController
 
   def destroy
     service = Service.find(params[:id])
-    service.destroy
-    head 204
+    service.isActive = false
+    if service.save
+      ServiceImage.delete_by_service_id(service.id)
+      Evaluation.delete_by_service_id(service.id)
+      render json: {message: "El servicio se eliminó satisfactoriamente.", delete: true}
+    else
+      render json: {message: "ha ocurrido un error y el servicio no pudo ser eliminado.", delete: false}
+    end
   end
 
   private
