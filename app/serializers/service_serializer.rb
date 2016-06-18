@@ -31,4 +31,5 @@ class ServiceSerializer < ActiveModel::Serializer
   has_many :service_images
   has_one :user, serializer: UserShortSerializer
 
+
 end

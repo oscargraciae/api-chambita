@@ -31,11 +31,11 @@ class Api::V1::ServicesController < BaseController
   def show
     ser = Service.find_by(id: params[:id], isActive: true)
     if ser
-      render json: ser, serializer: ServiceDetailSerializer, status: :ok 
+      render json: ser, serializer: ServiceDetailSerializer, status: :ok
     else
       render json: {message: 'Este servicio ya no está disponible.'}, status: 404
     end
-    
+
   end
 
   # METODOS PRIVADOR -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.

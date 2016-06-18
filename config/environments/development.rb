@@ -1,7 +1,7 @@
 Rails.application.configure do
-  
+
   Paperclip.options[:content_type_mappings]
-  
+
   config.cache_store = :dalli_store
 
   # Settings specified here will take precedence over those in config/application.rb.
@@ -13,6 +13,7 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  
   # Do not eager load code on boot.
   config.eager_load = false
 
@@ -27,7 +28,7 @@ Rails.application.configure do
   config.active_support.deprecation = :log
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-  
+
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 

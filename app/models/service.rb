@@ -27,7 +27,7 @@ class Service < ActiveRecord::Base
   belongs_to :sub_category
   belongs_to :category
   has_many :service_images
-  
+
   before_create :total_service_for_user
   before_create :default_values
 
@@ -41,12 +41,12 @@ class Service < ActiveRecord::Base
                         :default_url => 'http://chambita1236.s3.amazonaws.com/uploads/users/user_default.png',
                         :path => "uploads/services/cover/:file_id/:style/:filename"
 
-  #default_scope 
+  #default_scope { includes(:service_images) }
   scope :active, -> { where(isActive: true) }
   scope :user, -> (user_id) { where user_id: user_id }
   scope :top, -> { limit(2) }
   scope :recent, -> { order(updated_at: :desc) }
-  scope :add_include, -> { includes(:category, :user, :sub_category) }
+  scope :add_include, -> { includes(:category, :user, :sub_category, :service_images) }
   scope :location, -> (km, lat, lng) { joins(:user).near([lat, lng], km, :order => false).where(published: true).order rating_general: :desc }
 
   def self.all_services(lat, lng)
@@ -66,9 +66,9 @@ class Service < ActiveRecord::Base
     services = Service.where(["lower(services.name) LIKE ? ", "%#{query.downcase}%"])
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: {name: params[:sub_category]}) if params[:sub_category].present?
-    
+
     services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
-    
+
   end
 
   def self.all_cached
