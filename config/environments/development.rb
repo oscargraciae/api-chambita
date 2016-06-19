@@ -13,7 +13,7 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  
+
   # Do not eager load code on boot.
   config.eager_load = false
 
@@ -46,14 +46,24 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
-config.after_initialize do
-  Bullet.enable = true
-  Bullet.alert = true
-  Bullet.bullet_logger = true
-  #Bullet.console = true
-  Bullet.rails_logger = true
-  #Bullet.airbrake = true
-end
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = true
+    Bullet.bullet_logger = true
+    #Bullet.console = true
+    Bullet.rails_logger = true
+    #Bullet.airbrake = true
+  end
+#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
+  ActionMailer::Base.smtp_settings = {
+    :user_name => 'ogracia',
+    :password => 'Ogracia#001',
+    :domain => 'chambita.mx',
+    :address => 'smtp.sendgrid.net',
+    :port => 587,
+    :authentication => :plain,
+    :enable_starttls_auto => true
+  }
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

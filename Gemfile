@@ -36,6 +36,7 @@ gem 'rack-cors'
 gem 'rails', '4.2.3'
 gem 'rails-api'
 gem 'rake', '10.4.2'
+gem 'sendgrid-ruby'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'websocket-rails'
 
