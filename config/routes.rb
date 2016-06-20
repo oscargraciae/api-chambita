@@ -27,7 +27,11 @@ Rails.application.routes.draw do
       end
       resources :service_images, only: [:index, :create, :destroy]
       resources :locations, only: :index
-      resources :authentication, only: [:create, :destroy]
+      resources :authentication, only: [:create, :destroy] do
+        collection do
+          post 'facebook'
+        end
+      end
       resources :me, only: :index
       resources :categories, only: :index
       resources :request_services, only: [:index, :show, :create] do

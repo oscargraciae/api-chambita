@@ -29,7 +29,7 @@ class Api::V1::ServicesController < BaseController
   end
 
   def show
-    ser = Service.find_by(id: params[:id], isActive: true)
+    ser = Service.find_by(id: params[:id], isActive: true, published: true)
     if ser
       render json: ser, serializer: ServiceDetailSerializer, status: :ok
     else
