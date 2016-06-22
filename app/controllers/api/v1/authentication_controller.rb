@@ -37,8 +37,6 @@ class Api::V1::AuthenticationController < BaseController
     response = HTTParty.get(graph_api_url, :query => access_t)
     resp = response.parsed_response
 
-    puts resp
-
     user = User.find_by(facebook_id: resp["id"])
     if user
       puts "LOGIN"
