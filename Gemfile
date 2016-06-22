@@ -48,10 +48,10 @@ gem 'annotate'
 gem "bullet", :group => "development"
 group :development do
 	gem 'capistrano'
-	gem 'capistrano-bundler'
-	gem 'capistrano-rails'
-	gem 'capistrano-rvm'
-	gem 'capistrano3-puma'
+  gem 'capistrano3-puma'
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm'
 	gem 'railroady'
 	gem 'rails-erd'
 	gem 'sqlite3'

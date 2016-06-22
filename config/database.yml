@@ -85,6 +85,9 @@ test:
 #
 production:
   <<: *default
-  database: chambitas_production
-  username: twopx
-  password: <%= ENV['TWOPX_DATABASE_PASSWORD'] %>
+  database: chambitas_development
+  username: chambita
+  password: chambita12345
+  host: chambita.cyzwdrnlmdwk.us-west-2.rds.amazonaws.com
+  port: 5432
+  #password: <%= ENV['TWOPX_DATABASE_PASSWORD'] %>
