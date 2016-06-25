@@ -91,3 +91,10 @@ production:
   host: chambita.cyzwdrnlmdwk.us-west-2.rds.amazonaws.com
   port: 5432
   #password: <%= ENV['TWOPX_DATABASE_PASSWORD'] %>
+
+# production:
+#   <<: *default
+#   database: chambitas_development
+#   username: <%= ENV['PG_ENV_POSTGRES_USER'] %>
+#   password: <%= ENV['PG_ENV_POSTGRES_PASSWORD'] %>
+#   host: <%= ENV['PG_PORT_5432_TCP_ADDR'] %>

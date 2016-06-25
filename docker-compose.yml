@@ -1,0 +1,20 @@
+#nginx:
+#  build: ./nginx
+#  links:
+#      - web:web
+#  ports:
+#      - "80:80"
+web:
+  build: .
+  command: sh -c 'bundle exec rake db:create db:migrate && foreman start -f Procfile'
+  volumes:
+    - .:/rails
+  ports:
+    - "3000:3000"
+  env_file:
+  - '.env.web'
+
+#db:
+#  image: library/postgres
+#  ports:
+#    - "5432:5432"
