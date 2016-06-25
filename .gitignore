@@ -1,7 +1,4 @@
 /log
-/tmp
 /doc
-/.bundle
 
 /config/database.yml
-/config/secrets.yml
