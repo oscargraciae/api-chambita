@@ -13,7 +13,7 @@ set :linked_files, %w{config/database.yml}
 set :keep_releases, 5
 #set :rvm_type, :user
 
-set: :user, 'deploy'
+set :user, 'deploy'
 #set :rvm_ruby_version, 'jruby-1.7.19' # Edit this if you are using MRI Ruby
 
 # Default branch is :master
