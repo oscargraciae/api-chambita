@@ -6,7 +6,7 @@ set :repo_url, 'git@gitlab.com:ogracia/api-chambita.git'
 
 set :branch, :master
 #set :deploy_to, '/home/deploy/api-chambita'
-set :deploy_to, '/home/deploy/chambita'
+set :deploy_to, '/home/deploy/api-chambita'
 set :pty, true
 set :linked_files, %w{config/database.yml}
 #set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
