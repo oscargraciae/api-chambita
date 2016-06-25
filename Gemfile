@@ -45,15 +45,17 @@ gem 'sendgrid-ruby'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 #gem 'websocket-rails'
 
+gem 'capistrano3-puma'
+gem 'capistrano-rails', require: false
+gem 'capistrano-bundler', require: false
+gem 'capistrano-rvm'
+
 gem 'annotate'
 gem "bullet", :group => "development"
 group :development do
 	gem 'capistrano'
 	gem 'foreman'
-  gem 'capistrano3-puma'
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-rvm'
+
 	gem 'railroady'
 	gem 'rails-erd'
 	gem 'sqlite3'
