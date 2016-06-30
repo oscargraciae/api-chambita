@@ -49,6 +49,7 @@ gem 'capistrano3-puma'
 gem 'capistrano-rails', require: false
 gem 'capistrano-bundler', require: false
 gem 'capistrano-rvm'
+gem 'puma'
 
 gem 'annotate'
 gem "bullet", :group => "development"
@@ -76,7 +77,7 @@ group :development, :test do
 end
 
 group :production do
-	gem 'puma'
+
 	gem 'foreman'
 end
 
