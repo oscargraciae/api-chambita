@@ -13,9 +13,12 @@ class Api::V1::RequestServicesController < BaseController
     render json: requests, status: :ok
   end
 
+
+
+
   def jobs
     jobs = []
-    
+
     if params[:status_id] === '3'
       jobs = RequestService.jobs_history(@user.id, params[:status_id])
     else
