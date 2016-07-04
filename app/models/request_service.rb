@@ -38,8 +38,16 @@ class RequestService < ActiveRecord::Base
   	RequestService.where(services: { user_id: user_id }).status(status_id).recent()
   end
 
+  def self.jobs_history(user_id, status_id)
+  	RequestService.where(services: { user_id: user_id }).where(request_status_id: [3, 4]).recent()
+  end
+
   def self.requests_by_status(user_id, status_id)
     RequestService.me(user_id).status(status_id).recent()
+  end
+
+  def self.request_history(user_id)
+    RequestService.me(user_id).where(request_status_id: [3, 4]).recent()
   end
 
 end

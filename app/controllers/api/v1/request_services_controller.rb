@@ -2,12 +2,29 @@ class Api::V1::RequestServicesController < BaseController
   before_filter :auth, only: [:index, :show, :create, :jobs, :accept, :finish, :status, :cancel]
 
   def index
-    requests = RequestService.requests_by_status(@user.id, params[:status_id])
+    requests = []
+
+    if params[:status_id] === '3'
+      requests = RequestService.request_history(@user.id)
+    else
+      requests = RequestService.requests_by_status(@user.id, params[:status_id])
+    end
+
     render json: requests, status: :ok
   end
 
+
+
+
   def jobs
-    jobs = RequestService.jobs_by_status(@user.id, params[:status_id])
+    jobs = []
+
+    if params[:status_id] === '3'
+      jobs = RequestService.jobs_history(@user.id, params[:status_id])
+    else
+      jobs = RequestService.jobs_by_status(@user.id, params[:status_id])
+    end
+
     render json: jobs, status: :ok
   end
 
@@ -21,7 +38,7 @@ class Api::V1::RequestServicesController < BaseController
 
      card = CreditCard.find(params[:card_id])
      service = Service.find(request.service_id)
-     
+
      request.price = service.price
      #request.fee = service.price * CHAMBITA_FEED
      request.fee = calculate_fee(service.price)
@@ -44,7 +61,7 @@ class Api::V1::RequestServicesController < BaseController
     payment_conekta()
 
     if @message_error
-      render json: @message_error, status: 500  
+      render json: @message_error, status: 500
     else
 
       if @request.update_attribute(:request_status_id, REQUEST_STATUS_INPROCESS)
@@ -52,7 +69,7 @@ class Api::V1::RequestServicesController < BaseController
         Order.create(@request.id, ORDER_STATUS_PAID, @request.price, @request.fee)
         render json: @request, status: :ok
       end
-      
+
     end
   end
 
@@ -143,7 +160,7 @@ class Api::V1::RequestServicesController < BaseController
         }
       })
     rescue Conekta::ParameterValidationError => e
-      @message_error = e 
+      @message_error = e
       #render json: @message_error, status: 422
       #alguno de los parámetros fueron inválidos
     rescue Conekta::ProcessingError => e

@@ -13,6 +13,7 @@ source 'https://rubygems.org'
 # gem "mini_magick"
 # gem 'aws-sdk', '~> 1.5.7'
 # gem 'spring', :group => :development
+#docker-machine create --driver amazonec2 --amazonec2-access-key AKIAJK6YIHNDOOBAJIHA --amazonec2-secret-key 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  aws-chambita
 
 gem 'active_model_serializers'
 gem 'aws-sdk', '< 2'
@@ -22,7 +23,7 @@ gem 'carrierwave', '0.10.0'
 gem 'conekta'
 gem 'dalli'
 gem 'devise'
-gem 'fog'
+#gem 'fog'
 gem 'geocoder'
 gem 'httparty'
 #gem 'jbuilder'
@@ -30,9 +31,9 @@ gem 'jmespath'
 #gem 'json_pure'
 gem 'kaminari'
 gem 'memcachier'
-gem "omniauth"
-gem "omniauth-facebook"
-gem "omniauth-twitter"
+#gem "omniauth"
+#gem "omniauth-facebook"
+#gem "omniauth-twitter"
 gem 'paperclip', '~> 4.2'
 gem 'pg'
 gem 'puma'
@@ -42,16 +43,20 @@ gem 'rails-api'
 gem 'rake', '10.4.2'
 gem 'sendgrid-ruby'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
-gem 'websocket-rails'
+#gem 'websocket-rails'
+
+gem 'capistrano3-puma'
+gem 'capistrano-rails', require: false
+gem 'capistrano-bundler', require: false
+gem 'capistrano-rvm'
+gem 'puma'
 
 gem 'annotate'
 gem "bullet", :group => "development"
 group :development do
 	gem 'capistrano'
-  gem 'capistrano3-puma'
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-rvm'
+	gem 'foreman'
+
 	gem 'railroady'
 	gem 'rails-erd'
 	gem 'sqlite3'
@@ -68,6 +73,12 @@ group :development, :test do
 	gem 'rspec-rails'
 	gem 'shoulda-matchers'
 	gem 'spring'
+	gem 'minitest'
+end
+
+group :production do
+
+	gem 'foreman'
 end
 
 

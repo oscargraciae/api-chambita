@@ -1,10 +1,10 @@
 class Api::V1::UsersController < BaseController
   before_filter :auth, only: [:show, :update, :destroy, :me_show, :avatar, :password]
-  
+
   # GET api/v1/users
-  def index
-    render json: User.all, status: :ok
-  end
+  #def index
+  #  render json: User.all, status: :ok
+  #end
 
 # GET api/v1/users/:id
  def show
@@ -29,7 +29,7 @@ class Api::V1::UsersController < BaseController
       msj += user.errors[:email].any? ? "Esa dirección de correo electrónico ya está en uso. " : " "
       msj += user.errors[:password].any? ? "Tu contraseña debe tener al menos 8 caracteres. " : " "
 
-	    render json: { :errors => user.errors, :message => msj  }, status: 422
+	    render json: {:status => "error", :errors => user.errors, :message => msj  }, status: 200
 	  end
  end
 

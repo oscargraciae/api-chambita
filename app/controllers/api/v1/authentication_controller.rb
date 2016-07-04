@@ -9,14 +9,16 @@ class Api::V1::AuthenticationController < BaseController
 
     if user.valid_password? user_password
       # sign_in user, store: false
-      user.generate_authentication_token!
-      user.save
+      if !user.token
+        user.generate_authentication_token!
+        user.save
+      end
 
       us = MeSerializer.new(User.find(user.id))
       #UserNotifier.send_signup_email(us).deliver
       render json: {:user => us, :token => user.token}, status: 200
     else
-      render json: { :errors => user.errors, :message => "Correo electrónico o contraseña incorrecto" }, status: 422
+      render json: { :errors => user.errors, :status => "error", :message => "Correo electrónico o contraseña incorrecto" }, status: 200
     end
   end
 
@@ -39,15 +41,15 @@ class Api::V1::AuthenticationController < BaseController
 
     user = User.find_by(facebook_id: resp["id"])
     if user
-      puts "LOGIN"
-      user.generate_authentication_token!
-      user.save
+      if !user.token
+        user.generate_authentication_token!
+        user.save
+      end
 
       us = MeSerializer.new(User.find(user.id))
       #UserNotifier.send_signup_email(us).deliver
       render json: {:user => us, :token => user.token}, status: 200
     else
-      puts "NUEVO"
       user = User.new
       user.first_name = resp["first_name"]
       user.last_name = resp["last_name"]
@@ -61,8 +63,6 @@ class Api::V1::AuthenticationController < BaseController
       else
         render json: user.errors, status: :ok
       end
-
-
 
     end
 

@@ -62,10 +62,16 @@ class Service < ActiveRecord::Base
   end
 
   def self.search_service(params)
+
     query = params[:q]
-    location = Geocoder.search(params[:location])[0]
-    lat = location.coordinates[0]
-    lng = location.coordinates[1]
+    if params[:lat] && params[:lng]
+      lat = params[:lat]
+      lng = params[:lng]
+    else
+      location = Geocoder.search(params[:location])[0]
+      lat = location.coordinates[0]
+      lng = location.coordinates[1]
+    end
 
     services = Service.where(["lower(services.name) LIKE ? ", "%#{query.downcase}%"])
     services = services.where(category_id: params[:category]) if params[:category].present?
