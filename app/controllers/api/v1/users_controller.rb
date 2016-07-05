@@ -1,5 +1,5 @@
 class Api::V1::UsersController < BaseController
-  before_filter :auth, only: [:show, :update, :destroy, :me_show, :avatar, :password]
+  before_filter :auth, only: [:update, :destroy, :me_show, :avatar, :password]
 
   # GET api/v1/users
   #def index
@@ -22,6 +22,7 @@ class Api::V1::UsersController < BaseController
  def create
    user = User.new(user_params)
    if user.save
+      UserNotifier.send_signup_email(user).deliver
 	    render json: user, status: 201
 	  else
 
@@ -31,6 +32,17 @@ class Api::V1::UsersController < BaseController
 
 	    render json: {:status => "error", :errors => user.errors, :message => msj  }, status: 200
 	  end
+ end
+
+ def active_account
+   user = User.find_by(token: params[:token_user])
+   puts user.as_json
+   if user.update_attribute(:IsActiveEmail, true)
+     render json: {:status => "ok"}, status: 200
+   else
+     render json: {:status => "error"}, status: 200
+   end
+
  end
 
 # PUT api/v1/users/:id
