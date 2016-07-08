@@ -22,7 +22,7 @@ class Api::V1::NotificationController < BaseController
 		if notification.save
 			render json: notification, status: :ok
 		else
-			render json: notification.error, status: 500
+			render json: notification.error, status: 200
 		end
 
 	end
