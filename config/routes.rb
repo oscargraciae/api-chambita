@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   #devise_for :users
 
- # namespace "api",  defaults: {format: :json}, constraints: { subdomain: 'api' }, path: '/api' do  #Servidor
+   # namespace "api",  defaults: {format: :json}, constraints: { subdomain: 'api' }, path: '/api' do  #Servidor
   namespace "api",  defaults: {format: :json} do #local
     namespace "v1" do
       resources :users, only: [:index, :show, :create, :update, :destroy] do

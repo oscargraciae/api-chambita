@@ -21,7 +21,7 @@
 
 class Service < ActiveRecord::Base
   
-  validates :name, length: { maximum: 25 }
+  validates :name, length: { maximum: 60 }
   validates :description, length: { maximum: 400 }
   validates :price, length: { maximum: 25 }
   
