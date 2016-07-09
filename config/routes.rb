@@ -11,8 +11,8 @@ Rails.application.routes.draw do
           get 'me_show'
         end
         collection do
-            post 'prueba'
-          end
+          get 'active_account'
+        end
       end
       resources :services, only: [:index, :show, :create, :update, :destroy] do
         resources :evaluations, only: [:index, :create]

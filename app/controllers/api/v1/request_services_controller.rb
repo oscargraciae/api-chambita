@@ -98,7 +98,21 @@ class Api::V1::RequestServicesController < BaseController
 
   def cancel
     request = RequestService.find(params[:id])
+
+    user_id_cancel = Integer(params[:user_id])
+    user_id_notifier = 0
+
+    if user_id_cancel == request.supplier.id
+      puts "notificar a usuario"
+      user_id_notifier = request.user.id
+    else
+      puts "notificar a proveedor"
+      user_id_notifier = request.supplier.id
+    end
+
     if request.update_attribute(:request_status_id, REQUEST_STATUS_CANCELED)
+      puts "Cancelado!"
+      create_notification(request, "canceló el trabajo", user_id_cancel, user_id_notifier)
       render json: request, status: :ok
     else
       render json: {error: "Ocurrio un error."}, status: 500

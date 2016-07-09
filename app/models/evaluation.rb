@@ -17,11 +17,12 @@ class Evaluation < ActiveRecord::Base
 
   def self.delete_by_service_id(service_id)
     evaluations = Evaluation.where(service_id: service_id)
+
     evaluations.each do |e|
       Rating.where(evaluation_id: e.id).delete_all
     end
     evaluations.delete_all
-    
+
   end
-  
+
 end

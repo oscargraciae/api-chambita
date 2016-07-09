@@ -42,7 +42,10 @@ SubCategory.create(name: 'Ambientación', category_id: 2)
 SubCategory.create(name: 'Fotorafia y video', category_id: 2)
 SubCategory.create(name: 'Juegos infantiles', category_id: 2)
 SubCategory.create(name: 'Banquetes', category_id: 2)
-SubCategory.create(name: 'Personajes', category_id: 2)"""
+SubCategory.create(name: 'Personajes', category_id: 2)
+SubCategory.create(name: 'Música y sonido', category_id: 2)
+
+"""
 
 
 # Script para datos de prueba en servicios

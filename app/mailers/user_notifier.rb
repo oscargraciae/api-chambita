@@ -1,12 +1,15 @@
 class UserNotifier < ApplicationMailer
-  default :from => 'prueba@chambita.com'
+
+  default :from => 'Chambita <hello@chambita.mx>'
   layout "send_signup_email"
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def send_signup_email(user)
 
     headers "X-SMTPAPI" => {
       "sub": {
-        "%name%" => [user.first_name]
+        "%name%" => [user.first_name],
+        #"%url%" => ['http://localhost:9000/#/user/active_account/'+user.token]
+        "%url%" => ['http://www.chambita.mx/#/user/active_account/'+user.token]
       },
       "filters": {
         "templates": {
@@ -19,6 +22,6 @@ class UserNotifier < ApplicationMailer
     }.to_json
 
     @user = user
-    mail( :to => @user.email,:subject => 'Por favor, confirma tu dirección de correo electrónico - Chambita' )
+    mail( :to => @user.email,:subject => 'Por favor, confirma tu dirección de correo electrónico' )
   end
 end
