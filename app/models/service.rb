@@ -69,7 +69,8 @@ class Service < ActiveRecord::Base
       lng = location.coordinates[1]
     end
 
-    services = Service.where(["lower(services.name) LIKE ? ", "%#{query.downcase}%"])
+    services = Service.all
+    services = services.where(["lower(services.name) LIKE ? ", "%#{query.downcase}%"]) if query.present?
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: {name: params[:sub_category]}) if params[:sub_category].present?
 

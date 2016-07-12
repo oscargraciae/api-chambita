@@ -42,15 +42,15 @@
 class User < ActiveRecord::Base
   has_many :sent_messages, class_name: "RequestMessage", foreign_key: "sender_id"
   has_many :received_messages, class_name: "RequestMessage", foreign_key: "recipient_id"
-  has_many :notifications, dependent: :destroy  
+  has_many :notifications, dependent: :destroy
   has_many :services
-  
+
   belongs_to :supplier, class_name: "RequestService", foreign_key: "supplier_id"
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
-  
+
 
   before_create :generate_authentication_token!
 
@@ -64,7 +64,6 @@ class User < ActiveRecord::Base
                         :url  => ':s3_domain_url',
                         :default_url => 'https://s3-us-west-1.amazonaws.com/chambita1236/uploads/users/user_default.png',
                         :path => "uploads/users/:file_id/:style/:filename"
-
 
   def generate_authentication_token!
     begin

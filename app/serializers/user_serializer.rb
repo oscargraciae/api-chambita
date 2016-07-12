@@ -42,7 +42,11 @@
 class UserSerializer < ActiveModel::Serializer
   attributes :id, :first_name, :last_name, :full_name, :email, :description, :avatar, :avatar_thumb, :address
   has_many :services, serializer: ServicePublicDetailSerializer
-  
+
+  def services
+    object.services.where(published: true)
+  end
+
   def avatar_thumb
   	object.avatar.url(:thumb)
   end
