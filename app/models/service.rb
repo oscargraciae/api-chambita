@@ -25,6 +25,7 @@ class Service < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :sub_category
+  belongs_to :unit_type
   belongs_to :category
   has_many :service_images
 

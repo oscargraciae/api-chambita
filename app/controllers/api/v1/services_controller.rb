@@ -103,7 +103,7 @@ class Api::V1::ServicesController < BaseController
 
   # Parametros con permiso de entrada para registro de servicio
   def service_params
-    params.permit(:name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id, :lat, :lng, :cover)
+    params.permit(:name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id, :lat, :lng, :cover, :unit_type_id, :unit_max)
   end
 
 end

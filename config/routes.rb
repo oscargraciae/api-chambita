@@ -61,6 +61,7 @@ Rails.application.routes.draw do
           get 'read'
         end
       end
+      resources :unit_types, only: [:index]
     end
   end
 end
