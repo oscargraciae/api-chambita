@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160712235425) do
+ActiveRecord::Schema.define(version: 20160714205403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,19 +153,21 @@ ActiveRecord::Schema.define(version: 20160712235425) do
     t.text     "message"
     t.date     "request_date"
     t.time     "request_time"
-    t.integer  "request_status_id",  default: 1
+    t.integer  "request_status_id",                          default: 1
     t.integer  "service_id"
     t.integer  "user_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
     t.decimal  "price"
     t.decimal  "fee"
     t.integer  "supplier_id"
-    t.boolean  "is_finish_supplier", default: false
-    t.boolean  "is_finish_customer", default: false
-    t.boolean  "is_evaluated",       default: false
+    t.boolean  "is_finish_supplier",                         default: false
+    t.boolean  "is_finish_customer",                         default: false
+    t.boolean  "is_evaluated",                               default: false
     t.decimal  "total"
     t.string   "token_card"
+    t.decimal  "subtotal",           precision: 8, scale: 2
+    t.integer  "quantity",                                   default: 1
   end
 
   add_index "request_services", ["request_status_id"], name: "index_request_services_on_request_status_id", using: :btree

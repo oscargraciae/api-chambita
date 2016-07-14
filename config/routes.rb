@@ -43,6 +43,7 @@ Rails.application.routes.draw do
         end
         collection do
           get 'jobs'
+          get 'calculate_cost'
         end
       end
       resources :request_message, only: [:index, :create]
