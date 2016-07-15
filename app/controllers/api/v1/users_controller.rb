@@ -49,10 +49,14 @@ class Api::V1::UsersController < BaseController
  def update
 
    user = User.find(@user.id)
+   user.address = params[:address]
+
    location = Geocoder.search(params[:address])[0]
 
-   user.lat = location.coordinates[0]
-   user.lng = location.coordinates[1]
+   #user.lat = location.coordinates[0]
+   #user.lng = location.coordinates[1]
+   user.lat = params[:lat]
+   user.lng = params[:lng]
    user.country = location.country
    user.state = location.state
    user.city = location.city
