@@ -4,17 +4,17 @@ class Api::V1::ServicesController < BaseController
 
   # METODOS PUBLICOS -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
   def index
-    if params[:lat] && params[:lng]
-      services = Service.all_services(params[:lat], params[:lng])
-    else
-      # colocamos una ubicacion default, en caso de no enviar parametros de latitud y longitud
-      location = Geocoder.search("Monterrey, Nuevo León, México")[0]
-      lat = location.coordinates[0]
-      lng = location.coordinates[1]
+    # if params[:lat] && params[:lng]
+    #   #services = Service.all_services(params[:lat], params[:lng])
+    # else
+    #   # colocamos una ubicacion default, en caso de no enviar parametros de latitud y longitud
+    #   location = Geocoder.search("Monterrey, Nuevo León, México")[0]
+    #   lat = location.coordinates[0]
+    #   lng = location.coordinates[1]
+    #   services = Service.all_services(lat, lng)
+    # end
 
-      services = Service.all_services(lat, lng)
-    end
-
+    services = Service.search_service(params)
     render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
   end
 
@@ -103,7 +103,7 @@ class Api::V1::ServicesController < BaseController
 
   # Parametros con permiso de entrada para registro de servicio
   def service_params
-    params.permit(:name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id, :lat, :lng, :cover)
+    params.permit(:name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id, :lat, :lng, :cover, :unit_type_id, :unit_max)
   end
 
 end

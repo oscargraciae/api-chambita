@@ -13,9 +13,6 @@ class Api::V1::RequestServicesController < BaseController
     render json: requests, status: :ok
   end
 
-
-
-
   def jobs
     jobs = []
 
@@ -39,10 +36,21 @@ class Api::V1::RequestServicesController < BaseController
      card = CreditCard.find(params[:card_id])
      service = Service.find(request.service_id)
 
+     if params[:unit_size]
+        calculate(request.service_id, params[:unit_size])
+        quantity = params[:unit_size]
+     else
+        calculate(request.service_id, 0)
+        quantity = 0
+     end
+
+     request.quantity = quantity
      request.price = service.price
-     #request.fee = service.price * CHAMBITA_FEED
-     request.fee = calculate_fee(service.price)
-     request.total = request.price + request.fee
+     request.subtotal = @subtotal
+     request.fee = @fee_general
+     request.total = @total
+
+
      request.supplier_id = service.user_id
      request.token_card = card.token
 
@@ -121,8 +129,46 @@ class Api::V1::RequestServicesController < BaseController
     end
   end
 
+  def calculate_cost
+    calculate(params[:service_id], params[:unit_size])
+
+    render json: {subtotal: @subtotal, fee: @fee, total: @total,fee_general: @fee_general, fee_IVA: @fee_IVA}, status: :ok
+
+  end
+
   def request_params
   	params.permit(:request_date, :request_time, :message, :user_id, :service_id)
+  end
+
+  private
+  def calculate(service_id, unit_size)
+    subtotal = 0
+    fee = 0
+    total = 0
+    fee_general = 0
+    fee_IVA = 0
+
+    service = Service.find(params[:service_id])
+
+    if service.unit_max.present?
+      if service.unit_max > 0
+        subtotal = service.price * Integer(params[:unit_size])
+      end
+    else
+      subtotal = service.price
+    end
+
+
+    #se calcula la comision de chambita -> parametros de retorno la comision e impuestos
+    fee, fee_IVA = calculate_fee(subtotal)
+    #Se calcula la comision que cobra conekta
+    fee_conekta = conekta_fee(fee + subtotal)
+
+    @subtotal = subtotal.round(2)
+    @fee = (fee + fee_conekta).round(2)
+    @fee_IVA = fee_IVA.round(2)
+    @fee_general = (@fee + @fee_IVA).round(2)
+    @total = (@subtotal + @fee + @fee_IVA).round(2)
   end
 
   private
@@ -206,19 +252,25 @@ class Api::V1::RequestServicesController < BaseController
     visa_mastercard = 0.029
 
     if price < 2000
-      feed_percent = 0.09 + visa_mastercard
-      fee = price * feed_percent
+      fee = price * 0.09
     elsif price > 2001 && price < 5000
-      feed_percent = 0.07 + visa_mastercard
-      fee = price * feed_percent
+      fee = price * 0.07
     elsif price > 5001
-      feed_percent = 0.05 + visa_mastercard
-      fee = price * feed_percent
+      fee = price * 0.05
     else
       puts "Error al calcular comision"
     end
+    fee_IVA = (fee * 0.16)
 
-    fee
+    return fee, fee_IVA
+  end
+
+  private
+  def conekta_fee(subtotal)
+    # La comision de conekta se calcula sin incluir el gasto de impuestos por comision de chambita
+    fee_conekta = subtotal * 0.029
+
+    fee_conekta + 2.5
   end
 
 end
