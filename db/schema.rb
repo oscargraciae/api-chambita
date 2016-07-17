@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160714205403) do
+ActiveRecord::Schema.define(version: 20160715023221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -280,6 +280,7 @@ ActiveRecord::Schema.define(version: 20160714205403) do
     t.string   "conektaid"
     t.string   "facebook_id"
     t.boolean  "IsActiveEmail",          default: false
+    t.string   "address"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
