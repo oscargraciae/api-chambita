@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         member do
           put 'avatar'
           put 'password'
+          put 'update_CLABE'
           get 'me_show'
         end
         collection do
