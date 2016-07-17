@@ -7,7 +7,7 @@
    allow do
       #origins 'localhost:4200'
       # origins 'localhost:9000'
-      origins 'http://chambita.mx'
+      # origins 'http://chambita.mx'
 
      resource '*',
        headers: :any,
