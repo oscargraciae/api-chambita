@@ -14,12 +14,15 @@ class Api::V1::ServicesController < BaseController
     #   services = Service.all_services(lat, lng)
     # end
 
+
     services = Service.search_service(params)
+
     render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
   end
 
   def search
     services = Service.search_service(params)
+    puts services.as_json
     render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
   end
 

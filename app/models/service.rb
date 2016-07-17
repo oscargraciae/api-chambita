@@ -48,7 +48,8 @@ class Service < ActiveRecord::Base
   scope :top, -> { limit(2) }
   scope :recent, -> { order(updated_at: :desc) }
   scope :add_include, -> { includes(:category, :user, :sub_category, :service_images) }
-  scope :location, -> (km, lat, lng) { joins(:user).near([lat, lng], km, :order => false).where(published: true).order rating_general: :desc }
+  # scope :location, -> (km, lat, lng) { joins(:user).near([lat, lng], km, :order => false).where(published: true).order rating_general: :desc }
+  scope :location, -> (km, lat, lng) { joins(:user).near([lat, lng], km, :order => :distance).where(published: true).order rating_general: :desc }
 
   def self.all_services(lat, lng)
     Service.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
@@ -79,8 +80,10 @@ class Service < ActiveRecord::Base
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: {name: params[:sub_category]}) if params[:sub_category].present?
 
-    services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
-
+    services = services.joins(:user).near([lat, lng], 20, :order => false).where(isActive: true, published: true).order(rating_general: :desc)
+    #services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
+    puts services.as_json
+    services
   end
 
   def self.all_cached
