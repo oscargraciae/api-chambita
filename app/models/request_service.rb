@@ -20,6 +20,8 @@
 #
 
 class RequestService < ActiveRecord::Base
+  
+  validates :message, length: { maximum: 400 }
 
   belongs_to :supplier, class_name: "User", inverse_of: :supplier
   belongs_to :service

@@ -69,6 +69,8 @@ class Api::V1::RequestServicesController < BaseController
     payment_conekta()
 
     if @message_error
+      create_notification(@request, @message_error.message_to_purchaser, @request.supplier.id, @request.user.id)
+
       render json: @message_error, status: 500
     else
 

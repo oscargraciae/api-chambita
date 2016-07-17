@@ -1,5 +1,5 @@
 class Api::V1::UsersController < BaseController
-  before_filter :auth, only: [:update, :destroy, :me_show, :avatar, :password]
+  before_filter :auth, only: [:update, :destroy, :me_show, :avatar, :password, :update_CLABE]
 
   # GET api/v1/users
   #def index
@@ -36,7 +36,7 @@ class Api::V1::UsersController < BaseController
 
  def active_account
    user = User.find_by(token: params[:token_user])
-   puts user.as_json
+
    if user.update_attribute(:IsActiveEmail, true)
      render json: {:status => "ok"}, status: 200
    else
@@ -95,6 +95,20 @@ class Api::V1::UsersController < BaseController
       end
     else
       render json: {status: false, message: "Tus nuevas contraseñas no coinciden. Por favor, inténtalo de nuevo."}, status: 422
+    end
+  end
+
+  def update_CLABE
+    @user = User.find(params[:id])
+
+    puts @user.as_json
+
+    if @user.update_attributes(:CLABE => params[:CLABE], :bank => params[:bank])
+
+      render json: {status: true, message: "Se han actualizado tus datos."}, status: 200
+    else
+
+      render json: {status: false, message: "No se ha podido actualizar los datos."}, status: 422
     end
   end
 
