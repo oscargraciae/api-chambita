@@ -89,7 +89,7 @@ class Api::V1::ServicesController < BaseController
     service.isActive = false
     if service.save
       ServiceImage.delete_by_service_id(service.id)
-      Evaluation.delete_by_service_id(service.id)
+      #Evaluation.delete_by_service_id(service.id)
       render json: {message: "El servicio se eliminó satisfactoriamente.", delete: true}
     else
       render json: {message: "ha ocurrido un error y el servicio no pudo ser eliminado.", delete: false}
