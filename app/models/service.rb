@@ -66,6 +66,7 @@ class Service < ActiveRecord::Base
   def self.search_service(params)
 
     query = params[:q]
+
     if params[:lat] && params[:lng]
       lat = params[:lat]
       lng = params[:lng]
@@ -80,7 +81,7 @@ class Service < ActiveRecord::Base
     end
 
     services = Service.all
-    services = services.where(["lower(services.name) LIKE ? ", "%#{query.downcase}%"]) if query.present?
+    services = services.where(["lower(no_accent(services.name)) LIKE ? ", "%#{query.downcase.removeaccents}%"]) if query.present?
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: {name: params[:sub_category]}) if params[:sub_category].present?
 
