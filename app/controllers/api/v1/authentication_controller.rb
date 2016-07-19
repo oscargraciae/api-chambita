@@ -7,19 +7,24 @@ class Api::V1::AuthenticationController < BaseController
     user_email = params[:email]
     user = user_email.present? && User.find_by(email: user_email)
 
-    if user.valid_password? user_password
-      # sign_in user, store: false
-      if !user.token
-        user.generate_authentication_token!
-        user.save
-      end
+    if user
+      if user.valid_password? user_password
+        # sign_in user, store: false
+        if !user.token
+          user.generate_authentication_token!
+          user.save
+        end
 
-      us = MeSerializer.new(User.find(user.id))
-      #UserNotifier.send_signup_email(us).deliver
-      render json: {:user => us, :token => user.token}, status: 200
+        us = MeSerializer.new(User.find(user.id))
+        #UserNotifier.send_signup_email(us).deliver
+        render json: {:user => us, :token => user.token}, status: 200
+      else
+        render json: { :errors => user.errors, :status => "error", :message => "Contraseña incorrecto" }, status: 200
+      end
     else
-      render json: { :errors => user.errors, :status => "error", :message => "Correo electrónico o contraseña incorrecto" }, status: 200
+      render json: { :status => "error", :message => "Correo electrónico incorrecto." }, status: 200
     end
+
   end
 
   def facebook
