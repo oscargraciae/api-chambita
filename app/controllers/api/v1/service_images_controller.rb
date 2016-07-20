@@ -1,6 +1,11 @@
 class Api::V1::ServiceImagesController < BaseController
   before_filter :auth, only: [:create, :destroy]
 
+  def index
+    images = ServiceImage.where(service_id: params[:service_id])
+    render json: images, status: :ok
+  end
+
 	def create
 		service_image = ServiceImage.new
 		service_image.caption = ""

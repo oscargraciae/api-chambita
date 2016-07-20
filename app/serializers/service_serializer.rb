@@ -24,8 +24,7 @@ class ServiceSerializer < ActiveModel::Serializer
   #INFORMACION PRIVADA DE SERVICIO
 
   attributes :id, :name, :description, :price, :created_at, :updated_at, :published, :cover, :rating_general, :total_jobs, :unit_max
-  #, :total_jobs
-  #, :service_ratings
+  
   has_one :sub_category
   has_one :unit_type
   has_one :category, serializer: CategoryShortSerializer

@@ -41,10 +41,11 @@
 
 class UserSerializer < ActiveModel::Serializer
   attributes :id, :first_name, :last_name, :full_name, :email, :description, :avatar, :avatar_thumb, :address
-  has_many :services, serializer: ServicePublicDetailSerializer
+  # has_many :services, serializer: ServicePublicDetailSerializer
+  has_many :services, serializer: ServiceOnlySerializer
 
   def services
-    object.services.where(published: true)
+    object.services.where(published: true, isActive: true)
   end
 
   def avatar_thumb
