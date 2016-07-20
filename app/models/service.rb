@@ -60,7 +60,7 @@ class Service < ActiveRecord::Base
   end
 
   def self.service_by_user_id(user_id)
-    Service.where(user_id: user_id).recent().add_include.active()
+    Service.where(user_id: user_id).recent().includes(:sub_category).active()
   end
 
   def self.search_service(params)
@@ -81,11 +81,11 @@ class Service < ActiveRecord::Base
     end
 
     services = Service.all
-    services = services.where(["lower(no_accent(services.name)) LIKE ? ", "%#{query.downcase.removeaccents}%"]) if query.present?
+    services = services.where(["lower(no_accent(services.name)) LIKE ? ", "%#{query.downcase}%"]) if query.present?
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: {name: params[:sub_category]}) if params[:sub_category].present?
 
-    services = services.joins(:user).near([lat, lng], 20, :order => false).where(isActive: true, published: true).order(rating_general: :desc).includes(:category, :sub_category, :user)
+    services = services.joins(:user).near([lat, lng], 20, :order => false).where(isActive: true, published: true).order(rating_general: :desc).includes(:sub_category, :user)
     #services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
     services
   end

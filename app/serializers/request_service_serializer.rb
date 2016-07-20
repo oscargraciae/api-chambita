@@ -23,9 +23,9 @@ class RequestServiceSerializer < ActiveModel::Serializer
   attributes :id, :message, :request_date, :request_time, :price, :subtotal, :fee, :total, :quantity, :created_at, :is_finish_supplier, :is_finish_customer, :is_evaluated
 
   has_one :request_status
-  has_one :user, serializer: UserShortSerializer
-  has_one :supplier, serializer: UserShortSerializer
-	has_one :service, serializer: ServiceOnlySerializer
+  has_one :user, serializer: UserPrivateInfoSerializer
+  has_one :supplier, serializer: UserPrivateInfoSerializer
+	has_one :service, serializer: ServicePrivateSummarySerializer
 
   def request_message
     object.request_message.order(created_at: :desc)

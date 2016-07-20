@@ -4,31 +4,18 @@ class Api::V1::ServicesController < BaseController
 
   # METODOS PUBLICOS -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
   def index
-    # if params[:lat] && params[:lng]
-    #   #services = Service.all_services(params[:lat], params[:lng])
-    # else
-    #   # colocamos una ubicacion default, en caso de no enviar parametros de latitud y longitud
-    #   location = Geocoder.search("Monterrey, Nuevo León, México")[0]
-    #   lat = location.coordinates[0]
-    #   lng = location.coordinates[1]
-    #   services = Service.all_services(lat, lng)
-    # end
-
-
     services = Service.search_service(params)
-
-    render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
+    render json: services, status: :ok
   end
 
   def search
     services = Service.search_service(params)
-    puts services.as_json
-    render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
+    render json: services, status: :ok
   end
 
   def user_services
-    services = Service.service_by_user_id(params[:user_id])
-    render json: services, each_serializer: ServiceDetailSerializer, status: :ok
+    services = Service.service_by_user_id(params[:user_id]).where(isActive: true, published: true)
+    render json: services, status: :ok
   end
 
   def show
@@ -45,13 +32,13 @@ class Api::V1::ServicesController < BaseController
 
   def my_services
     services = Service.service_by_user_id(@user.id)
-    render json: services, status: :ok
+    render json: services, each_serializer: ServicePrivateSummarySerializer, status: :ok
   end
 
   def show_service
     ser = Service.find_by(id: params[:id], user_id: @user.id, isActive: true)
     if ser
-      render json: ser, status: :ok
+      render json: ser,serializer: ServicePrivateDetailSerializer, status: :ok
     else
       render json: {message: "No tiene aceso a este servicio."}, status: 500
     end
