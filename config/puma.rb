@@ -18,6 +18,9 @@ end"""
 #port        ENV['PORT']     || 3000
 #environment ENV['RACK_ENV'] || 'development'
 
+# pidfile 'tmp/pids/puma.pid'
+# state_path 'tmp/pids/puma.state'
+# bind 'unix:///var/run/my_app.sock'
 
 environment ENV['RACK_ENV']
 threads 0,5

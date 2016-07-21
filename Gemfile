@@ -60,10 +60,13 @@ group :development do
 	gem 'web-console', '~> 2.0'
 	gem 'faker'
 
-	gem 'capistrano3-puma'
+#	gem 'capistrano3-puma'
 	gem 'capistrano-rails', require: false
 	gem 'capistrano-bundler', require: false
 	gem 'capistrano-rvm'
+	gem 'capistrano3-puma'
+
+
 end
 
 group :development, :test do
