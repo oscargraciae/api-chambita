@@ -45,10 +45,7 @@ gem 'sendgrid-ruby'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 #gem 'websocket-rails'
 
-gem 'capistrano3-puma'
-gem 'capistrano-rails', require: false
-gem 'capistrano-bundler', require: false
-gem 'capistrano-rvm'
+
 gem 'puma'
 
 gem 'annotate'
@@ -62,6 +59,11 @@ group :development do
 	gem 'sqlite3'
 	gem 'web-console', '~> 2.0'
 	gem 'faker'
+
+	gem 'capistrano3-puma'
+	gem 'capistrano-rails', require: false
+	gem 'capistrano-bundler', require: false
+	gem 'capistrano-rvm'
 end
 
 group :development, :test do
