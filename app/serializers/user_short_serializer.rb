@@ -1,5 +1,5 @@
 class UserShortSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :full_name, :avatar, :address,
+  attributes :id, :first_name, :full_name, :avatar, :address, :description
 
   def full_name
 	"#{object.first_name} #{object.last_name}"

@@ -17,6 +17,7 @@ source 'https://rubygems.org'
 
 gem 'active_model_serializers'
 gem 'aws-sdk', '< 2'
+#gem 'aws-sdk'
 gem 'bcrypt', '~> 3.1.11'
 #gem 'bower-rails'
 gem 'carrierwave', '0.10.0'

@@ -15,7 +15,8 @@ class Api::V1::UsersController < BaseController
  # GET api/v1/users/:id
  def me_show
    user = User.find(@user.id)
-   render json: MeSerializer.new(user), status: :ok
+   puts user.as_json
+   render json: user, serializer: MeSerializer, status: :ok
  end
 
 # POST api/v1/users
@@ -62,7 +63,7 @@ class Api::V1::UsersController < BaseController
    user.city = location.city
 
    if user.update(user_params)
-      render json: MeSerializer.new(user), status: 200
+      render json: user, serializer: MeSerializer, status: 200
    else
       render json: { :errors => user.errors, :message => "Esa dirección de correo electrónico ya está en uso."  }, status: 200
    end
@@ -71,7 +72,7 @@ class Api::V1::UsersController < BaseController
   def avatar
     user = User.find(@user.id)
     if user.update_attribute(:avatar, params[:avatar])
-      render json: {status: true, user: MeSerializer.new(user) }, status: 200
+      render json: user, serializer: MeSerializer, status: 200
     else
       render json: {errors: user.errors}, status: 422
     end

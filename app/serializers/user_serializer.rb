@@ -57,7 +57,7 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    "#{object.first_name} #{object.last_name}"
   end
 
 end

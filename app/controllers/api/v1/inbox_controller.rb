@@ -2,15 +2,20 @@ class Api::V1::InboxController < BaseController
   before_filter  :auth, only: [:index, :create, :all_messages]
 
   def index
-    #listado de conversacioness
     inb = Inbox.all_inbox_by_user(@user.id)
 
-    render json: {inbox: ActiveModel::ArraySerializer.new(inb), count: inb.size}, status: :ok
+    render json: inb, status: :ok
   end
 
   def create
     #validacion de primer mensaje
-  	@inb = Inbox.where(sender_id: [@user.id, params[:user_id]] , recipient_id: [@user.id, params[:user_id]]).first
+    if !params[:inbox_id]
+        @inb = Inbox.where(sender_id: [@user.id, params[:user_id]] , recipient_id: [@user.id, params[:user_id]]).first
+        puts "Inbox por usuario"
+    else
+        @inb = Inbox.find(params[:inbox_id])
+        puts "Inbox por id"
+    end
 
   	if @inb
         save_inbMessage()
