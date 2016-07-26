@@ -20,11 +20,11 @@
 #
 
 class Service < ActiveRecord::Base
-  
+
   validates :name, length: { maximum: 60 }
   validates :description, length: { maximum: 400 }
   validates :price, length: { maximum: 25 }
-  
+
   reverse_geocoded_by "users.lat", "users.lng"
 
   belongs_to :user
@@ -33,7 +33,7 @@ class Service < ActiveRecord::Base
   belongs_to :category
   has_many :service_images
 
-  before_create :total_service_for_user
+  #before_create :total_service_for_user
   before_create :default_values
 
   do_not_validate_attachment_file_type :cover
@@ -60,7 +60,7 @@ class Service < ActiveRecord::Base
   end
 
   def self.service_by_user_id(user_id)
-    Service.where(user_id: user_id).recent().add_include.active()
+    Service.where(user_id: user_id).recent().includes(:sub_category).active()
   end
 
   def self.search_service(params)
@@ -81,13 +81,12 @@ class Service < ActiveRecord::Base
     end
 
     services = Service.all
-    services = services.where(["lower(no_accent(services.name)) LIKE ? ", "%#{query.downcase.removeaccents}%"]) if query.present?
+    services = services.where(["lower(no_accent(services.name)) LIKE ? ", "%#{query.downcase}%"]) if query.present?
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: {name: params[:sub_category]}) if params[:sub_category].present?
 
-    services = services.joins(:user).near([lat, lng], 20, :order => false).where(isActive: true, published: true).order(rating_general: :desc)
+    services = services.joins(:user).near([lat, lng], 20, :order => false).where(isActive: true, published: true).order(rating_general: :desc).includes(:sub_category, :user)
     #services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
-    puts services.as_json
     services
   end
 

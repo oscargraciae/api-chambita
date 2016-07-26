@@ -1,14 +1,11 @@
 class ServicePublicDetailSerializer < ActiveModel::Serializer
 
-  #INFORMACION PUBLICA DE SERVICIO
-
-  attributes :id, :name, :description, :price, :updated_at, :cover, :rating_general, :total_jobs, :distance
+  #INFORMACION PRIVADA DE SERVICIO
+  # ES UTILIZADA PARA MOSTRAR EL RESUMEN DEL SERVICIO
+  # EDITAR USUARIO
+  attributes :id, :name, :description, :price, :cover
 
   has_one :sub_category
-  has_one :category
-  has_one :user, serializer: UserShortSerializer
+  has_many :service_images, includes: true
 
-  def distance
-    object.distance.round(2)
-  end
 end

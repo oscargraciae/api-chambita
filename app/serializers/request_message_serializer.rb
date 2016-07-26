@@ -14,6 +14,9 @@
 class RequestMessageSerializer < ActiveModel::Serializer
   #attributes :id, :sender, :recipient, :text
   attributes :text, :created_at
-  has_one :sender, serializer: UserOnlySerializer
-  has_one :recipient, serializer: UserOnlySerializer
+  # has_one :sender, serializer: UserOnlySerializer
+  # has_one :recipient, serializer: UserOnlySerializer
+
+  has_one :sender, serializer: UserPrivateInfoSerializer
+  has_one :recipient, serializer: UserPrivateInfoSerializer
 end

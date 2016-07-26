@@ -40,12 +40,13 @@
 #
 
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :last_name, :full_name, :email, :description, :avatar, :avatar_thumb, :address
-  has_many :services, serializer: ServicePublicDetailSerializer
+  attributes :id, :first_name, :last_name, :full_name, :description, :avatar, :avatar_thumb, :address
+  # has_many :services, serializer: ServicePublicDetailSerializer
+  #has_many :services, serializer: ServicePrivateSummarySerializer
 
-  def services
-    object.services.where(published: true)
-  end
+  # def services
+  #   object.services.where(published: true, isActive: true)
+  # end
 
   def avatar_thumb
   	object.avatar.url(:thumb)
@@ -56,7 +57,7 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    "#{object.first_name} #{object.last_name}"
   end
 
 end

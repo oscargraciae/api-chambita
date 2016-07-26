@@ -4,9 +4,9 @@ class Api::V1::NotificationController < BaseController
 	def index
 		notifications = Notification.where(user_id: @user.id).limit(5).order(created_at: :desc).includes(:user, :notified_by, :request_service)
 
-		notification_size = Notification.where(user_id: @user.id, read: false).order(created_at: :desc).includes(:user, :notified_by, :request_service).size
+		#notification_size = Notification.where(user_id: @user.id, read: false).order(created_at: :desc).includes(:user, :notified_by, :request_service).size
 
-		render json: {notifications: ActiveModel::ArraySerializer.new(notifications), count: notification_size}, status: :ok
+		render json: notifications, status: :ok
 	end
 
 	def read
