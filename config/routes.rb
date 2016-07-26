@@ -9,6 +9,8 @@ Rails.application.routes.draw do
           put 'avatar'
           put 'password'
           put 'update_CLABE'
+          put 'password_reset'
+          get 'valid_Token'
           get 'me_show'
         end
         collection do

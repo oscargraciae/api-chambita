@@ -55,7 +55,13 @@ class Api::V1::RequestServicesController < BaseController
      request.token_card = card.token
 
      if request.save
+
       create_notification(request, "ha solicitado el servicio", request.user.id, request.supplier.id)
+
+      supplier = User.find(service.user_id)
+      
+      PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
+
 
       render json: request, status: :ok
     else

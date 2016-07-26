@@ -22,7 +22,7 @@ class Api::V1::ServicesController < BaseController
 
   def search
     services = Service.search_service(params)
-    puts services.as_json
+
     render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
   end
 
