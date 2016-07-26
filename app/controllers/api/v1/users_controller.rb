@@ -43,7 +43,31 @@ class Api::V1::UsersController < BaseController
    else
      render json: {:status => "error"}, status: 200
    end
+ end
 
+  def valid_Token
+    user = User.find_by(token: params[:token_user])
+
+    if user
+      render json: user.id, status: 200
+    else
+      render json: {:status => "error"}, status: 200
+    end
+
+  end
+
+ def password_reset
+   user = User.find_by(token: params[:token_user])
+
+    if params[:password] == params[:password_confirmation]
+
+      if user.update_attribute(:password, params[:password])
+        render json: {status: true}, status: 200
+      end
+
+    else
+      render json: {status: false, message: "Tus nuevas contraseñas no coinciden. Por favor, inténtalo de nuevo."}, status: 422
+    end
  end
 
 # PUT api/v1/users/:id
@@ -119,6 +143,7 @@ class Api::V1::UsersController < BaseController
 
  # Validamos los parametros de entrada
  def user_params
+
     params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :birthdate, :cellphone, :description, :encrypted_password, :address_street, :address_area, :address_zipcode, :cellphone)
  end
 
