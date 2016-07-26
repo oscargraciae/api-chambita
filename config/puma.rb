@@ -40,15 +40,14 @@ workers 2
 
 preload_app!
 
-cwd = File.dirname(__FILE__) + '/..'
+# cwd = File.dirname(__FILE__) + '/..'
+# directory cwd
+# rackup "#{cwd}/config.ru"
+#
+# pidfile "#{cwd}/tmp/pids/puma.pid"
 
-directory cwd
-rackup "#{cwd}/config.ru"
-
-pidfile "#{cwd}/tmp/pids/puma.pid"
-
-bind 'tcp://0.0.0.0:9292'
-bind "unix://#{cwd}/tmp/sockets/puma.sock"
+#bind 'tcp://0.0.0.0:3000'
+#bind "unix://#{cwd}/tmp/sockets/puma.sock"
 
 on_worker_boot do
     ActiveSupport.on_load(:active_record) do

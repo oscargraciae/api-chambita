@@ -1,20 +1,17 @@
 class Api::V1::InboxController < BaseController
-  before_filter  :auth, only: [:index, :create, :all_messages]
+  before_filter  :auth, only: [:index, :preview_inbox, :create, :all_messages]
 
   def index
     inb = Inbox.all_inbox_by_user(@user.id)
-
     render json: inb, status: :ok
   end
 
   def create
     #validacion de primer mensaje
     if !params[:inbox_id]
-        @inb = Inbox.where(sender_id: [@user.id, params[:user_id]] , recipient_id: [@user.id, params[:user_id]]).first
-        puts "Inbox por usuario"
+      @inb = Inbox.where(sender_id: [@user.id, params[:user_id]] , recipient_id: [@user.id, params[:user_id]]).first
     else
-        @inb = Inbox.find(params[:inbox_id])
-        puts "Inbox por id"
+      @inb = Inbox.find(params[:inbox_id])
     end
 
   	if @inb
@@ -26,6 +23,12 @@ class Api::V1::InboxController < BaseController
 
     render json: @inbMess,  status: 201
   end
+
+  def preview_inbox
+    inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.SENDER_ID = #{@user.id} OR INBOXES.RECIPIENT_ID = #{@user.id}) AND READIT = false")
+    render json: inboxes_preview, status: :ok
+  end
+
 
   def save_inbox
 
