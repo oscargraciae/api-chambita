@@ -240,7 +240,7 @@ class Api::V1::RequestServicesController < BaseController
 
   private
   def create_notification(request, message, from, to)
-    puts request.as_json
+    
     Notification.create(user_id: to,
       notified_by_id: from,
       request_service_id: request.id,

@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   #devise_for :users
 
- # namespace "api",  defaults: {format: :json}, constraints: { subdomain: 'api' }, path: '/api' do
-  namespace "api",  defaults: {format: :json} do
+ namespace "api",  defaults: {format: :json}, constraints: { subdomain: 'api' }, path: '/api' do
+  # namespace "api",  defaults: {format: :json} do
     namespace "v1" do
       resources :users, only: [:index, :show, :create, :update, :destroy] do
         member do
@@ -10,11 +10,12 @@ Rails.application.routes.draw do
           put 'password'
           put 'update_CLABE'
           put 'password_reset'
-          get 'valid_Token'
           get 'me_show'
         end
         collection do
           get 'active_account'
+
+          get 'valid_Token'
         end
       end
       resources :services, only: [:index, :show, :create, :update, :destroy] do

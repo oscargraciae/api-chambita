@@ -53,11 +53,10 @@ class Api::V1::UsersController < BaseController
     else
       render json: {:status => "error"}, status: 200
     end
-
   end
 
  def password_reset
-   user = User.find_by(token: params[:token_user])
+   user = User.find_by(token: params[:token_user], id: params[:id])
 
     if params[:password] == params[:password_confirmation]
 
