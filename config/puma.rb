@@ -35,26 +35,26 @@ end"""
 # end
 
 
-threads 1, 6
-workers 2
+# threads 1, 6
+# workers 2
 
-preload_app!
+# preload_app!
 
-cwd = File.dirname(__FILE__) + '/..'
+# cwd = File.dirname(__FILE__) + '/..'
 
-directory cwd
-rackup "#{cwd}/config.ru"
+# directory cwd
+# rackup "#{cwd}/config.ru"
 
-pidfile "#{cwd}/tmp/pids/puma.pid"
+# pidfile "#{cwd}/tmp/pids/puma.pid"
 
-bind 'tcp://0.0.0.0:9292'
-bind "unix://#{cwd}/tmp/sockets/puma.sock"
+# bind 'tcp://0.0.0.0:9292'
+# bind "unix://#{cwd}/tmp/sockets/puma.sock"
 
-on_worker_boot do
-    ActiveSupport.on_load(:active_record) do
-        ActiveRecord::Base.establish_connection
-    end
-end
+# on_worker_boot do
+#     ActiveSupport.on_load(:active_record) do
+#         ActiveRecord::Base.establish_connection
+#     end
+# end
 
 
 #RUN chown -R www-data:www-data /var/lib/nginx
