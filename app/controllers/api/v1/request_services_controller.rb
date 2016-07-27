@@ -59,7 +59,7 @@ class Api::V1::RequestServicesController < BaseController
 
       supplier = User.find(service.user_id)
 
-      #PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
+      PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
 
       render json: request, status: :ok
     else
