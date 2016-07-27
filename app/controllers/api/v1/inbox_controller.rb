@@ -25,7 +25,7 @@ class Api::V1::InboxController < BaseController
   end
 
   def preview_inbox
-    inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.SENDER_ID = #{@user.id} OR INBOXES.RECIPIENT_ID = #{@user.id}) AND READIT = false")
+    inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.SENDER_ID = #{@user.id} OR INBOXES.RECIPIENT_ID = #{@user.id}) AND READIT = false").size
     render json: inboxes_preview, status: :ok
   end
 
