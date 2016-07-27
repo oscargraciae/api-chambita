@@ -1,6 +1,6 @@
 class PurchaseDetail < ApplicationMailer
   default :from => 'Chambita <hello@chambita.mx>'
-  layout "send_purchase_detail"
+  layout false
   # send a signup email to the user, pass in the user object that contains the user's email address
   def send_purchase_detail(user, request, service, supplier)
 

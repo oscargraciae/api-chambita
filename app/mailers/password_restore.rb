@@ -1,7 +1,7 @@
 class PasswordRestore < ApplicationMailer
 
   default :from => 'Chambita <hello@chambita.mx>'
-  layout "send_password_reset"
+  #layout "send_password_reset"
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def send_password_reset(user)
 
