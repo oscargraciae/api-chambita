@@ -58,11 +58,13 @@ Rails.application.routes.draw do
       resources :inbox, only: [:index, :create] do
         collection do
           get 'all_messages'
+          get 'preview_inbox'
         end
       end
       resources :notification, only: [:index] do
         collection do
           get 'read'
+          get 'preview_notifications'
         end
       end
       resources :unit_types, only: [:index]

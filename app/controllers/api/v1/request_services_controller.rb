@@ -50,7 +50,6 @@ class Api::V1::RequestServicesController < BaseController
      request.fee = @fee_general
      request.total = @total
 
-
      request.supplier_id = service.user_id
      request.token_card = card.token
 
@@ -59,9 +58,8 @@ class Api::V1::RequestServicesController < BaseController
       create_notification(request, "ha solicitado el servicio", request.user.id, request.supplier.id)
 
       supplier = User.find(service.user_id)
-      
-      PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
 
+      #PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
 
       render json: request, status: :ok
     else
