@@ -46,8 +46,8 @@ class User < ActiveRecord::Base
   validates :email, length: { maximum: 254 }
   #validates :address , length: { maximum: 30 }
   validates :description , length: { maximum: 400 }
-  validates :address_street, length: { maximum: 30 }
-  validates :address_area, length: { maximum: 30 }
+  validates :address_street, length: { maximum: 60 }
+  validates :address_area, length: { maximum: 60 }
   validates :address_zipcode, length: { maximum: 6 }
   validates :cellphone, length: { maximum: 15 }
 
