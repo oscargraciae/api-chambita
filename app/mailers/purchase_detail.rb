@@ -5,6 +5,11 @@ class PurchaseDetail < ApplicationMailer
   # send a signup email to the user, pass in the user object that contains the user's email address
   def send_purchase_detail(user, request, service, supplier)
 
+    neto = service.price + request.fee
+    puts "---------------------------------------"
+    puts request.as_json
+    puts "---------------------------------------"
+
     headers "X-SMTPAPI" => {
       "sub": {
         "%name%" => [user.first_name],
@@ -14,7 +19,7 @@ class PurchaseDetail < ApplicationMailer
         "%service_supplier%" => [supplier.first_name],
         "%service_bruto%" => [service.price],
         "%service_comision%" => [request.fee],
-        "%service_neto%" => [request.price] + [request.fee]
+        "%service_neto%" => [neto]
       },
       "filters": {
         "templates": {

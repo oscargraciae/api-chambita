@@ -240,7 +240,11 @@ class Api::V1::RequestServicesController < BaseController
 
   private
   def create_notification(request, message, from, to)
-    
+
+    user = User.find(to)
+
+    MailNotification.send_mail_notification(user, message).deliver
+
     Notification.create(user_id: to,
       notified_by_id: from,
       request_service_id: request.id,

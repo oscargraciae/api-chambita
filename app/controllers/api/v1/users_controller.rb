@@ -69,6 +69,17 @@ class Api::V1::UsersController < BaseController
     end
  end
 
+ def send_Password_Email
+  user = User.find_by(email: params[:email])
+
+  if user
+    PasswordRestore.send_password_reset(user).deliver
+    render json: user, status: 200
+  else
+    render json: {status: false, message: "El correo ingresado no es válido"}, status: 422
+  end
+ end
+
 # PUT api/v1/users/:id
  def update
 
