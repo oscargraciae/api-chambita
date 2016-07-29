@@ -106,7 +106,7 @@ class Api::V1::RequestServicesController < BaseController
 
     if request.update_attribute(:request_status_id, params[:status_id])
       req_status = RequestStatus.find(params[:status_id])
-      render json: req_status, status: :ok
+      render json: request, status: :ok
     end
   end
 
@@ -240,7 +240,6 @@ class Api::V1::RequestServicesController < BaseController
 
   private
   def create_notification(request, message, from, to)
-
     user = User.find(to)
 
     MailNotification.send_mail_notification(user, message).deliver
@@ -259,11 +258,11 @@ class Api::V1::RequestServicesController < BaseController
     amex = 0.045
     visa_mastercard = 0.029
 
-    if price < 2000
-      fee = price * 0.09
-    elsif price > 2001 && price < 5000
+    if price <= 2000
+      fee = price * 0.10
+    elsif price >= 2001 && price <= 5000
       fee = price * 0.07
-    elsif price > 5001
+    elsif price >= 5001
       fee = price * 0.05
     else
       puts "Error al calcular comision"

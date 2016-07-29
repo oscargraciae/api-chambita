@@ -10,8 +10,9 @@ class Api::V1::ServicesController < BaseController
 
   def search
     services = Service.search_service(params)
-    
-    render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
+
+    #render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
+    render json: services, status: :ok
   end
 
   def user_services

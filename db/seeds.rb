@@ -1,13 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-
-# :name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id
-
 
 # rating
 #RatingType.create(name: 'Precio')
@@ -15,9 +5,15 @@
 #RatingType.create(name: 'Tiempo')
 
 # Estatus de soicitud (Carga inicial)
-# RequestStatus.create(name: 'Aceptada')
-# RequestStatus.create(name: 'Rechazada')
 # RequestStatus.create(name: 'Pendiente')
+# RequestStatus.create(name: 'En proceso')
+# RequestStatus.create(name: 'Terminado')
+# RequestStatus.create(name: 'Cancelado')
+# RequestStatus.create(name: 'En relamación')
+
+# OrderStuses.create(name: 'Pagado')
+# OrderStuses.create(name: 'Rechazado')
+# OrderStuses.create(name: 'Pendiente')
 
 
 # Categorias (Carga inicial)
