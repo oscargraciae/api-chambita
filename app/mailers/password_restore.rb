@@ -1,15 +1,15 @@
 class PasswordRestore < ApplicationMailer
 
   default :from => 'Chambita <hello@chambita.mx>'
-  #layout "send_password_reset"
+  layout false
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def send_password_reset(user)
 
     headers "X-SMTPAPI" => {
       "sub": {
         "%name%" => [user.first_name],
-        #"%url%" => ['http://localhost:9000/#/user/password-reset/'+user.token]
-        "%url%" => ['http://www.chambita.mx/#/user/password-reset/'+user.token]
+        #%url%" => ['http://localhost:9000/user/password-reset/'+user.token]
+        "%url%" => ['http://www.chambita.mx/user/password-reset/'+user.token]
       },
       "filters": {
         "templates": {

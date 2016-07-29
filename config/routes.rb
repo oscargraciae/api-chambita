@@ -13,9 +13,9 @@ Rails.application.routes.draw do
           get 'me_show'
         end
         collection do
+          put 'send_Password_Email'
           get 'active_account'
-
-          get 'valid_Token'
+          get 'valid_Token'          
         end
       end
       resources :services, only: [:index, :show, :create, :update, :destroy] do
