@@ -6,7 +6,7 @@ class Api::V1::AuthenticationController < BaseController
     user_password = params[:password]
     user_email = params[:email]
     user = user_email.present? && User.find_by(email: user_email)
-
+    puts user
     if user
       if user.valid_password? user_password
         # sign_in user, store: false

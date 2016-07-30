@@ -55,7 +55,7 @@ class Api::V1::RequestServicesController < BaseController
 
      if request.save
 
-      create_notification(request, "ha solicitado el servicio", request.user.id, request.supplier.id)
+      create_notification(request, "ha solicitado el servicio", request.user, request.supplier)
 
       supplier = User.find(service.user_id)
 
@@ -73,13 +73,13 @@ class Api::V1::RequestServicesController < BaseController
     payment_conekta()
 
     if @message_error
-      create_notification(@request, @message_error.message_to_purchaser, @request.supplier.id, @request.user.id)
+      create_notification(@request, @message_error.message_to_purchaser, @request.supplier, @request.user)
 
       render json: @message_error, status: 500
     else
 
       if @request.update_attribute(:request_status_id, REQUEST_STATUS_INPROCESS)
-        create_notification(@request, "acepto el trabajo", @request.supplier.id, @request.user.id)
+        create_notification(@request, "acepto el trabajo", @request.supplier, @request.user)
         Order.create(@request.id, ORDER_STATUS_PAID, @request.price, @request.fee)
         render json: @request, status: :ok
       end
@@ -114,19 +114,22 @@ class Api::V1::RequestServicesController < BaseController
     request = RequestService.find(params[:id])
 
     user_id_cancel = Integer(params[:user_id])
+    user_cancel = nil
     user_id_notifier = 0
+    user_notifier = nil
+
+    user_cancel = User.find(params[:user_id])
 
     if user_id_cancel == request.supplier.id
-      puts "notificar a usuario"
       user_id_notifier = request.user.id
+      user_notifier = request.user
     else
-      puts "notificar a proveedor"
       user_id_notifier = request.supplier.id
+      user_notifier = request.supplier
     end
 
     if request.update_attribute(:request_status_id, REQUEST_STATUS_CANCELED)
-      puts "Cancelado!"
-      create_notification(request, "canceló el trabajo", user_id_cancel, user_id_notifier)
+      create_notification(request, "canceló el trabajo", user_cancel, user_notifier)
       render json: request, status: :ok
     else
       render json: {error: "Ocurrio un error."}, status: 500
@@ -177,7 +180,7 @@ class Api::V1::RequestServicesController < BaseController
 
   private
   def finish_customer(request)
-    create_notification(request, "aprobó el trabajo", request.user.id, request.supplier.id)
+    create_notification(request, "aprobó el trabajo", request.user, request.supplier)
 
     request.update_attributes(:is_finish_customer => true, :request_status_id => REQUEST_STATUS_FINISH)
 
@@ -193,7 +196,7 @@ class Api::V1::RequestServicesController < BaseController
 
   private
   def finish_supplier(request)
-    create_notification(request, "ha terminado", request.supplier.id, request.user.id)
+    create_notification(request, "ha terminado", request.supplier, request.user)
     request.update_attribute(:is_finish_supplier, true)
     request
   end
@@ -242,10 +245,12 @@ class Api::V1::RequestServicesController < BaseController
   def create_notification(request, message, from, to)
     user = User.find(to)
 
-    MailNotification.send_mail_notification(user, message).deliver
+    email_content = "#{from.first_name} #{message} #{request.service.name}"
+    puts email_content
+    MailNotification.send_mail_notification(user, email_content).deliver
 
-    Notification.create(user_id: to,
-      notified_by_id: from,
+    Notification.create(user_id: to.id,
+      notified_by_id: from.id,
       request_service_id: request.id,
       identifier: request.id,
       type_notification: message,
