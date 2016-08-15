@@ -6,7 +6,7 @@ class Api::V1::AuthenticationController < BaseController
     user_password = params[:password]
     user_email = params[:email]
     user = user_email.present? && User.find_by(email: user_email)
-    puts user
+
     if user
       if user.valid_password? user_password
         # sign_in user, store: false
@@ -19,10 +19,10 @@ class Api::V1::AuthenticationController < BaseController
         #UserNotifier.send_signup_email(us).deliver
         render json: {:user => us, :token => user.token}, status: 200
       else
-        render json: { :errors => user.errors, :status => "error", :message => "Contraseña incorrecto" }, status: 200
+        render json: { :errors => user.errors, :status => "error", :message => "Contraseña incorrecta" }, status: 200
       end
     else
-      render json: { :status => "error", :message => "Correo electrónico incorrecto." }, status: 200
+      render json: { :status => "error", :message => "Correo electrónico no existe o es incorrecto." }, status: 200
     end
 
   end

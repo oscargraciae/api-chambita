@@ -28,14 +28,7 @@ module Chambitas
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
-    config.paperclip_defaults = {
-        :storage => :s3,
-        :s3_credentials => {
-            :access_key_id => 'AKIAJE2VWUVEX5WUBB5Q',
-            :secret_access_key => '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',
-            :bucket => 'chambita1236'
-        }
-    }
+    
 
   end
 end

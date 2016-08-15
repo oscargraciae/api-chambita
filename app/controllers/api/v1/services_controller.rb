@@ -31,7 +31,6 @@ class Api::V1::ServicesController < BaseController
   end
 
   # METODOS PRIVADOR -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
-
   def my_services
     services = Service.service_by_user_id(@user.id)
     render json: services, each_serializer: ServicePrivateSummarySerializer, status: :ok

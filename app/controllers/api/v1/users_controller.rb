@@ -126,10 +126,10 @@ class Api::V1::UsersController < BaseController
           render json: {status: true}, status: 200
         end
       else
-        render json: {status: false, message: "Tu antigua contraseña era incorrecta. Por favor, inténtalo de nuevo."}, status: 422
+        render json: {status: false, message: "Tu antigua contraseña es incorrecta. Por favor, inténtalo de nuevo."}, status: 200
       end
     else
-      render json: {status: false, message: "Tus nuevas contraseñas no coinciden. Por favor, inténtalo de nuevo."}, status: 422
+      render json: {status: false, message: "Tus nuevas contraseñas no coinciden. Por favor, inténtalo de nuevo."}, status: 200
     end
   end
 

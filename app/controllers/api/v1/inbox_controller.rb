@@ -25,7 +25,8 @@ class Api::V1::InboxController < BaseController
   end
 
   def preview_inbox
-    inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.SENDER_ID = #{@user.id} OR INBOXES.RECIPIENT_ID = #{@user.id}) AND READIT = false").size
+    #inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.RECIPIENT_ID = #{@user.id} OR INBOXES.SENDER_ID = #{@user.id}) AND READIT = false").size
+    inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.RECIPIENT_ID = #{@user.id} OR INBOXES.SENDER_ID = #{@user.id}) AND READIT = false").where.not(sender_user: @user.id).size
     render json: inboxes_preview, status: :ok
   end
 
@@ -35,10 +36,9 @@ class Api::V1::InboxController < BaseController
   	inbox = Inbox.new
   	inbox.sender_id = @user.id
   	inbox.recipient_id = params[:user_id]
-
   	inbox.save
-
   	@inb = inbox
+
   end
 
   def save_inbMessage

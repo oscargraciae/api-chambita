@@ -80,7 +80,7 @@ class Api::V1::RequestServicesController < BaseController
 
       if @request.update_attribute(:request_status_id, REQUEST_STATUS_INPROCESS)
         create_notification(@request, "acepto el trabajo", @request.supplier, @request.user)
-        Order.create(@request.id, ORDER_STATUS_PAID, @request.price, @request.fee)
+        Order.create(@request.id, ORDER_STATUS_PENDING, @request.price, @request.fee)
         render json: @request, status: :ok
       end
 
@@ -129,6 +129,9 @@ class Api::V1::RequestServicesController < BaseController
     end
 
     if request.update_attribute(:request_status_id, REQUEST_STATUS_CANCELED)
+      order = Order.find_by(request_service_id: request.id)
+      order.update_attribute(:order_status_id, ORDER_STATUS_CANCELED)
+
       create_notification(request, "canceló el trabajo", user_cancel, user_notifier)
       render json: request, status: :ok
     else
@@ -184,8 +187,8 @@ class Api::V1::RequestServicesController < BaseController
 
     request.update_attributes(:is_finish_customer => true, :request_status_id => REQUEST_STATUS_FINISH)
 
-    order = Order.find_by(request_service_id: request.id)
-    order.update_attribute(:order_status_id, ORDER_STATUS_PAID)
+    # order = Order.find_by(request_service_id: request.id)
+    # order.update_attribute(:order_status_id, ORDER_STATUS_PAID)
 
     request_size = RequestService.where({service_id: request.service_id, request_status_id: REQUEST_STATUS_FINISH}).size
     s = Service.find(request.service_id)

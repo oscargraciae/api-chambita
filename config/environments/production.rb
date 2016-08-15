@@ -86,5 +86,15 @@ Rails.application.configure do
     :authentication => :plain,
     :enable_starttls_auto => true
   }
-  
+
+  config.paperclip_defaults = {
+      :storage => :s3,
+      :s3_credentials => {
+          :access_key_id => 'AKIAJE2VWUVEX5WUBB5Q',
+          :secret_access_key => '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',
+          # :bucket => 'chambita1236'
+          :bucket => 'chambita_production'
+      }
+  }
+
 end
