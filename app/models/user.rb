@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
                         :default_style => :meddium,
                         :storage => :s3,
                         :url  => ':s3_domain_url',
-                        :default_url => 'https://s3-us-west-1.amazonaws.com/chambita1236/uploads/users/user1.png',
+                        :default_url => 'https://s3-us-west-1.amazonaws.com/chambita_production/uploads/users/user1.png',
                         :path => "uploads/users/:file_id/:style/:filename"
 
   def generate_authentication_token!
