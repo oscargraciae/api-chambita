@@ -25,7 +25,7 @@ development:
   <<: *default
   database: chambitas_development
   username: chambita
-  password: chambita12345
+  password: ch4m8it4$123
   host: chambita.cyzwdrnlmdwk.us-west-2.rds.amazonaws.com
   port: 5432
   # The specified database role being used to connect to postgres.
@@ -62,7 +62,8 @@ test:
   <<: *default
   database: chambitas_test
   username: chambita
-  password: chambita12345
+  # password: chambita12345
+  password: ch4m8it4$123
   host: chambita.cyzwdrnlmdwk.us-west-2.rds.amazonaws.com
 
 # As with config/secrets.yml, you never want to store sensitive information,

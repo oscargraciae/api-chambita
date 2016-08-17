@@ -6,9 +6,6 @@ class PurchaseDetail < ApplicationMailer
   def send_purchase_detail(user, request, service, supplier)
 
     neto = service.price + request.fee
-    puts "---------------------------------------"
-    puts request.as_json
-    puts "---------------------------------------"
 
     headers "X-SMTPAPI" => {
       "sub": {
