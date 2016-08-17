@@ -43,7 +43,9 @@ class Service < ActiveRecord::Base
                         :default_style => :meddium,
                         :storage => :s3,
                         :url  => ':s3_domain_url',
-                        :default_url => 'https://chambita_production.s3.amazonaws.com/uploads/users/user_default.png',
+                        #:default_url => 'https://chambita_production.s3.amazonaws.com/uploads/users/user_default.png',
+                        :default_url => 'https://s3.amazonaws.com/chambita_production/uploads/users/user_default.png',
+
                         :path => "uploads/services/cover/:file_id/:style/:filename"
 
   #default_scope { includes(:service_images) }
