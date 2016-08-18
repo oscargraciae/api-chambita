@@ -9,7 +9,7 @@ class UserNotifier < ApplicationMailer
       "sub": {
         "%name%" => [user.first_name],
         #"%url%" => ['http://localhost:9000/#/user/active_account/'+user.token]
-        "%url%" => ['http://www.chambita.mx/#/user/active_account/'+user.token]
+        "%url%" => ['https://chambita.mx/#/user/active_account/'+user.token]
       },
       "filters": {
         "templates": {

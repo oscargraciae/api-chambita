@@ -87,7 +87,7 @@ class Service < ActiveRecord::Base
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: {name: params[:sub_category]}) if params[:sub_category].present?
 
-    services = services.joins(:user).near([lat, lng], 20, :order => false).where(isActive: true, published: true).order(rating_general: :desc).includes(:sub_category, :user)
+    services = services.joins(:user).near([lat, lng], 40, :order => false).where(isActive: true, published: true).order(rating_general: :desc).includes(:sub_category, :user)
     #services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
     services
   end

@@ -14,9 +14,9 @@ class PurchaseDetail < ApplicationMailer
         "%service_date%" => [request.request_date],
         "%service_time%" => [request.request_time],
         "%service_supplier%" => [supplier.first_name],
-        "%service_bruto%" => [service.price],
+        "%service_bruto%" => [request.subtotal],
         "%service_comision%" => [request.fee],
-        "%service_neto%" => [neto]
+        "%service_neto%" => [request.total]
       },
       "filters": {
         "templates": {

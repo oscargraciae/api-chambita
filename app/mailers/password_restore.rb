@@ -9,7 +9,7 @@ class PasswordRestore < ApplicationMailer
       "sub": {
         "%name%" => [user.first_name],
         # "%url%" => ['http://localhost:9000/user/password-reset/'+user.token]
-        "%url%" => ['http://www.chambita.mx/user/password-reset/'+user.token]
+        "%url%" => ['https://chambita.mx/user/password-reset/'+user.token]
       },
       "filters": {
         "templates": {

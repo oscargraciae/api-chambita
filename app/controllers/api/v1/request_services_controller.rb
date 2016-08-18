@@ -220,7 +220,7 @@ class Api::V1::RequestServicesController < BaseController
           "line_items"=> [{
             "name"=> @request.service.name,
             "description"=> @request.service.description,
-            "unit_price"=> (@request.price * 100).to_i,
+            "unit_price"=> (@request.subtotal * 100).to_i,
             "quantity"=> 1
           },
           {
