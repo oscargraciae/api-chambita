@@ -136,14 +136,12 @@ class Api::V1::UsersController < BaseController
   def update_CLABE
     @user = User.find(params[:id])
 
-    puts @user.as_json
-
     if @user.update_attributes(:CLABE => params[:CLABE], :bank => params[:bank])
-
-      render json: {status: true, message: "Se han actualizado tus datos."}, status: 200
+      render json: @user, serializer: MeSerializer, status: 200
+      #render json: {status: true, message: "Se han actualizado tus datos."}, status: 200
     else
 
-      render json: {status: false, message: "No se ha podido actualizar los datos."}, status: 422
+      render json: {status: false, message: "No se ha podido actualizar los datos."}, status: 200
     end
   end
 

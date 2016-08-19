@@ -35,6 +35,10 @@ SubCategory.create(name: 'Reparacion de computadoras', category_id: 1)
 SubCategory.create(name: 'Reparacion de equipos electrónicos', category_id: 1)
 SubCategory.create(name: 'Limpieza', category_id: 1)
 SubCategory.create(name: 'Fletes y mudanza', category_id: 1)
+SubCategory.create(name: 'Fumigaciones', category_id: 1)
+SubCategory.create(name: 'Herrería', category_id: 1)
+
+
 
 SubCategory.create(name: 'Ambientación', category_id: 2)
 SubCategory.create(name: 'Fotorafia y video', category_id: 2)
