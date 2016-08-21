@@ -41,8 +41,8 @@
 
 class User < ActiveRecord::Base
 
-  validates :first_name, length: { maximum: 30 }
-  validates :last_name, length: { maximum: 30 }
+  validates :first_name, length: { maximum: 60 }
+  validates :last_name, length: { maximum: 40 }
   validates :email, length: { maximum: 254 }
   #validates :address , length: { maximum: 30 }
   validates :description , length: { maximum: 400 }

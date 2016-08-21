@@ -9,7 +9,7 @@ class UserNotifier < ApplicationMailer
       "sub": {
         "%name%" => [user.first_name],
         #"%url%" => ['http://localhost:9000/#/user/active_account/'+user.token]
-        "%url%" => ['https://chambita.mx/#/user/active_account/'+user.token]
+        "%url%" => ['https://chambita.mx/user/active_account/'+user.token]
       },
       "filters": {
         "templates": {
@@ -22,6 +22,8 @@ class UserNotifier < ApplicationMailer
     }.to_json
 
     @user = user
-    mail( :to => @user.email,:subject => 'Por favor, confirma tu dirección de correo electrónico' )
+    #mail( :to => @user.email,:subject => 'Por favor, confirma tu dirección de correo electrónico' )
+
+    mail( :to => "chambitamx@gmail.com",:subject => 'Nuevo usuario' )
   end
 end

@@ -87,9 +87,9 @@ test:
 #
 production:
   <<: *default
-  database: chambitas_development
+  database: chambitas_production
   username: chambita
-  password: chambita12345
+  password: ch4m8it4$123
   host: chambita.cyzwdrnlmdwk.us-west-2.rds.amazonaws.com
   port: 5432
   #password: <%= ENV['TWOPX_DATABASE_PASSWORD'] %>
