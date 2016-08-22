@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   #devise_for :users
 
- namespace "api",  defaults: {format: :json}, constraints: { subdomain: 'api' }, path: '/api' do
-  # namespace "api",  defaults: {format: :json} do
+ namespace "api", constraints: { subdomain: 'api' }, path: '/api' do
+  # namespace "api" do
     namespace "v1" do
       resources :users, only: [:index, :show, :create, :update, :destroy] do
         member do
@@ -28,6 +28,7 @@ Rails.application.routes.draw do
           get 'search'
           get 'my_services'
           get 'user_services'
+          get 'render_service'
         end
       end
       resources :service_images, only: [:index, :create, :destroy]

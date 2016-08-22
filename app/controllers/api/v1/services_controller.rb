@@ -87,6 +87,13 @@ class Api::V1::ServicesController < BaseController
     end
   end
 
+  def render_service
+    puts params[:id]
+    @service = Service.find_by(id: params[:id], isActive: true, published: true)
+    puts @service
+    render template: 'render_og'
+  end
+
   private
   def set_service
     @ser = Service.find(params[:id])

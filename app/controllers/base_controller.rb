@@ -29,5 +29,5 @@ class BaseController < ApplicationController
         end
       end
     end
-
+    
 end
