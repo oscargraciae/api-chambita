@@ -4,7 +4,7 @@ class UserDetail < ApplicationMailer
 
   def user_signup_detail(user)
     @user = user
-    mail( :to => "oscar.graciae@gmail.com",:subject => 'Nuevo usuario' )
+    mail( :to => "chambitamx@gmail.com",:subject => 'Nuevo usuario' )
   end
 
 end
