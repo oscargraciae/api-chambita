@@ -88,6 +88,8 @@ class Api::V1::ServicesController < BaseController
   end
 
   def render_service
+    @service = nil
+    
     if params[:id]
       @service = Service.find_by(id: params[:id], isActive: true, published: true)
     end

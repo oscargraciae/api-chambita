@@ -2,7 +2,7 @@
 <html>
     <head>
 
-      <% if @service.id %>
+      <% if @service %>
         <meta property="og:title" content="<%= @service.name %>"/>
         <meta property="og:image" content='<%= @service.cover %>'/>
         <meta property="og:description" content="<%= @service.description %>"/>
@@ -22,7 +22,7 @@
     </head>
     <body>
 
-      <% if @service.id %>
+      <% if @service %>
         <p><%= @service.name %></p>
         <img src="<%= @service.cover %>">
       <% end %>
