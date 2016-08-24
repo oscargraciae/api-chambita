@@ -23,7 +23,8 @@ class Api::V1::UsersController < BaseController
  def create
    user = User.new(user_params)
    if user.save
-      UserNotifier.send_signup_email(user).deliver
+      #UserNotifier.send_signup_email(user).deliver
+      UserDetail.user_signup_detail(user).deliver
 	    render json: user, status: 201
 	  else
 
