@@ -87,7 +87,8 @@ test:
 #
 production:
   <<: *default
-  database: chambitas_production
+  # database: chambitas_production
+  database: chambitas_test
   username: chambita
   password: ch4m8it4$123
   host: chambita.cyzwdrnlmdwk.us-west-2.rds.amazonaws.com

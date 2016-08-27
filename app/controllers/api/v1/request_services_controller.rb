@@ -249,7 +249,6 @@ class Api::V1::RequestServicesController < BaseController
     user = User.find(to)
 
     email_content = "#{from.first_name} #{message} #{request.service.name}"
-    puts email_content
     MailNotification.send_mail_notification(user, email_content).deliver
 
     Notification.create(user_id: to.id,

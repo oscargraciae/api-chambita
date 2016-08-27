@@ -17,6 +17,10 @@ class Api::V1::InboxController < BaseController
   	if @inb
         save_inbMessage()
   	else
+      user_res = User.find(params[:user_id])
+      email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada"
+      MailNotification.send_mail_notification(user_res, email_content).deliver
+
   		save_inbox()
 	  	save_inbMessage()
     end
