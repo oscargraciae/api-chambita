@@ -51,7 +51,18 @@
 # SubCategory.create(name: 'Idiomas', category_id: 3)
 # SubCategory.create(name: 'Artes', category_id: 3)
 # SubCategory.create(name: 'Música', category_id: 3)
-#
+
+# SubCategory.create(name: 'Apoyo especial', category_id: 3)
+# SubCategory.create(name: 'Ciencias sociales', category_id: 3)
+# SubCategory.create(name: 'Deporte y salud', category_id: 3)
+# SubCategory.create(name: 'Economía y empresa', category_id: 3)
+# SubCategory.create(name: 'Humanidades', category_id: 3)
+# SubCategory.create(name: 'Informática y tecnología', category_id: 3)
+# SubCategory.create(name: 'Baile', category_id: 3)
+# SubCategory.create(name: 'Preparación de exámenes', category_id: 3)
+
+
+
 #
 # # Tipos de unidad de medida
 # UnitType.create(description: 'mts2')
