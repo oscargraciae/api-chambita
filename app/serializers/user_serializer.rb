@@ -49,7 +49,7 @@ class UserSerializer < ActiveModel::Serializer
   # end
 
   def avatar_thumb
-  	object.avatar.url(:thumb)
+  	object.avatar.url(:small)
   end
 
   def address
