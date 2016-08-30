@@ -135,7 +135,7 @@ class Api::V1::RequestServicesController < BaseController
       create_notification(request, "canceló el trabajo", user_cancel, user_notifier)
       render json: request, status: :ok
     else
-      render json: {error: "Ocurrio un error."}, status: 500
+      render json: {error: "Ocurrió un error."}, status: 500
     end
   end
 
