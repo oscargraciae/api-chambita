@@ -137,7 +137,7 @@ class Api::V1::UsersController < BaseController
   def update_CLABE
     @user = User.find(params[:id])
 
-    if @user.update_attributes(:CLABE => params[:CLABE], :bank => params[:bank])
+    if @user.update_attributes(:clabe => params[:clabe], :bank => params[:bank])
       render json: @user, serializer: MeSerializer, status: 200
       #render json: {status: true, message: "Se han actualizado tus datos."}, status: 200
     else
