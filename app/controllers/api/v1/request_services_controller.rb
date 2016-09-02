@@ -6,6 +6,8 @@ class Api::V1::RequestServicesController < BaseController
 
     if params[:status_id] === '3'
       requests = RequestService.request_history(@user.id)
+    elsif params[:status_id] === '2'
+      requests = RequestService.pending_request(@user.id)
     else
       requests = RequestService.requests_by_status(@user.id, params[:status_id])
     end
@@ -18,6 +20,8 @@ class Api::V1::RequestServicesController < BaseController
 
     if params[:status_id] === '3'
       jobs = RequestService.jobs_history(@user.id, params[:status_id])
+    elsif params[:status_id] === '2'
+      jobs = RequestService.pending_jobs(@user.id, params[:status_id])
     else
       jobs = RequestService.jobs_by_status(@user.id, params[:status_id])
     end
