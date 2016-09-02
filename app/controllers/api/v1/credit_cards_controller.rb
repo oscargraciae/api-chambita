@@ -15,7 +15,7 @@ class Api::V1::CreditCardsController < BaseController
       if card.save
         render json: card, status: 201
       else
-        render json: {errors: card.errors}, status: 422
+        render json: {errors: card.errors}, status: 200
       end
 
     else
@@ -50,8 +50,8 @@ class Api::V1::CreditCardsController < BaseController
       render json: customer, status: 200
     else
       render json: {errors: "" , message: "Usuario no registrado en Conekta"} , status: :ok
-    end   
-    
+    end
+
   end
 
   def my_cards
@@ -63,7 +63,7 @@ class Api::V1::CreditCardsController < BaseController
     customer = Conekta::Customer.find(@user.conektaid)
     pos = 0
 
-    customer.cards.each_with_index do |val, index| 
+    customer.cards.each_with_index do |val, index|
       if val[1].id === credit_cards_parms[:id]
         pos = index
       end
@@ -77,7 +77,7 @@ class Api::V1::CreditCardsController < BaseController
       if credit_card.destroy
         head 204
       else
-        render json: {errors: credit_card.error, message: "Ha ocurruido un error y no se ha podido borrar la tarjeta, contacte al administrador"} , status: 422 
+        render json: {errors: credit_card.error, message: "Ha ocurruido un error y no se ha podido borrar la tarjeta, contacte al administrador"} , status: 422
       end
 
     else
@@ -87,7 +87,7 @@ class Api::V1::CreditCardsController < BaseController
 
   # Validamos los parametros de entrada
  def credit_cards_parms
-    params.permit(:id)  
+    params.permit(:id)
  end
 
 end
