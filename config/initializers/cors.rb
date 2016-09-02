@@ -9,8 +9,6 @@
       # origins 'localhost:9000'
       # origins 'http://chambita.mx'
 
-
-
      resource '*',
        headers: :any,
        methods: [:get, :post, :put, :patch, :delete, :options, :head]
