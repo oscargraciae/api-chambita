@@ -38,7 +38,7 @@ class Api::V1::CreditCardsController < BaseController
 
         render json: card, status: 201
       else
-        render json: card.errors, status: 422
+        render json: card.errors, status: 200
       end
     end
   end
