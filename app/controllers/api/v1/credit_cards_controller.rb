@@ -51,7 +51,7 @@ class Api::V1::CreditCardsController < BaseController
       customer = Conekta::Customer.find(@user.conektaid)
       render json: customer, status: 200
     else
-			
+
       render json: {errors: "" , message: "Usuario no registrado en Conekta"} , status: :ok
     end
 
