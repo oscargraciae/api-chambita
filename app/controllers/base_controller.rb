@@ -25,9 +25,9 @@ class BaseController < ApplicationController
         @user = User.find_by(token: token)
         if !@user
           json = {:code => "unauthorized", :message => "Acceso no autorizado", :object => "error", :type => nil}
-          render json: json, status: :unauthorized
+          render json: json, status: 200
         end
       end
     end
-    
+
 end

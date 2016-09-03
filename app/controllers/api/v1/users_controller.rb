@@ -24,7 +24,10 @@ class Api::V1::UsersController < BaseController
    user = User.new(user_params)
    if user.save
       #UserNotifier.send_signup_email(user).deliver
-      UserDetail.user_signup_detail(user).deliver
+      if Rails.env.production?
+        UserDetail.user_signup_detail(user).deliver
+      end
+
 	    render json: user, status: 201
 	  else
 
@@ -89,13 +92,12 @@ class Api::V1::UsersController < BaseController
 
    location = Geocoder.search(params[:address])[0]
 
-   #user.lat = location.coordinates[0]
-   #user.lng = location.coordinates[1]
    user.lat = params[:lat]
    user.lng = params[:lng]
    user.country = location.country
    user.state = location.state
    user.city = location.city
+   user.is_completed = true
 
    if user.update(user_params)
       render json: user, serializer: MeSerializer, status: 200

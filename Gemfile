@@ -35,7 +35,7 @@ gem 'memcachier'
 #gem "omniauth"
 #gem "omniauth-facebook"
 #gem "omniauth-twitter"
-gem 'paperclip', '~> 4.2'
+gem 'paperclip', '4.2'
 gem 'pg'
 gem 'puma'
 gem 'rack-cors'

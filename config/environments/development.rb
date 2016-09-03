@@ -1,5 +1,7 @@
 Rails.application.configure do
 
+  Conekta.api_key = 'key_jaiWQwqGqEkQqqkUqhdy2A'
+
   Paperclip.options[:content_type_mappings]
 
   config.cache_store = :dalli_store

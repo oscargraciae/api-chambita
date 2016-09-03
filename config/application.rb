@@ -12,7 +12,7 @@ Bundler.require(*Rails.groups)
 module Chambitas
   class Application < Rails::Application
     require 'extend_string'
-    Conekta.api_key = 'key_RtrGssMx9HRXYKSrDk4EmQ'
+    # Conekta.api_key = 'key_RtrGssMx9HRXYKSrDk4EmQ'
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
