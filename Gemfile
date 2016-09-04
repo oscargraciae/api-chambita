@@ -52,7 +52,7 @@ gem 'puma'
 gem 'annotate'
 gem "bullet", :group => "development"
 group :development do
-	gem 'capistrano'
+	gem 'capistrano', '3.5.0'
 	gem 'foreman'
 
 	gem 'railroady'

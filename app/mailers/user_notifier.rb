@@ -22,7 +22,7 @@ class UserNotifier < ApplicationMailer
     }.to_json
 
     @user = user
-    #mail( :to => @user.email,:subject => 'Por favor, confirma tu dirección de correo electrónico' )
+    mail( :to => @user.email,:subject => 'Por favor, confirma tu dirección de correo electrónico' )
 
     #mail( :to => "chambitamx@gmail.com",:subject => 'Nuevo usuario' )
   end

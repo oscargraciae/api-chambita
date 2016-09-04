@@ -23,8 +23,8 @@ class Api::V1::UsersController < BaseController
  def create
    user = User.new(user_params)
    if user.save
-      #UserNotifier.send_signup_email(user).deliver
       if Rails.env.production?
+        UserNotifier.send_signup_email(user).deliver
         UserDetail.user_signup_detail(user).deliver
       end
 
