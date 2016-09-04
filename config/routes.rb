@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   #devise_for :users
 
- namespace "api", constraints: { subdomain: 'api' }, path: '/api' do
-  # namespace "api" do
+ # namespace "api", constraints: { subdomain: 'api' }, path: '/api' do
+  namespace "api" do
     namespace "v1" do
       resources :users, only: [:index, :show, :create, :update, :destroy] do
         member do
@@ -16,6 +16,7 @@ Rails.application.routes.draw do
           put 'send_Password_Email'
           get 'active_account'
           get 'valid_Token'
+          get 'resend_email'
         end
       end
       resources :services, only: [:index, :show, :create, :update, :destroy] do

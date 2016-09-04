@@ -1,5 +1,5 @@
 class Api::V1::UsersController < BaseController
-  before_filter :auth, only: [:update, :destroy, :me_show, :avatar, :password, :update_CLABE]
+  before_filter :auth, only: [:update, :destroy, :me_show, :avatar, :password, :update_CLABE, :resend_email]
 
   # GET api/v1/users
   #def index
@@ -146,6 +146,12 @@ class Api::V1::UsersController < BaseController
 
       render json: {status: false, message: "No se ha podido actualizar los datos."}, status: 200
     end
+  end
+
+  def resend_email
+    UserNotifier.send_signup_email(@user).deliver
+
+    render json: {status:true}, status: 200
   end
 
  # DELETE api/v1/users/:id
