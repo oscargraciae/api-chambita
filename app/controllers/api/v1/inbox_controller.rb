@@ -77,7 +77,7 @@ class Api::V1::InboxController < BaseController
     user_id = 0
 
     if @inb
-      if sender_id == @inb.sender_id
+      if id == @inb.sender_id
         user_id = @inb.recipient_id
       else
         user_id = @inb.sender_id
