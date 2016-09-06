@@ -56,7 +56,9 @@ class Api::V1::InboxController < BaseController
     @inbMess.sender_user = @user.id
     @inbMess.inbox_id = @inb.id
 
-    @inbMess.save
+    if @inbMess.save
+      sendNotification(@user.id)
+    end
 
   end
 
@@ -68,5 +70,24 @@ class Api::V1::InboxController < BaseController
     read.update_all "readit = 'true'"
 
     render json: inb.order(id: :asc), status: :ok
+  end
+
+  private
+  def sendNotification(id)
+    user_id = 0
+
+    if @inb
+      if sender_id == @inb.sender_id
+        user_id = @inb.recipient_id
+      else
+        user_id = @inb.sender_id
+      end
+
+      user_res = User.find(user_id)
+      email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada"
+      MailNotification.send_mail_notification(user_res, email_content).deliver
+    end
+
+
   end
 end
