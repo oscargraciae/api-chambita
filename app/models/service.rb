@@ -22,7 +22,7 @@
 class Service < ActiveRecord::Base
 
   validates :name, length: { maximum: 60 }
-  validates :description, length: { maximum: 400 }
+  validates :description, length: { maximum: 1000 }
   validates :price, length: { maximum: 25 }
 
   reverse_geocoded_by "users.lat", "users.lng"
