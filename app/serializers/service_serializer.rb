@@ -26,6 +26,7 @@ class ServiceSerializer < ActiveModel::Serializer
 
   attributes :id, :name, :price, :cover, :rating_general
 
+  has_one :unit_type
   has_one :sub_category
   has_one :user, serializer: UserShortSerializer
 

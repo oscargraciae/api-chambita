@@ -1,3 +1,3 @@
 class UnitTypeSerializer < ActiveModel::Serializer
-  attributes :id, :description
+  attributes :id, :description, :singular_name
 end
