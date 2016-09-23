@@ -65,7 +65,7 @@ class Api::V1::ServicesController < BaseController
     if service.update(service_params)
         render json: service, status: :ok
     else
-        render json: {errors: service.errors}, status: 422
+        render json: {errors: service.errors}, status: 200
     end
   end
 
