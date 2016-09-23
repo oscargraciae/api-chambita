@@ -59,7 +59,7 @@
 # SubCategory.create(name: 'Humanidades', category_id: 3)
 # SubCategory.create(name: 'Informática y tecnología', category_id: 3)
 # SubCategory.create(name: 'Baile', category_id: 3)
-# SubCategory.create(name: 'Preparación de exámenes', category_id: 3)
+# SubCategory.create(name: 'Preparación para exámenes', category_id: 3)
 #
 #
 #

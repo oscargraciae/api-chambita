@@ -72,6 +72,8 @@ Rails.application.routes.draw do
         end
       end
       resources :unit_types, only: [:index]
+
+      resources :stats, only: [:index]
     end
   end
 end

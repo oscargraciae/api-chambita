@@ -39,7 +39,8 @@ class Service < ActiveRecord::Base
   do_not_validate_attachment_file_type :cover
   has_attached_file   :cover,
                         #:styles => { :small => ["128x128!",:jpg], :meddium => ["230x230!",:jpg], :thumb => ["90x90#", :jpg]},
-                        :styles => { :small => ["128x128!",:jpg], :meddium => ["230x230!",:jpg] },
+                        :styles => { :small => ["128x128!",:jpg], :meddium => ["300x300!",:jpg], :thumb => ["268x134#", :jpg] },
+                        #:styles => { :small => ["128x128!",:jpg], :meddium => ["460x230!",:jpg] },
                         :default_style => :meddium,
                         :storage => :s3,
                         :url  => ':s3_domain_url',

@@ -23,6 +23,10 @@ class Api::V1::ServicesController < BaseController
   def show
     ser = Service.find_by(id: params[:id], isActive: true, published: true)
     if ser
+
+      visits = ser.visits + 1
+      ser.update_attribute(:visits, visits)
+
       render json: ser, serializer: ServiceDetailSerializer, status: :ok
     else
       render json: {message: 'Este servicio ya no está disponible.'}, status: 404
@@ -51,7 +55,7 @@ class Api::V1::ServicesController < BaseController
     if ser.save
       render json: ser, status: 201
     else
-      render json: {errors: ser.errors}, status: 422
+      render json: {errors: ser.errors}, status: 200
     end
   end
 
