@@ -4,9 +4,11 @@ lock '3.5.0'
 set :application, 'chambita'
 set :repo_url, 'git@gitlab.com:ogracia/api-chambita.git'
 
-set :branch, :master
+#set :branch, :master
+set :branch, :desarrollo
 #set :deploy_to, '/home/deploy/api-chambita'
-set :deploy_to, '/home/deploy/api-chambita'
+#set :deploy_to, '/home/deploy/api-chambita'
+set :deploy_to, '/home/deploy/apitest'
 set :pty, true
 set :linked_files, %w{config/database.yml config/secrets.yml}
 set :linked_dirs, %w{bin log tmp/cache vendor/bundle public/system public/uploads}
