@@ -1,6 +1,7 @@
 class Api::V1::ServicesController < BaseController
 
   before_filter :auth, only: [:create, :update, :destroy, :my_services, :show_service, :published]
+  before_action :verify_params, only: [:create, :update]
 
   # METODOS PUBLICOS -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
   def index
@@ -103,6 +104,13 @@ class Api::V1::ServicesController < BaseController
   private
   def set_service
     @ser = Service.find(params[:id])
+  end
+
+  private
+  def verify_params
+    if params[:unit_type_id] == 0
+      params[:unit_type_id] = nil
+    end
   end
 
   # Parametros con permiso de entrada para registro de servicio
