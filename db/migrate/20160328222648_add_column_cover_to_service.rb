@@ -1,7 +1,7 @@
 class AddColumnCoverToService < ActiveRecord::Migration
-   def up
+  def up
     add_attachment :services, :cover
-  end
+ end
 
   def down
     remove_attachment :services, :cover

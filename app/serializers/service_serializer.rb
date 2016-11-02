@@ -20,9 +20,8 @@
 #
 
 class ServiceSerializer < ActiveModel::Serializer
-
-  #ESTE SERIALIZER ES UTILIZADO PARA ENVIAR EL RESUMEN DE LA INFORMACION DEL SERVICIO
-  #UNICAMENTE LLENAMOS LOS service-card.html
+  # ESTE SERIALIZER ES UTILIZADO PARA ENVIAR EL RESUMEN DE LA INFORMACION DEL SERVICIO
+  # UNICAMENTE LLENAMOS LOS service-card.html
 
   attributes :id, :name, :price, :cover, :rating_general
 
@@ -30,5 +29,9 @@ class ServiceSerializer < ActiveModel::Serializer
   has_one :sub_category
   has_one :user, serializer: UserShortSerializer
 
+  has_many :packages
 
+  def packages
+    object.packages.order(price: :asc)
+  end
 end

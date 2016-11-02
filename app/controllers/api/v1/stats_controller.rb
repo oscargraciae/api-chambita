@@ -1,6 +1,4 @@
 class Api::V1::StatsController < BaseController
-
-   def index
-      
-   end
+  def index
+  end
 end

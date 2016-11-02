@@ -3,14 +3,14 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
- Rails.application.config.middleware.insert_before 0, "Rack::Cors" do
-   allow do
-      #origins 'localhost:4200'
-      # origins 'localhost:9000'
-      # origins 'http://chambita.mx'
+Rails.application.config.middleware.insert_before 0, 'Rack::Cors' do
+  allow do
+    # origins 'localhost:4200'
+    origins 'localhost:9000'
+    # origins 'http://chambita.mx'
 
-     resource '*',
-       headers: :any,
-       methods: [:get, :post, :put, :patch, :delete, :options, :head]
-   end
- end
+    resource '*',
+             headers: :any,
+             methods: [:get, :post, :put, :patch, :delete, :options, :head]
+  end
+end

@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :unit_type do
-    description "MyString"
+    description 'MyString'
   end
-
 end

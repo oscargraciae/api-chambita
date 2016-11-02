@@ -5,17 +5,17 @@ set :application, 'chambita'
 set :repo_url, 'git@gitlab.com:ogracia/api-chambita.git'
 
 set :branch, :master
-#set :deploy_to, '/home/deploy/api-chambita'
+# set :deploy_to, '/home/deploy/api-chambita'
 set :deploy_to, '/home/deploy/api-chambita'
 set :pty, true
-set :linked_files, %w{config/database.yml config/secrets.yml}
-set :linked_dirs, %w{bin log tmp/cache vendor/bundle public/system public/uploads}
-#set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
+set :linked_files, %w(config/database.yml config/secrets.yml)
+set :linked_dirs, %w(bin log tmp/cache vendor/bundle public/system public/uploads)
+# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
 set :keep_releases, 5
-#set :rvm_type, :user
+# set :rvm_type, :user
 
 set :user, 'deploy'
-#set :rvm_ruby_version, 'jruby-1.7.19' # Edit this if you are using MRI Ruby
+# set :rvm_ruby_version, 'jruby-1.7.19' # Edit this if you are using MRI Ruby
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -49,8 +49,8 @@ set :user, 'deploy'
 set :puma_rackup, -> { File.join(current_path, 'config.ru') }
 set :puma_state, "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
-set :puma_bind, "unix://#{shared_path}/tmp/sockets/puma.sock"    #accept array for multi-bind
-#set :puma_bind, "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
+set :puma_bind, "unix://#{shared_path}/tmp/sockets/puma.sock" # accept array for multi-bind
+# set :puma_bind, "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
 
 set :puma_conf, "#{shared_path}/puma.rb"
 set :puma_access_log, "#{shared_path}/log/puma_error.log"
@@ -63,7 +63,6 @@ set :puma_worker_timeout, nil
 set :puma_init_active_record, true
 set :puma_preload_app, false
 
-
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'
   task :make_dirs do
@@ -73,23 +72,22 @@ namespace :puma do
     end
   end
 
-
   before :start, :make_dirs
 end
 
 namespace :deploy do
-  desc "Make sure local git is in sync with remote."
+  desc 'Make sure local git is in sync with remote.'
   task :check_revision do
     on roles(:app) do
       unless `git rev-parse HEAD` == `git rev-parse origin/master`
-        puts "WARNING: HEAD is not the same as origin/master"
-        puts "Run `git push` to sync changes."
+        puts 'WARNING: HEAD is not the same as origin/master'
+        puts 'Run `git push` to sync changes.'
         exit
       end
     end
   end
 
-  desc "reload the database with seed data"
+  desc 'reload the database with seed data'
   task :seed do
     run "cd #{current_path}; bundle exec rake db:seed RAILS_ENV=#{rails_env}"
   end

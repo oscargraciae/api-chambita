@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  #devise_for :users
+  # devise_for :users
 
- namespace "api", constraints: { subdomain: 'api' }, path: '/api' do
-  # namespace "api" do
-    namespace "v1" do
+  #  namespace "api", constraints: { subdomain: 'api' }, path: '/api' do
+  namespace 'api' do
+    namespace 'v1' do
       resources :users, only: [:index, :show, :create, :update, :destroy] do
         member do
           put 'avatar'
@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       resources :unit_types, only: [:index]
 
       resources :stats, only: [:index]
+      resources :packages, only: [:create, :index, :destroy, :show]
     end
   end
 end

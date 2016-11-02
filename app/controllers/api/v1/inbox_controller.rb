@@ -1,5 +1,5 @@
 class Api::V1::InboxController < BaseController
-  before_filter  :auth, only: [:index, :preview_inbox, :create, :all_messages]
+  before_filter :auth, only: [:index, :preview_inbox, :create, :all_messages]
 
   def index
     inb = Inbox.all_inbox_by_user(@user.id)
@@ -7,62 +7,55 @@ class Api::V1::InboxController < BaseController
   end
 
   def create
-    #validacion de primer mensaje
+    # validacion de primer mensaje
     if !params[:inbox_id]
-      @inb = Inbox.where(sender_id: [@user.id, params[:user_id]] , recipient_id: [@user.id, params[:user_id]]).first
+      @inb = Inbox.where(sender_id: [@user.id, params[:user_id]], recipient_id: [@user.id, params[:user_id]]).first
     else
       @inb = Inbox.find(params[:inbox_id])
     end
 
-  	if @inb
+    if @inb
       # user_res = User.find(params[:user_id])
       # email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada"
       # MailNotification.send_mail_notification(user_res, email_content).deliver
 
-      save_inbMessage()
-  	else
+      save_inbMessage
+    else
       # user_res = User.find(params[:user_id])
       # email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada"
       # MailNotification.send_mail_notification(user_res, email_content).deliver
 
-  		save_inbox()
-	  	save_inbMessage()
+      save_inbox
+      save_inbMessage
     end
 
-    render json: @inbMess,  status: 201
+    render json: @inbMess, status: 201
   end
 
   def preview_inbox
-    #inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.RECIPIENT_ID = #{@user.id} OR INBOXES.SENDER_ID = #{@user.id}) AND READIT = false").size
+    # inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.RECIPIENT_ID = #{@user.id} OR INBOXES.SENDER_ID = #{@user.id}) AND READIT = false").size
     inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.RECIPIENT_ID = #{@user.id} OR INBOXES.SENDER_ID = #{@user.id}) AND READIT = false").where.not(sender_user: @user.id).size
     render json: inboxes_preview, status: :ok
   end
 
-
   def save_inbox
-
-  	inbox = Inbox.new
-  	inbox.sender_id = @user.id
-  	inbox.recipient_id = params[:user_id]
-  	inbox.save
-  	@inb = inbox
-
+    inbox = Inbox.new
+    inbox.sender_id = @user.id
+    inbox.recipient_id = params[:user_id]
+    inbox.save
+    @inb = inbox
   end
 
   def save_inbMessage
-
-  	@inbMess = InboxMessage.new
+    @inbMess = InboxMessage.new
     @inbMess.message = params[:message]
     @inbMess.sender_user = @user.id
     @inbMess.inbox_id = @inb.id
 
-    if @inbMess.save
-      sendNotification(@user.id)
-    end
-
+    sendNotification(@user.id) if @inbMess.save
   end
 
-  #metodo conversación
+  # metodo conversación
   def all_messages
     inb = InboxMessage.where(inbox_id: params[:inboxId])
 
@@ -73,21 +66,20 @@ class Api::V1::InboxController < BaseController
   end
 
   private
+
   def sendNotification(id)
     user_id = 0
 
     if @inb
-      if id == @inb.sender_id
-        user_id = @inb.recipient_id
-      else
-        user_id = @inb.sender_id
-      end
+      user_id = if id == @inb.sender_id
+                  @inb.recipient_id
+                else
+                  @inb.sender_id
+                end
 
       user_res = User.find(user_id)
       email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada"
       MailNotification.send_mail_notification(user_res, email_content).deliver
     end
-
-
   end
 end
