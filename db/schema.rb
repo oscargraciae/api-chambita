@@ -11,10 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160917011421) do
+ActiveRecord::Schema.define(version: 20161018213512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "api_logs", force: :cascade do |t|
+    t.string   "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "module"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "name", null: false
@@ -85,6 +92,12 @@ ActiveRecord::Schema.define(version: 20160917011421) do
     t.datetime "updated_at",                                  null: false
   end
 
+  create_table "log_apis", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "notified_by_id"
@@ -119,6 +132,21 @@ ActiveRecord::Schema.define(version: 20160917011421) do
 
   add_index "orders", ["order_status_id"], name: "index_orders_on_order_status_id", using: :btree
   add_index "orders", ["request_service_id"], name: "index_orders_on_request_service_id", using: :btree
+
+  create_table "packages", force: :cascade do |t|
+    t.string   "title"
+    t.string   "description"
+    t.decimal  "price"
+    t.integer  "unit_type_id"
+    t.integer  "unit_max"
+    t.integer  "service_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.boolean  "is_principal", default: false
+    t.boolean  "active",       default: true
+  end
+
+  add_index "packages", ["service_id"], name: "index_packages_on_service_id", using: :btree
 
   create_table "rating_types", force: :cascade do |t|
     t.string   "name"
@@ -302,6 +330,7 @@ ActiveRecord::Schema.define(version: 20160917011421) do
   add_foreign_key "notifications", "users", column: "notified_by_id"
   add_foreign_key "orders", "order_statuses"
   add_foreign_key "orders", "request_services"
+  add_foreign_key "packages", "services"
   add_foreign_key "ratings", "evaluations"
   add_foreign_key "ratings", "rating_types"
   add_foreign_key "request_messages", "request_services"

@@ -5,7 +5,6 @@ class InboxSerializer < ActiveModel::Serializer
   has_one :recipient
 
   def inbox_message
-  	object.inbox_message.order(created_at: :desc).includes(:sender)
+    object.inbox_message.order(created_at: :desc).includes(:sender)
   end
-
 end

@@ -4,5 +4,4 @@ class CreateTableCategory < ActiveRecord::Migration
       t.string :name, null: false
     end
   end
-
 end

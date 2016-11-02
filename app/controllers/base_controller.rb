@@ -7,27 +7,28 @@ class BaseController < ApplicationController
   # 422 parameter_validation_error => Cuando algun parametro de la peticion es invalido
   # 500 api_error => Error con la aplicacion o con los servidores
 
-  #Objeto API Conekta
-  #Conekta.api_key="key_jaiWQwqGqEkQqqkUqhdy2A" #Llave privada de usuario
+  # Objeto API Conekta
+  # Conekta.api_key="key_jaiWQwqGqEkQqqkUqhdy2A" #Llave privada de usuario
 
   # Este metodo nos validara el token del usuaro
+
   private
+
     def auth
-      #token = request.headers["Authorization"].split(' ')[1]
-      token = request.headers["Authorization"]
+      # token = request.headers["Authorization"].split(' ')[1]
+      token = request.headers['Authorization']
 
       if !token
-        json = {:code => "unauthorized", :message => "Acceso no autorizado", :object => "error", :type => nil}
+        json = { code: 'unauthorized', message: 'Acceso no autorizado', object: 'error', type: nil }
         render json: json, status: :unauthorized
       else
         token = token.split(' ')[1]
         # Validamos que el token exista y si existe almacenamos el usuario en una variable, si no existe retornamos el error
         @user = User.find_by(token: token)
-        if !@user
-          json = {:code => "unauthorized", :message => "Acceso no autorizado", :object => "error", :type => nil}
+        unless @user
+          json = { code: 'unauthorized', message: 'Acceso no autorizado', object: 'error', type: nil }
           render json: json, status: 200
         end
       end
     end
-
 end

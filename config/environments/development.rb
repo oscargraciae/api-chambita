@@ -1,5 +1,4 @@
 Rails.application.configure do
-
   Conekta.api_key = 'key_jaiWQwqGqEkQqqkUqhdy2A'
 
   Paperclip.options[:content_type_mappings]
@@ -14,7 +13,6 @@ Rails.application.configure do
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
-
 
   # Do not eager load code on boot.
   config.eager_load = false
@@ -52,29 +50,29 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.alert = true
     Bullet.bullet_logger = true
-    #Bullet.console = true
+    # Bullet.console = true
     Bullet.rails_logger = true
-    #Bullet.airbrake = true
+    # Bullet.airbrake = true
   end
-#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
+  # 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
   ActionMailer::Base.smtp_settings = {
-    :user_name => 'ogracia',
-    :password => 'Ogracia#001',
-    :domain => 'chambita.mx',
-    :address => 'smtp.sendgrid.net',
-    :port => 587,
-    :authentication => :plain,
-    :enable_starttls_auto => true
+    user_name: 'ogracia',
+    password: 'Ogracia#001',
+    domain: 'chambita.mx',
+    address: 'smtp.sendgrid.net',
+    port: 587,
+    authentication: :plain,
+    enable_starttls_auto: true
   }
 
   config.paperclip_defaults = {
-      :storage => :s3,
-      :s3_protocol => :https,
-      :s3_credentials => {
-          :access_key_id => 'AKIAJE2VWUVEX5WUBB5Q',
-          :secret_access_key => '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',
-          :bucket => 'chambita_development'
-      }
+    storage: :s3,
+    s3_protocol: :https,
+    s3_credentials: {
+      access_key_id: 'AKIAJE2VWUVEX5WUBB5Q',
+      secret_access_key: '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',
+      bucket: 'chambita_development'
+    }
   }
 
   # Raises error for missing translations

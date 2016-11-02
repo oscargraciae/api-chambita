@@ -1,6 +1,7 @@
 class Api::V1::ServicesController < BaseController
-
   before_filter :auth, only: [:create, :update, :destroy, :my_services, :show_service, :published]
+
+  MODULE_NAME = 'service_controller'
 
   # METODOS PUBLICOS -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
   def index
@@ -11,7 +12,7 @@ class Api::V1::ServicesController < BaseController
   def search
     services = Service.search_service(params)
 
-    #render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
+    # render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
     render json: services, status: :ok
   end
 
@@ -29,9 +30,8 @@ class Api::V1::ServicesController < BaseController
 
       render json: ser, serializer: ServiceDetailSerializer, status: :ok
     else
-      render json: {message: 'Este servicio ya no está disponible.'}, status: 404
+      render json: { message: 'Este servicio ya no está disponible.' }, status: 404
     end
-
   end
 
   # METODOS PRIVADOR -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
@@ -43,19 +43,23 @@ class Api::V1::ServicesController < BaseController
   def show_service
     ser = Service.find_by(id: params[:id], user_id: @user.id, isActive: true)
     if ser
-      render json: ser,serializer: ServicePrivateDetailSerializer, status: :ok
+      render json: ser, serializer: ServicePrivateDetailSerializer, status: :ok
     else
-      render json: {message: "No tiene aceso a este servicio."}, status: 500
+      render json: { message: 'No tiene aceso a este servicio.' }, status: 500
     end
-
   end
 
   def create
-    ser = Service.new(service_params)
-    if ser.save
-      render json: ser, status: 201
-    else
-      render json: {errors: ser.errors}, status: 200
+    begin
+      ser = Service.new(service_params)
+      ser.published = false
+      if ser.save
+        render json: ser, status: 201
+      else
+        render json: { errors: ser.errors }, status: 422
+      end
+    rescue => exception
+      exception_message(exception)
     end
   end
 
@@ -63,19 +67,25 @@ class Api::V1::ServicesController < BaseController
     service = Service.find(params[:id])
 
     if service.update(service_params)
-        render json: service, status: :ok
+      render json: service, status: :ok
     else
-        render json: {errors: service.errors}, status: 200
+      render json: { errors: service.errors }, status: 200
     end
   end
 
   def published
     service = Service.find(params[:id])
 
-    if service.update_attribute(:published, params[:publish])
-      render json: {status: true, published: service.published}, status: 200
+    if Package.where(service_id: params[:id]).size > 0
+      service.published = true
     else
-      render json: {errors: service.errors}, status: 422
+      service.published = false
+    end
+
+    if service.save
+      render json: { status: true, published: service.published }, status: 200
+    else
+      render json: { errors: service.errors }, status: 422
     end
   end
 
@@ -84,10 +94,10 @@ class Api::V1::ServicesController < BaseController
     service.isActive = false
     if service.save
       ServiceImage.delete_by_service_id(service.id)
-      #Evaluation.delete_by_service_id(service.id)
-      render json: {message: "El servicio se eliminó satisfactoriamente.", delete: true}
+      # Evaluation.delete_by_service_id(service.id)
+      render json: { message: 'El servicio se eliminó satisfactoriamente.', delete: true }
     else
-      render json: {message: "ha ocurrido un error y el servicio no pudo ser eliminado.", delete: false}
+      render json: { message: 'ha ocurrido un error y el servicio no pudo ser eliminado.', delete: false }
     end
   end
 
@@ -101,13 +111,18 @@ class Api::V1::ServicesController < BaseController
   end
 
   private
+  def exception_message(exception)
+    ApiLog.create(message: exception.message, module: MODULE_NAME)
+    render json: { error: exception.message }, status: :unprocessable_entity
+  end
+
+  private
   def set_service
     @ser = Service.find(params[:id])
   end
 
   # Parametros con permiso de entrada para registro de servicio
   def service_params
-    params.permit(:name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id, :lat, :lng, :cover, :unit_type_id, :unit_max)
+    params.permit(:name, :description, :category_id, :country, :state, :locality, :price, :sub_category_id, :user_id, :lat, :lng, :cover, :unit_type_id, :unit_max, :packages)
   end
-
 end

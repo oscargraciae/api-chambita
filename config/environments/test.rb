@@ -38,22 +38,22 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   ActionMailer::Base.smtp_settings = {
-    :user_name => 'ogracia',
-    :password => 'Ogracia#001',
-    :domain => 'chambita.mx',
-    :address => 'smtp.sendgrid.net',
-    :port => 587,
-    :authentication => :plain,
-    :enable_starttls_auto => true
+    user_name: 'ogracia',
+    password: 'Ogracia#001',
+    domain: 'chambita.mx',
+    address: 'smtp.sendgrid.net',
+    port: 587,
+    authentication: :plain,
+    enable_starttls_auto: true
   }
 
   config.paperclip_defaults = {
-      :storage => :s3,
-      :s3_credentials => {
-          :access_key_id => 'AKIAJE2VWUVEX5WUBB5Q',
-          :secret_access_key => '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',
-          :bucket => 'chambita_test'
-      }
+    storage: :s3,
+    s3_credentials: {
+      access_key_id: 'AKIAJE2VWUVEX5WUBB5Q',
+      secret_access_key: '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',
+      bucket: 'chambita_test'
+    }
   }
 
   # Raises error for missing translations

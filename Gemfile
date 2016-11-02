@@ -13,28 +13,28 @@ source 'https://rubygems.org'
 # gem "mini_magick"
 # gem 'aws-sdk', '~> 1.5.7'
 # gem 'spring', :group => :development
-#docker-machine create --driver amazonec2 --amazonec2-access-key AKIAJK6YIHNDOOBAJIHA --amazonec2-secret-key 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  aws-chambita
+# docker-machine create --driver amazonec2 --amazonec2-access-key AKIAJK6YIHNDOOBAJIHA --amazonec2-secret-key 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  aws-chambita
 
 gem 'active_model_serializers'
 gem 'aws-sdk', '< 2'
-#gem 'aws-sdk'
+# gem 'aws-sdk'
 gem 'bcrypt', '~> 3.1.11'
-#gem 'bower-rails'
+# gem 'bower-rails'
 gem 'carrierwave', '0.10.0'
 gem 'conekta'
 gem 'dalli'
 gem 'devise'
-#gem 'fog'
+# gem 'fog'
 gem 'geocoder'
 gem 'httparty'
-#gem 'jbuilder'
+# gem 'jbuilder'
 gem 'jmespath'
-#gem 'json_pure'
+# gem 'json_pure'
 gem 'kaminari'
 gem 'memcachier'
-#gem "omniauth"
-#gem "omniauth-facebook"
-#gem "omniauth-twitter"
+# gem "omniauth"
+# gem "omniauth-facebook"
+# gem "omniauth-twitter"
 gem 'paperclip', '4.2'
 gem 'pg'
 gem 'puma'
@@ -44,49 +44,44 @@ gem 'rails-api'
 gem 'rake', '10.4.2'
 gem 'sendgrid-ruby'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
-#gem 'websocket-rails'
-
+# gem 'websocket-rails'
 
 gem 'puma'
 
 gem 'annotate'
-gem "bullet", :group => "development"
+gem 'bullet', group: 'development'
 group :development do
-	gem 'capistrano', '3.5.0'
-	gem 'foreman'
+  gem 'capistrano', '3.5.0'
+  gem 'foreman'
 
-	gem 'railroady'
-	gem 'rails-erd'
-	gem 'sqlite3'
-	gem 'web-console', '~> 2.0'
-	gem 'faker'
+  gem 'railroady'
+  gem 'rails-erd'
+  gem 'sqlite3'
+  gem 'web-console', '~> 2.0'
+  gem 'faker'
 
-#	gem 'capistrano3-puma'
-	gem 'capistrano-rails', require: false
-	gem 'capistrano-bundler', require: false
-	gem 'capistrano-rvm'
-	gem 'capistrano3-puma'
-
-
+  #	gem 'capistrano3-puma'
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm'
+  gem 'capistrano3-puma'
 end
 
 group :development, :test do
-	gem 'byebug'
-	gem 'email_spec'
-	gem 'factory_girl_rails'
-	gem 'ffaker'
-	gem 'pry-rails'
-	gem 'rspec-rails'
-	gem 'shoulda-matchers'
-	gem 'spring'
-	gem 'minitest'
+  gem 'byebug'
+  gem 'email_spec'
+  gem 'factory_girl_rails'
+  gem 'ffaker'
+  gem 'pry-rails'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'spring'
+  gem 'minitest'
 end
 
 group :production do
-
-	gem 'foreman'
+  gem 'foreman'
 end
-
 
 # gem 'kaminari'
 # gem 'delayed_job_active_record'

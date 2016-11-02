@@ -12,7 +12,7 @@
 #
 
 class RequestMessageSerializer < ActiveModel::Serializer
-  #attributes :id, :sender, :recipient, :text
+  # attributes :id, :sender, :recipient, :text
   attributes :text, :created_at
   # has_one :sender, serializer: UserOnlySerializer
   # has_one :recipient, serializer: UserOnlySerializer

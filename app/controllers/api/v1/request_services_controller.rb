@@ -18,13 +18,13 @@ class Api::V1::RequestServicesController < BaseController
   def jobs
     jobs = []
 
-    if params[:status_id] === '3'
-      jobs = RequestService.jobs_history(@user.id, params[:status_id])
-    elsif params[:status_id] === '2'
-      jobs = RequestService.pending_jobs(@user.id, params[:status_id])
-    else
-      jobs = RequestService.jobs_by_status(@user.id, params[:status_id])
-    end
+    jobs = if params[:status_id] === '3'
+             RequestService.jobs_history(@user.id, params[:status_id])
+           elsif params[:status_id] === '2'
+             RequestService.pending_jobs(@user.id, params[:status_id])
+           else
+             RequestService.jobs_by_status(@user.id, params[:status_id])
+           end
 
     render json: jobs, status: :ok
   end
@@ -35,46 +35,49 @@ class Api::V1::RequestServicesController < BaseController
   end
 
   def create
-     request = RequestService.new(request_params)
+    request = RequestService.new(request_params)
+    card = CreditCard.find(params[:card_id])
+    service = Service.find(request.service_id)
 
-     card = CreditCard.find(params[:card_id])
-     service = Service.find(request.service_id)
+    if params[:package_id]
+      package = Package.find(params[:package_id])
+    end
 
-     if params[:unit_size]
-        calculate(request.service_id, params[:unit_size])
-        quantity = params[:unit_size]
-     else
-        calculate(request.service_id, 0)
-        quantity = 0
-     end
+    if package
+      package_cost(package)
+      request.price = package.price
+    else
+      calculate(service)
+      request.price = service.price
+    end
+    
+    request.quantity = @unit_size
+    request.subtotal = @subtotal
+    request.fee = @fee_general
+    request.total = @total
 
-     request.quantity = quantity
-     request.price = service.price
-     request.subtotal = @subtotal
-     request.fee = @fee_general
-     request.total = @total
+    request.supplier_id = service.user_id
+    request.token_card = card.token
 
-     request.supplier_id = service.user_id
-     request.token_card = card.token
+    if request.save
 
-     if request.save
-
-      create_notification(request, "ha solicitado el servicio", request.user, request.supplier)
+      create_notification(request, 'ha solicitado el servicio', request.user, request.supplier)
 
       supplier = User.find(service.user_id)
 
-      PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
+      # Metodo de envio de correo
+      # PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
 
       render json: request, status: :ok
     else
-      render json: "Error", status: 422
-    end
+      render json: 'Error', status: 422
+   end
   end
 
   def accept
     @request = RequestService.joins(:service).find(params[:id])
 
-    payment_conekta()
+    payment_conekta
 
     if @message_error
       create_notification(@request, @message_error.message_to_purchaser, @request.supplier, @request.user)
@@ -83,7 +86,7 @@ class Api::V1::RequestServicesController < BaseController
     else
 
       if @request.update_attribute(:request_status_id, REQUEST_STATUS_INPROCESS)
-        create_notification(@request, "acepto el trabajo", @request.supplier, @request.user)
+        create_notification(@request, 'acepto el trabajo', @request.supplier, @request.user)
         Order.create(@request.id, ORDER_STATUS_PENDING, @request.price, @request.fee)
         render json: @request, status: :ok
       end
@@ -99,7 +102,7 @@ class Api::V1::RequestServicesController < BaseController
     elsif params[:finish_type] == 'customer'
       request = finish_customer(request)
     else
-      puts "Ha ocurrido un error."
+      puts 'Ha ocurrido un error.'
     end
 
     render json: request, status: :ok
@@ -136,35 +139,36 @@ class Api::V1::RequestServicesController < BaseController
       order = Order.find_by(request_service_id: request.id)
       order.update_attribute(:order_status_id, ORDER_STATUS_CANCELED)
 
-      create_notification(request, "canceló el trabajo", user_cancel, user_notifier)
+      create_notification(request, 'canceló el trabajo', user_cancel, user_notifier)
       render json: request, status: :ok
     else
-      render json: {error: "Ocurrió un error."}, status: 500
+      render json: { error: 'Ocurrió un error.' }, status: 500
     end
   end
 
   def calculate_cost
-    calculate(params[:service_id], params[:unit_size])
+    
+    if params[:service_id]
+      service = Service.find(params[:service_id])
+      calculate(service)
+    elsif params[:package_id]
+      package = Package.find(params[:package_id])
+      package_cost(package)
+    end
 
-    render json: {subtotal: @subtotal, fee: @fee, total: @total,fee_general: @fee_general, fee_IVA: @fee_IVA}, status: :ok
-
+    
+    render json: { subtotal: @subtotal, fee: @fee, total: @total, fee_general: @fee_general, fee_IVA: @fee_IVA }, status: :ok
   end
 
   def request_params
-  	params.permit(:request_date, :request_time, :message, :user_id, :service_id)
+    params.permit(:request_date, :request_time, :message, :user_id, :service_id)
   end
 
   private
-  def calculate(service_id, unit_size)
-    subtotal = 0
-    fee = 0
-    total = 0
-    fee_general = 0
-    fee_IVA = 0
 
-    service = Service.find(params[:service_id])
-
-    if service.unit_max.present?
+  def calculate(service)ﬁ
+    
+    if service.unit_type_id.present?
       if service.unit_max > 0
         subtotal = service.price * Integer(params[:unit_size])
       end
@@ -172,12 +176,10 @@ class Api::V1::RequestServicesController < BaseController
       subtotal = service.price
     end
 
-
-    #se calcula la comision de chambita -> parametros de retorno la comision e impuestos
     fee, fee_IVA = calculate_fee(subtotal)
-    #Se calcula la comision que cobra conekta
     fee_conekta = conekta_fee(fee + subtotal)
 
+    @unit_size = 0 if params[:unit_size] == nil
     @subtotal = subtotal.round(2)
     @fee = (fee + fee_conekta).round(2)
     @fee_IVA = fee_IVA.round(2)
@@ -185,16 +187,35 @@ class Api::V1::RequestServicesController < BaseController
     @total = (@subtotal + @fee + @fee_IVA).round(2)
   end
 
+  def package_cost(package)
+    
+    if package.unit_type_id.present?
+      if package.unit_max > 0
+        subtotal = package.price * Integer(params[:unit_size])
+      end
+    else
+      subtotal = package.price
+    end
+
+    fee, fee_IVA = calculate_fee(subtotal)
+    fee_conekta = conekta_fee(fee + subtotal)
+
+    @unit_size = 0 if params[:unit_size] == nil
+    @subtotal = subtotal.round(2)
+    @fee = (fee + fee_conekta).round(2)
+    @fee_IVA = fee_IVA.round(2)
+    @fee_general = (@fee + @fee_IVA).round(2)
+    @total = (@subtotal + @fee + @fee_IVA).round(2)
+  end
+
+
   private
   def finish_customer(request)
-    create_notification(request, "aprobó el trabajo", request.user, request.supplier)
+    create_notification(request, 'aprobó el trabajo', request.user, request.supplier)
 
-    request.update_attributes(:is_finish_customer => true, :request_status_id => REQUEST_STATUS_FINISH)
+    request.update_attributes(is_finish_customer: true, request_status_id: REQUEST_STATUS_FINISH)
 
-    # order = Order.find_by(request_service_id: request.id)
-    # order.update_attribute(:order_status_id, ORDER_STATUS_PAID)
-
-    request_size = RequestService.where({service_id: request.service_id, request_status_id: REQUEST_STATUS_FINISH}).size
+    request_size = RequestService.where(service_id: request.service_id, request_status_id: REQUEST_STATUS_FINISH).size
     s = Service.find(request.service_id)
     s.update_attribute(:total_jobs, request_size)
 
@@ -202,65 +223,64 @@ class Api::V1::RequestServicesController < BaseController
   end
 
   private
+
   def finish_supplier(request)
-    create_notification(request, "ha terminado", request.supplier, request.user)
+    create_notification(request, 'ha terminado', request.supplier, request.user)
     request.update_attribute(:is_finish_supplier, true)
     request
   end
 
   private
-  def payment_conekta()
-    begin
-      @charge = Conekta::Charge.create({
-        "amount"=> (@request.total * 100).to_i,
-        "currency"=> "MXN",
-        "description"=>  @request.message,
-        "reference_id"=> @request.id,
-        "card"=> @request.token_card,
-        "details"=> {
-          "name"=> @user.first_name,
-          "phone"=> "8182002386",
-          "email"=> @user.email,
-          "line_items"=> [{
-            "name"=> @request.service.name,
-            "description"=> @request.service.description,
-            "unit_price"=> (@request.subtotal * 100).to_i,
-            "quantity"=> 1
-          },
-          {
-            "name"=> "Comision chambita",
-            "description"=> "Cobro por uso de plataforma",
-            "unit_price"=> (@request.fee * 100).to_i,
-            "quantity"=> 1
-          }]
-        }
-      })
-    rescue Conekta::ParameterValidationError => e
-      @message_error = e
-      #render json: @message_error, status: 422
-      #alguno de los parámetros fueron inválidos
-    rescue Conekta::ProcessingError => e
-      @message_error = e
-      #render json: @message_error, status: 422
-      #la tarjeta no pudo ser procesada
-    rescue Conekta::Error => e
-      #un error ocurrió que no sucede en el flujo normal de cobros como por ejemplo un auth_key incorrecto
-    end
+
+  def payment_conekta
+    @charge = Conekta::Charge.create('amount' => (@request.total * 100).to_i,
+                                     'currency' => 'MXN',
+                                     'description' => @request.message,
+                                     'reference_id' => @request.id,
+                                     'card' => @request.token_card,
+                                     'details' => {
+                                       'name' => @user.first_name,
+                                       'phone' => '8182002386',
+                                       'email' => @user.email,
+                                       'line_items' => [{
+                                         'name' => @request.service.name,
+                                         'description' => @request.service.description,
+                                         'unit_price' => (@request.subtotal * 100).to_i,
+                                         'quantity' => 1
+                                       },
+                                                        {
+                                                          'name' => 'Comision chambita',
+                                                          'description' => 'Cobro por uso de plataforma',
+                                                          'unit_price' => (@request.fee * 100).to_i,
+                                                          'quantity' => 1
+                                                        }]
+                                     })
+  rescue Conekta::ParameterValidationError => e
+    @message_error = e
+    # render json: @message_error, status: 422
+    # alguno de los parámetros fueron inválidos
+  rescue Conekta::ProcessingError => e
+    @message_error = e
+    # render json: @message_error, status: 422
+    # la tarjeta no pudo ser procesada
+  rescue Conekta::Error => e
+    # un error ocurrió que no sucede en el flujo normal de cobros como por ejemplo un auth_key incorrecto
   end
 
   private
-  def create_notification(request, message, from, to)
-    user = User.find(to)
 
-    email_content = "#{from.first_name} #{message} #{request.service.name}"
+  def create_notification(request, message, user_from, user_to)
+    user = User.find(user_to)
+
+    email_content = "#{user_from.first_name} #{message} #{request.service.name}"
     MailNotification.send_mail_notification(user, email_content).deliver
 
-    Notification.create(user_id: to.id,
-      notified_by_id: from.id,
-      request_service_id: request.id,
-      identifier: request.id,
-      type_notification: message,
-      read: false)
+    Notification.create(user_id: user_to.id,
+                        notified_by_id: user_from.id,
+                        request_service_id: request.id,
+                        identifier: request.id,
+                        type_notification: message,
+                        read: false)
   end
 
   private
@@ -276,19 +296,19 @@ class Api::V1::RequestServicesController < BaseController
     elsif price >= 5001
       fee = price * 0.05
     else
-      puts "Error al calcular comision"
+      puts 'Error al calcular comision'
     end
     fee_IVA = (fee * 0.16)
 
-    return fee, fee_IVA
+    [fee, fee_IVA]
   end
 
   private
+
   def conekta_fee(subtotal)
     # La comision de conekta se calcula sin incluir el gasto de impuestos por comision de chambita
     fee_conekta = subtotal * 0.029
 
     fee_conekta + 2.5
   end
-
 end

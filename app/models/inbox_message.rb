@@ -11,6 +11,6 @@
 #
 
 class InboxMessage < ActiveRecord::Base
-  belongs_to :sender, class_name: "User", foreign_key: "sender_user"
+  belongs_to :sender, class_name: 'User', foreign_key: 'sender_user'
   belongs_to :inbox
 end

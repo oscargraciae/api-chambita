@@ -1,4 +1,4 @@
-"""environment ENV['RACK_ENV']
+''"environment ENV['RACK_ENV']
 threads 0,5
 
 workers 3
@@ -8,15 +8,14 @@ on_worker_boot do
   ActiveSupport.on_load(:active_record) do
     ActiveRecord::Base.establish_connection
   end
-end"""
+end"''
 
-
-#workers Integer(ENV['WEB_CONCURRENCY'] || 2)
-#threads_count = Integer(ENV['MAX_THREADS'] || 5)
-#threads threads_count, threads_count
-#rackup      DefaultRackup
-#port        ENV['PORT']     || 3000
-#environment ENV['RACK_ENV'] || 'development'
+# workers Integer(ENV['WEB_CONCURRENCY'] || 2)
+# threads_count = Integer(ENV['MAX_THREADS'] || 5)
+# threads threads_count, threads_count
+# rackup      DefaultRackup
+# port        ENV['PORT']     || 3000
+# environment ENV['RACK_ENV'] || 'development'
 
 # pidfile 'tmp/pids/puma.pid'
 # state_path 'tmp/pids/puma.state'
@@ -33,7 +32,6 @@ end"""
 #       ActiveRecord::Base.establish_connection
 #   end
 # end
-
 
 # threads 1, 6
 # workers 2
@@ -56,5 +54,4 @@ end"""
 #     end
 # end
 
-
-#RUN chown -R www-data:www-data /var/lib/nginx
+# RUN chown -R www-data:www-data /var/lib/nginx

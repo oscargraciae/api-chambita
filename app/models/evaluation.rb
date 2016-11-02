@@ -22,7 +22,5 @@ class Evaluation < ActiveRecord::Base
       Rating.where(evaluation_id: e.id).delete_all
     end
     evaluations.delete_all
-
   end
-
 end

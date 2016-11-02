@@ -42,22 +42,21 @@
 class UserSerializer < ActiveModel::Serializer
   attributes :id, :first_name, :last_name, :full_name, :description, :avatar, :avatar_thumb, :address
   # has_many :services, serializer: ServicePublicDetailSerializer
-  #has_many :services, serializer: ServicePrivateSummarySerializer
+  # has_many :services, serializer: ServicePrivateSummarySerializer
 
   # def services
   #   object.services.where(published: true, isActive: true)
   # end
 
   def avatar_thumb
-  	object.avatar.url(:small)
+    object.avatar.url(:small)
   end
 
   def address
-  	[object.city, object.state, object.country].compact.join(', ')
+    [object.city, object.state, object.country].compact.join(', ')
   end
 
   def full_name
     "#{object.first_name} #{object.last_name}"
   end
-
 end
