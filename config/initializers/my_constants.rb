@@ -14,3 +14,5 @@ SEARCH_DEFAULT_KM = 100 * 0.30
 
 # Comision de chambita
 CHAMBITA_FEED = 0.12
+
+DEFAULT_LOCATION = 'Monterrey, Nuevo Leon, Mexico'

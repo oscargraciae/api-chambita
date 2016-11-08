@@ -12,8 +12,13 @@ class Api::V1::ServicesController < BaseController
 
   def search
     services = Service.search_service(params)
+    render json: services, status: :ok
+  end
 
-    # render json: services, each_serializer: ServicePublicDetailSerializer, status: :ok
+  def sample
+    lat, lng = Service.get_location(params)
+    services = Service.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).limit(16).includes(:sub_category, :user, :packages, :unit_type)
+
     render json: services, status: :ok
   end
 

@@ -31,7 +31,7 @@ class ServiceSerializer < ActiveModel::Serializer
 
   has_many :packages
 
-  def packages
-    object.packages.order(price: :asc)
-  end
+  # def packages
+  #   object.packages.order(price: :asc)
+  # end
 end

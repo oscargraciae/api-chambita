@@ -30,6 +30,7 @@ Rails.application.routes.draw do
           get 'my_services'
           get 'user_services'
           get 'render_service'
+          get 'sample'
         end
       end
       resources :service_images, only: [:index, :create, :destroy]

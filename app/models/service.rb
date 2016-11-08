@@ -88,7 +88,7 @@ class Service < ActiveRecord::Base
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: { name: params[:sub_category] }) if params[:sub_category].present?
 
-    services = services.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).includes(:sub_category, :user)
+    services = services.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).includes(:sub_category, :user, :packages, :unit_type)
     # services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
     services
   end
@@ -121,6 +121,22 @@ class Service < ActiveRecord::Base
     self.unit_type_id = nil if self.unit_type_id == 0
   end
 
+  def self.get_location(params)
+    if params[:lat] && params[:lng]
+      lat = params[:lat]
+      lng = params[:lng]
+    elsif params[:location]
+      location = Geocoder.search(params[:location])[0]
+      lat = location.coordinates[0]
+      lng = location.coordinates[1]
+    else
+      location = Geocoder.search(DEFAULT_LOCATION)[0]
+      lat = location.coordinates[0]
+      lng = location.coordinates[1]
+    end
+
+    return lat, lng
+  end
   # private
   # def validate_company_id
   #   self.unit

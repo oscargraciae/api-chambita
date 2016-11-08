@@ -137,8 +137,10 @@ class Api::V1::RequestServicesController < BaseController
 
     if request.update_attribute(:request_status_id, REQUEST_STATUS_CANCELED)
       order = Order.find_by(request_service_id: request.id)
-      order.update_attribute(:order_status_id, ORDER_STATUS_CANCELED)
-
+      if order
+        order.update_attribute(:order_status_id, ORDER_STATUS_CANCELED)
+      end
+      
       create_notification(request, 'canceló el trabajo', user_cancel, user_notifier)
       render json: request, status: :ok
     else
