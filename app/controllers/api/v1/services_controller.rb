@@ -17,14 +17,14 @@ class Api::V1::ServicesController < BaseController
 
   def sample
     lat, lng = Service.get_location(params)
-    services = Service.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).limit(16).includes(:sub_category, :user, :packages, :unit_type)
+    services = Service.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).limit(8).includes(:sub_category, :user, :packages, :unit_type)
 
     render json: services, status: :ok
   end
 
   def user_services
-    services = Service.service_by_user_id(params[:user_id]).where(isActive: true, published: true)
-    render json: services, status: :ok
+    services = Service.service_by_user_id(params[:user_id]).where(isActive: true, published: true).limit(4).includes(:packages, :sub_category, :unit_type)
+    render json: services, each_serializer: ServiceByUserSerializer, status: :ok
   end
 
   def show

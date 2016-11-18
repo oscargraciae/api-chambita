@@ -76,6 +76,11 @@ Rails.application.routes.draw do
 
       resources :stats, only: [:index]
       resources :packages, only: [:create, :index, :destroy, :show]
+      resources :reports do
+        collection do
+          get 'sales'
+        end
+      end
     end
   end
 end
