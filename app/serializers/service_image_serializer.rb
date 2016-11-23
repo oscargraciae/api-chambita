@@ -15,10 +15,14 @@
 #
 
 class ServiceImageSerializer < ActiveModel::Serializer
-  attributes :id, :img, :thumb
+  attributes :id, :medium, :img, :thumb
 
   def img
     object.photo.url(:original)
+  end
+
+  def medium
+    object.photo.url(:meddium)
   end
 
   def thumb

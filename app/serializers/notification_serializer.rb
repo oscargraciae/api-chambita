@@ -14,7 +14,7 @@
 #
 
 class NotificationSerializer < ActiveModel::Serializer
-  attributes :id, :message, :type_notification, :user_name, :service_name, :user_avatar, :request_id, :read
+  attributes :id, :message, :type_notification, :user_name, :service_name, :user_avatar, :request_id, :read, :created_at
 
   # has_one :notified_by, class_name: 'User'
   # has_one :user

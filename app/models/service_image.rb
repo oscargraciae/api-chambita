@@ -19,14 +19,28 @@ class ServiceImage < ActiveRecord::Base
 
   do_not_validate_attachment_file_type :photo
   has_attached_file :photo,
-                    styles: { small: ['216x144!', :jpg], meddium: ['230x230!', :jpg], thumb: ['90x90#', :jpg] },
+                    styles: { meddium: ['230x230!', :jpg], thumb: ['230x230#', :jpg] },
                     default_style: :meddium,
                     storage: :s3,
                     url: ':s3_domain_url',
                     default_url: 'http://chambita1236.s3.amazonaws.com/uploads/users/:style/user_default.png',
                     path: 'uploads/services/:file_id/:style/:filename'
 
+
+
+  before_create :valid_total_images
+   
   def self.delete_by_service_id(service_id)
     ServiceImage.where(service_id: service_id).destroy_all
   end
+
+  def valid_total_images
+    total = 0
+    total = ServiceImage.where(service_id: service_id).count
+    if total >= 6
+      errors.add('general', 'Solo pude subir hasta 6 imágenes')
+      return false
+    end
+  end
+
 end
