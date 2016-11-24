@@ -79,6 +79,7 @@ Rails.application.routes.draw do
       resources :reports do
         collection do
           get 'sales'
+          get 'total_sales'
         end
       end
     end
