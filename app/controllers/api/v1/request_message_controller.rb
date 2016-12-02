@@ -11,6 +11,10 @@ class Api::V1::RequestMessageController < BaseController
   def create
     m = RequestMessage.new(message_params)
     if m.save
+
+      request = RequestService.find(m.request_service_id)
+      create_notification(request, 'ha preguntado algo del servicio', params[:sender_id], params[:recipient_id])
+
       messages = RequestMessage.where(request_service_id: m.request_service_id).order(created_at: :desc)
       render json: messages, status: :ok
     else

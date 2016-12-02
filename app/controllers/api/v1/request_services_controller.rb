@@ -168,7 +168,7 @@ class Api::V1::RequestServicesController < BaseController
 
   private
 
-  def calculate(service)ﬁ
+  def calculate(service)
     
     if service.unit_type_id.present?
       if service.unit_max > 0

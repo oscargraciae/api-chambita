@@ -31,4 +31,19 @@ class BaseController < ApplicationController
         end
       end
     end
+
+    def create_notification(request, message, user_from_id, user_to_id)
+      user_to = User.find(user_to_id)
+      user_from = User.find(user_from_id)
+
+      email_content = "#{user_from.first_name} #{message} #{request.service.name}"
+      MailNotification.send_mail_notification(user_to, email_content).deliver
+
+      Notification.create(user_id: user_to.id,
+                          notified_by_id: user_from.id,
+                          request_service_id: request.id,
+                          identifier: request.id,
+                          type_notification: message,
+                          read: false)
+  end
 end

@@ -28,6 +28,8 @@ require 'capistrano/rails'
 require 'capistrano/bundler'
 require 'capistrano/rvm'
 require 'capistrano/puma'
+require "whenever/capistrano"
+
 
 Rake::Task[:production].invoke
 
