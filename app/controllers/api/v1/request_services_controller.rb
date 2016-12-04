@@ -44,10 +44,11 @@ class Api::V1::RequestServicesController < BaseController
     end
 
     if package
-      package_cost(package)
+      price_by_package(package)
       request.price = package.price
+      request.package_id = package.id
     else
-      calculate(service)
+      price_by_service(service)
       request.price = service.price
     end
     
@@ -60,12 +61,10 @@ class Api::V1::RequestServicesController < BaseController
     request.token_card = card.token
 
     if request.save
-
       create_notification(request, 'ha solicitado el servicio', request.user, request.supplier)
-
-      supplier = User.find(service.user_id)
-
+      
       # Metodo de envio de correo
+      # supplier = User.find(service.user_id)
       # PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
 
       render json: request, status: :ok
@@ -152,13 +151,12 @@ class Api::V1::RequestServicesController < BaseController
     
     if params[:service_id]
       service = Service.find(params[:service_id])
-      calculate(service)
+      price_by_service(service)
     elsif params[:package_id]
       package = Package.find(params[:package_id])
-      package_cost(package)
+      price_by_package(package)
     end
 
-    
     render json: { subtotal: @subtotal, fee: @fee, total: @total, fee_general: @fee_general, fee_IVA: @fee_IVA }, status: :ok
   end
 
@@ -166,10 +164,12 @@ class Api::V1::RequestServicesController < BaseController
     params.permit(:request_date, :request_time, :message, :user_id, :service_id)
   end
 
+  
+# Metodo para calcular el costo de la solicitud por servicio
   private
-
-  def calculate(service)
+  def price_by_service(service)
     
+    # Validamos si el servicio tiene unidades de medida
     if service.unit_type_id.present?
       if service.unit_max > 0
         subtotal = service.price * Integer(params[:unit_size])
@@ -178,19 +178,14 @@ class Api::V1::RequestServicesController < BaseController
       subtotal = service.price
     end
 
-    fee, fee_IVA = calculate_fee(subtotal)
-    fee_conekta = conekta_fee(fee + subtotal)
-
-    @unit_size = 0 if params[:unit_size] == nil
-    @subtotal = subtotal.round(2)
-    @fee = (fee + fee_conekta).round(2)
-    @fee_IVA = fee_IVA.round(2)
-    @fee_general = (@fee + @fee_IVA).round(2)
-    @total = (@subtotal + @fee + @fee_IVA).round(2)
+    get_price(subtotal)
   end
 
-  def package_cost(package)
+# Metodo para calcular el costo de la solicitud por paquete
+  private
+  def price_by_package(package)
     
+    # Validamos si el paquete tiene unidades de medida
     if package.unit_type_id.present?
       if package.unit_max > 0
         subtotal = package.price * Integer(params[:unit_size])
@@ -199,10 +194,14 @@ class Api::V1::RequestServicesController < BaseController
       subtotal = package.price
     end
 
+    get_price(subtotal)
+  end
+
+  def get_price(subtotal)
     fee, fee_IVA = calculate_fee(subtotal)
     fee_conekta = conekta_fee(fee + subtotal)
 
-    @unit_size = 0 if params[:unit_size] == nil
+    @unit_size = params[:unit_size] == nil ? 0 : params[:unit_size]
     @subtotal = subtotal.round(2)
     @fee = (fee + fee_conekta).round(2)
     @fee_IVA = fee_IVA.round(2)

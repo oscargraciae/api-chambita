@@ -26,6 +26,7 @@ class RequestService < ActiveRecord::Base
   belongs_to :service
   belongs_to :user
   belongs_to :request_status
+  belongs_to :package
   # has_many :request_message
   # has_many :notifications, dependent: :destroy
   scope :me, -> (user_id) { where user_id: user_id }

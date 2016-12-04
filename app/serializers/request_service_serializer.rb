@@ -26,6 +26,7 @@ class RequestServiceSerializer < ActiveModel::Serializer
   has_one :user, serializer: UserPrivateInfoSerializer
   has_one :supplier, serializer: UserPrivateInfoSerializer
   has_one :service, serializer: ServicePrivateSummarySerializer
+  has_one :package
 
   def request_message
     object.request_message.order(created_at: :desc)
