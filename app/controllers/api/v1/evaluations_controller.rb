@@ -3,7 +3,7 @@ class Api::V1::EvaluationsController < BaseController
 
   def index
     service = Service.find(params[:service_id])
-    evaluations = Evaluation.where(subcategory_id: service.sub_category_id, supplier_id: service.user_id).includes(:user, :ratings)
+    evaluations = Evaluation.where(service_id: params[:service_id]).includes(:user, :ratings)
 
     render json: evaluations, status: :ok
   end
@@ -22,7 +22,8 @@ class Api::V1::EvaluationsController < BaseController
       if evaluation.save
         # Hacemos los registros para los rating
         Rating.set_ratings(params[:ratings], evaluation)
-        Rating.update_rating_by_subcategory(evaluation.subcategory_id, evaluation.supplier_id)
+        Rating.update_rating_by_service(evaluation.service_id)
+        # Rating.get_ratings_by_service_id(evaluation.service_id)
 
         request.update_attribute(:is_evaluated, true)
         render json: request, status: :ok

@@ -108,8 +108,8 @@ class Service < ActiveRecord::Base
   end
 
   def service_ratings
-    service = Service.find(id)
-    Rating.get_ratings_by_subcategory(service.sub_category_id, service.user_id)
+    # service = Service.find(id)
+    Rating.get_ratings_by_service_id(id)
   end
 
   #def default_values
