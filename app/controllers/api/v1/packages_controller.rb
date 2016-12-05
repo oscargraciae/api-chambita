@@ -23,7 +23,7 @@ class Api::V1::PackagesController < ApplicationController
     if package.save
         render json: package, status: :ok
     else
-        render json: {error: true, message: package.erros}
+        render json: {error: true, message: package.errors}, status: 422
     end
   end
 

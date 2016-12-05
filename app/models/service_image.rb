@@ -38,7 +38,7 @@ class ServiceImage < ActiveRecord::Base
     total = 0
     total = ServiceImage.where(service_id: service_id).count
     if total >= 6
-      errors.add('general', 'Solo pude subir hasta 6 imágenes')
+      errors.add('general', 'Solo puedes subir hasta 6 imágenes')
       return false
     end
   end
