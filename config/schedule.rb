@@ -21,7 +21,7 @@
 
 set :output, "log/cron.log"  #Step 1
 
-every 1.minute do   #Step 2
+every 1.day do   #Step 2
   rake "cancel_request:daily"        #Step 3
   rake "finish_request:daily"        #Step 3
 end

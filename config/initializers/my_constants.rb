@@ -10,7 +10,7 @@ ORDER_STATUS_CANCELED = 2
 ORDER_STATUS_PENDING = 3
 
 # Kilometros de busqueda por defecto
-SEARCH_DEFAULT_KM = 100 * 0.30
+SEARCH_DEFAULT_KM = 100 * 0.40
 
 # Comision de chambita
 CHAMBITA_FEED = 0.12

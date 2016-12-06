@@ -7,6 +7,8 @@ class Package < ActiveRecord::Base
 
   before_create :max_package
 
+  default_scope { where(active: true) }
+
   private
   def unit_type_validation
     self.unit_type_id = nil if self.unit_type_id == 0

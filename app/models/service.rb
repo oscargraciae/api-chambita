@@ -137,6 +137,8 @@ class Service < ActiveRecord::Base
 
     return lat, lng
   end
+
+  
   # private
   # def validate_company_id
   #   self.unit
