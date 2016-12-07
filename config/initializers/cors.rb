@@ -9,8 +9,10 @@ Rails.application.config.middleware.insert_before 0, 'Rack::Cors' do
     # origins 'localhost:9000'
     # origins 'https://chambita.mx'
 
-    resource '*',
-             headers: :any,
-             methods: [:get, :post, :put, :patch, :delete, :options, :head]
-  end
+  #   resource '*',
+  #            headers: :any,
+  #            methods: [:get, :post, :put, :patch, :delete, :options, :head]
+  # end
+    origins '*'
+    resource '*', headers: :any, methods: :any
 end
