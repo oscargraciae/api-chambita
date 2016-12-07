@@ -21,7 +21,7 @@ class Api::V1::CreditCardsController < BaseController
     else
       customer = Conekta::Customer.create(name: @user.first_name + ' ' + @user.last_name,
                                           email: @user.email,
-                                          phone: @cellphone,
+                                          phone: '88888888',
                                           cards: [params[:conektaTokenId]])
 
       card = CreditCard.new
