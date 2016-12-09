@@ -46,6 +46,7 @@
 # SubCategory.create(name: 'Banquetes', category_id: 2)
 # SubCategory.create(name: 'Personajes', category_id: 2)
 # SubCategory.create(name: 'Música y sonido', category_id: 2)
+
 SubCategory.create(name: 'Quintas y terrenos', category_id: 2)
 #
 # SubCategory.create(name: 'Academico', category_id: 3)
