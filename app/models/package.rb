@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: packages
+#
+#  id           :integer          not null, primary key
+#  title        :string
+#  description  :string
+#  price        :decimal(, )
+#  unit_type_id :integer
+#  unit_max     :integer
+#  service_id   :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  is_principal :boolean          default(FALSE)
+#  active       :boolean          default(TRUE)
+#
+
 class Package < ActiveRecord::Base
 
   belongs_to :unit_type
@@ -5,7 +22,7 @@ class Package < ActiveRecord::Base
 
   validate :unit_type_validation
 
-  before_create :max_package
+  before_create :max_package, :default_title
 
   default_scope { where(active: true) }
 
@@ -22,6 +39,13 @@ class Package < ActiveRecord::Base
       errors.add('general', 'Solo puedes subir hasta 5 paquetes')
       return false
     end
+  end
+
+  private
+  def default_title
+    letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+    package_size = Package.where(service_id: self.service_id).size
+    self.title = "Precio #{letter[package_size]}"
   end
 
 end

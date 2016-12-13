@@ -37,6 +37,12 @@
 #  address_area           :string
 #  address_zipcode        :string
 #  conektaid              :string
+#  facebook_id            :string
+#  IsActiveEmail          :boolean          default(FALSE)
+#  address                :string
+#  clabe                  :string
+#  bank                   :string
+#  is_completed           :boolean          default(FALSE)
 #
 
 class UserSerializer < ActiveModel::Serializer

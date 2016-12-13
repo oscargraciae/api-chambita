@@ -47,6 +47,8 @@ gem 'sendgrid-ruby'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'whenever', :require => false
 
+gem 'delayed_job_active_record'
+gem 'daemons'
 # gem 'websocket-rails'
 
 gem 'puma'
@@ -87,4 +89,3 @@ group :production do
 end
 
 # gem 'kaminari'
-# gem 'delayed_job_active_record'

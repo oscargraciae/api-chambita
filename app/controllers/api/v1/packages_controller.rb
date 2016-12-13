@@ -3,14 +3,14 @@ class Api::V1::PackagesController < ApplicationController
   def index
     render json: Package.where(service_id: params[:service_id], active: true), status: :ok
   end
-  
+
   def show
     package = Package.find(params[:id])
-    
+
     if package
       render json: package, serializer: PackageDetailSerializer, status: :ok
     else
-      render json: {error: "not found", message: "El paquete no se encontró"}, status: 404  
+      render json: {error: "not found", message: "El paquete no se encontró"}, status: 404
     end
 
   end
@@ -19,7 +19,7 @@ class Api::V1::PackagesController < ApplicationController
 
     package = Package.new(package_params)
     package.is_principal = isPrincipal(params[:service_id])
-    
+
     if package.save
         render json: package, status: :ok
     else
@@ -48,7 +48,7 @@ class Api::V1::PackagesController < ApplicationController
     puts packages
     if packages === 0
       return true
-      
+
     else
       return false
     end
