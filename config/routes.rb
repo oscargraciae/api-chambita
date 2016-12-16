@@ -94,6 +94,14 @@ Rails.application.routes.draw do
 
       resources :services, only: [:index]
       resources :request, only: [:index]
+      resources :reports, only: [:index] do
+        collection do
+          get 'total_users'
+          get 'total_service_by_category'
+          get 'users_by_month'
+          get 'services_by_month'
+        end
+      end
 
     end #End
 
