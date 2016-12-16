@@ -83,5 +83,19 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    # Rutas para el administrador
+    namespace 'admin' do
+      resources :users, only: [:index] do
+        collection do
+          get 'suppliers'
+        end
+      end
+
+      resources :services, only: [:index]
+      resources :request, only: [:index]
+
+    end #End
+
   end
 end

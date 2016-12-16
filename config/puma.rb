@@ -1,4 +1,4 @@
-''"environment ENV['RACK_ENV']
+environment ENV['RACK_ENV']
 threads 0,5
 
 workers 3
@@ -8,7 +8,7 @@ on_worker_boot do
   ActiveSupport.on_load(:active_record) do
     ActiveRecord::Base.establish_connection
   end
-end"''
+end
 
 # workers Integer(ENV['WEB_CONCURRENCY'] || 2)
 # threads_count = Integer(ENV['MAX_THREADS'] || 5)
