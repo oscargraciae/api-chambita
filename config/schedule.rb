@@ -26,6 +26,6 @@ every 1.day do   #Step 2
   rake "finish_request:daily"        #Step 3
 end
 
-every 8.hours do   #Step 2
+every 7.day do   #Step 2
   rake "services_of_the_week:daily"
 end

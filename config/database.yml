@@ -85,15 +85,23 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+# production:
+#   <<: *default
+#   # database: chambitas_production
+#   database: chambitas_test
+#   username: chambita
+#   password: ch4m8it4$123
+#   host: chambita.cyzwdrnlmdwk.us-west-2.rds.amazonaws.com
+#   port: 5432
+
 production:
-  <<: *default
-  # database: chambitas_production
-  database: chambitas_test
+  adapter: postgresql
+  encoding: unicode
+  database: chambitas_production
   username: chambita
   password: ch4m8it4$123
   host: chambita.cyzwdrnlmdwk.us-west-2.rds.amazonaws.com
   port: 5432
-  #password: <%= ENV['TWOPX_DATABASE_PASSWORD'] %>
 
 # production:
 #   <<: *default
