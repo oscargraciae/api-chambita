@@ -12,6 +12,10 @@
 #
 
 class InboxMessageSerializer < ActiveModel::Serializer
-  attributes :id, :message, :readit, :created_at
+  attributes :id, :message, :readit, :created_at, :sender_name
   has_one :sender
+
+  def sender_name
+    object.sender.first_name
+  end
 end

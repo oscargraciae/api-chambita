@@ -13,7 +13,7 @@
 #
 
 class Order < ActiveRecord::Base
-  belongs_to :request_services
+  belongs_to :request_service
   belongs_to :order_status
 
   def self.create(request_id, status_id, price, fee)

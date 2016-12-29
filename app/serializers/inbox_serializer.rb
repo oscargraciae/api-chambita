@@ -10,7 +10,7 @@
 #
 
 class InboxSerializer < ActiveModel::Serializer
-  attributes :id, :updated_at
+  attributes :id, :updated_at, :created_at
   has_many :inbox_message
   has_one :sender
   has_one :recipient
