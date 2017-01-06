@@ -39,7 +39,7 @@ class Api::V1::PackagesController < ApplicationController
   end
 
   def package_params
-    params.permit(:description, :price, :unit_type_id, :unit_max, :service_id)
+    params.permit(:title, :description, :price, :unit_type_id, :unit_max, :service_id)
   end
 
   private

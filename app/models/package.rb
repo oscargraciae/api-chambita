@@ -22,7 +22,7 @@ class Package < ActiveRecord::Base
 
   validate :unit_type_validation
 
-  before_create :max_package, :default_title
+  before_create :max_package
 
   default_scope { where(active: true) }
 
@@ -41,11 +41,11 @@ class Package < ActiveRecord::Base
     end
   end
 
-  private
-  def default_title
-    letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-    package_size = Package.where(service_id: self.service_id).size
-    self.title = "Precio #{letter[package_size]}"
-  end
+  # private
+  # def default_title
+  #   letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+  #   package_size = Package.where(service_id: self.service_id).size
+  #   self.title = "Precio #{letter[package_size]}"
+  # end
 
 end
