@@ -24,8 +24,8 @@ class Api::V1::UsersController < BaseController
     user = User.new(user_params)
     if user.save
       if Rails.env.production?
-        # UserNotifier.send_signup_email(user).deliver
-        # UserDetail.user_signup_detail(user).deliver
+        #UserNotifier.send_signup_email(user).deliver
+        UserDetail.user_signup_detail(user).deliver
       end
 
       render json: user, status: 201
