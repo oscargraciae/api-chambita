@@ -46,7 +46,7 @@
 #
 
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :last_name, :full_name, :description, :avatar, :avatar_thumb, :address
+  attributes :id, :first_name, :last_name, :full_name, :description, :avatar, :avatar_thumb, :address, :username
   # has_many :services, serializer: ServicePublicDetailSerializer
   # has_many :services, serializer: ServicePrivateSummarySerializer
 

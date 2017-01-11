@@ -1,5 +1,5 @@
 class UserShortSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :full_name, :avatar, :address, :description, :avatar_small
+  attributes :id, :first_name, :full_name, :avatar, :address, :description, :avatar_small, :username
 
   def avatar_small
     object.avatar.url(:small)

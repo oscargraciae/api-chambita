@@ -22,7 +22,8 @@ class Package < ActiveRecord::Base
 
   validate :unit_type_validation
 
-  before_create :max_package, :default_title
+  before_create :max_package
+  # before_create :max_package, :default_title
 
   default_scope { where(active: true) }
 

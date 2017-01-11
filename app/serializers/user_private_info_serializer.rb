@@ -1,5 +1,5 @@
 class UserPrivateInfoSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :last_name, :full_name, :clabe, :description, :avatar, :avatar_thumb, :address, :address_street, :address_area, :address_zipcode, :cellphone
+  attributes :id, :first_name, :last_name, :full_name, :clabe, :description, :avatar, :avatar_thumb, :address, :address_street, :address_area, :address_zipcode, :cellphone, :username
 
   def avatar_thumb
     object.avatar.url(:thumb)
