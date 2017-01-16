@@ -23,7 +23,8 @@ class Api::V1::ServicesController < BaseController
   end
 
   def user_services
-    services = Service.service_by_user_id(params[:user_id]).where(isActive: true, published: true).limit(4).includes(:packages, :sub_category, :unit_type)
+    user = User.find_by(username: params[:user_id])
+    services = Service.service_by_user_id(user.id).where(isActive: true, published: true).limit(4).includes(:packages, :sub_category, :unit_type)
     render json: services, each_serializer: ServiceByUserSerializer, status: :ok
   end
 

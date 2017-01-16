@@ -7,8 +7,10 @@ class Api::V1::UsersController < BaseController
   # end
 
   # GET api/v1/users/:id
+  # GET api/v1/users/:username
   def show
-    user = User.find(params[:id])
+    # user = User.find(params[:id])
+    user = User.find_by(username: params[:id])
     render json: user, status: :ok
   end
 
@@ -22,6 +24,7 @@ class Api::V1::UsersController < BaseController
   # POST api/v1/users
   def create
     user = User.new(user_params)
+    user.username = User.get_username(user.email)
     if user.save
       if Rails.env.production?
         #UserNotifier.send_signup_email(user).deliver

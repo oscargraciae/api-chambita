@@ -2,8 +2,8 @@ namespace :email_to_username do
   desc "Crear nombres de usuario con base al email"
   task :start => :environment do
     User.find_each do |user|
-      email = user.email
-      username = email.split('@')[0].gsub('_', '').gsub('.','').gsub('-','')
+      username = User.get_username(user.email)
+      # username = email.split('@')[0].gsub('_', '').gsub('.','').gsub('-','')
 
       user.update_attribute(:username, username)
     end

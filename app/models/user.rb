@@ -85,4 +85,23 @@ class User < ActiveRecord::Base
       self.token = Devise.friendly_token
     end while self.class.exists?(token: token)
   end
+
+  def self.get_username(email)
+    username = email.split('@')[0].gsub('_', '').gsub('.','').gsub('-','')
+
+    is_username_invalid = true
+    i = 0
+
+    while is_username_invalid do
+        i += 1
+        users = User.where(username: username)
+        if users.size >= 1
+          username = "#{username}#{rand(1..9)}"
+        else
+          is_username_invalid = false
+        end
+    end
+    
+    return username
+  end
 end
