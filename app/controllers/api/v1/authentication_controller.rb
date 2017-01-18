@@ -62,6 +62,7 @@ class Api::V1::AuthenticationController < BaseController
       user.password = "123456899"
       user.facebook_id = resp["id"]
       user.avatar = resp["picture"]["data"]["url"]
+      user.username = User.get_username(resp["email"])
 
       if user.save
         render json: {:user => user, :token => user.token}, status: 200
