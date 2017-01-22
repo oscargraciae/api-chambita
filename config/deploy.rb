@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.5.0'
+lock '3.7.1'
 
 set :application, 'chambita'
 set :repo_url, 'git@gitlab.com:ogracia/api-chambita.git'
