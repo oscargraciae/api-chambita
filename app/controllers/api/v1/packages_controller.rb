@@ -1,7 +1,9 @@
 class Api::V1::PackagesController < ApplicationController
 
   def index
-    render json: Package.where(service_id: params[:service_id], active: true), status: :ok
+    # packages = Package.where(service_id: params[:service_id]).order(price: :desc)
+    packages = Package.where(service_id: params[:service_id])
+    render json: packages, active: true, status: :ok
   end
 
   def show

@@ -17,7 +17,7 @@ class Api::V1::ServicesController < BaseController
 
   def sample
     lat, lng = Service.get_location(params)
-    services = Service.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).limit(12).includes(:sub_category, :user, :packages, :unit_type)
+    services = Service.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).order("packages.price").limit(16).includes(:sub_category, :user, :packages, :unit_type)
 
     render json: services, status: :ok
   end

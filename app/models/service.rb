@@ -94,7 +94,7 @@ class Service < ActiveRecord::Base
     services = services.where(category_id: params[:category]) if params[:category].present?
     services = services.joins(:sub_category).where(sub_categories: { name: params[:sub_category] }) if params[:sub_category].present?
 
-    services = services.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).includes(:sub_category, :user, :packages, :unit_type)
+    services = services.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).order("packages.price").includes(:sub_category, :user, :packages, :unit_type)
     # services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
     services
   end
@@ -144,7 +144,7 @@ class Service < ActiveRecord::Base
     return lat, lng
   end
 
-  
+
   # private
   # def validate_company_id
   #   self.unit
