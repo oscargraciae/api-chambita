@@ -78,7 +78,7 @@ class Api::V1::InboxController < BaseController
                 end
 
       user_res = User.find(user_id)
-      email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada"
+      email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en www.chambita.mx"
       MailNotification.send_mail_notification(user_res, email_content).deliver
     end
   end

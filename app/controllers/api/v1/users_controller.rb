@@ -90,16 +90,19 @@ class Api::V1::UsersController < BaseController
   # PUT api/v1/users/:id
   def update
     user = User.find(@user.id)
-    user.address = params[:address]
 
-    location = Geocoder.search(params[:address])[0]
+    if !params[:address].blank?
+      user.address = params[:address]
 
-    user.lat = params[:lat]
-    user.lng = params[:lng]
-    user.country = location.country
-    user.state = location.state
-    user.city = location.city
-    user.is_completed = true
+      location = Geocoder.search(params[:address])[0]
+
+      user.lat = params[:lat]
+      user.lng = params[:lng]
+      user.country = location.country
+      user.state = location.state
+      user.city = location.city
+      user.is_completed = true
+    end
 
     if user.update(user_params)
       render json: user, serializer: MeSerializer, status: 200
@@ -107,6 +110,15 @@ class Api::V1::UsersController < BaseController
       render json: { errors: user.errors, message: 'Esa dirección de correo electrónico ya está en uso.' }, status: 200
     end
   end
+
+  # def update_address
+  #     user = User.find(@user.id)
+  #     if user.update(user_params)
+  #       render json: user, serializer: MeSerializer, status: 200
+  #     else
+  #       render json: { errors: user.errors, message: 'Error' }, status: 500
+  #     end
+  # end
 
   def avatar
     user = User.find(@user.id)
