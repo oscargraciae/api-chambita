@@ -90,7 +90,12 @@ class Api::V1::ServicesController < BaseController
     end
 
     if service.save
-      render json: { status: true, published: service.published }, status: 200
+      if service.published
+          render json: { status: true, published: service.published }, status: 200
+      else
+          render json: { status: true, published: service.published, message: "Por lo menos debes añadir un precio" }, status: 200
+      end
+
     else
       render json: { errors: service.errors }, status: 422
     end

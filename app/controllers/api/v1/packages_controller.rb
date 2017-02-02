@@ -33,7 +33,22 @@ class Api::V1::PackagesController < ApplicationController
     package = Package.find(params[:id])
     package.active = false
     if package.save
-      render json: { message: 'El paquete se eliminó satisfactoriamente.', delete: true }, status: :ok
+
+      service = Service.find(package.service_id)
+      if Package.where(service_id: package.service_id).size > 0
+        service.published = true
+      else
+        service.published = false
+      end
+      service.save
+
+      if service.published
+          render json: {published: service.published, message: 'El paquete se eliminó satisfactoriamente.', delete: true }, status: :ok
+      else
+        render json: {published: service.published, message: 'Servicio desactivado. Debes por lo menos añadir un precio', delete: true }, status: :ok
+      end
+
+
     else
       render json: package.errors, status: 422
     end
