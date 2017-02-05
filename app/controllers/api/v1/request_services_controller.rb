@@ -51,7 +51,7 @@ class Api::V1::RequestServicesController < BaseController
       price_by_service(service)
       request.price = service.price
     end
-    
+
     request.quantity = @unit_size
     request.subtotal = @subtotal
     request.fee = @fee_general
@@ -62,7 +62,7 @@ class Api::V1::RequestServicesController < BaseController
 
     if request.save
       create_notification(request, 'ha solicitado el servicio', request.user, request.supplier)
-      
+
       # Metodo de envio de correo
       # supplier = User.find(service.user_id)
       # PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
@@ -101,7 +101,7 @@ class Api::V1::RequestServicesController < BaseController
     elsif params[:finish_type] == 'customer'
       request = finish_customer(request)
     else
-      puts 'Ha ocurrido un error.'
+      
     end
 
     render json: request, status: :ok
@@ -139,7 +139,7 @@ class Api::V1::RequestServicesController < BaseController
       if order
         order.update_attribute(:order_status_id, ORDER_STATUS_CANCELED)
       end
-      
+
       create_notification(request, 'canceló el trabajo', user_cancel, user_notifier)
       render json: request, status: :ok
     else
@@ -148,7 +148,7 @@ class Api::V1::RequestServicesController < BaseController
   end
 
   def calculate_cost
-    
+
     if params[:service_id]
       service = Service.find(params[:service_id])
       price_by_service(service)
@@ -164,11 +164,11 @@ class Api::V1::RequestServicesController < BaseController
     params.permit(:request_date, :request_time, :message, :user_id, :service_id)
   end
 
-  
+
 # Metodo para calcular el costo de la solicitud por servicio
   private
   def price_by_service(service)
-    
+
     # Validamos si el servicio tiene unidades de medida
     if service.unit_type_id.present?
       if service.unit_max > 0
@@ -184,7 +184,7 @@ class Api::V1::RequestServicesController < BaseController
 # Metodo para calcular el costo de la solicitud por paquete
   private
   def price_by_package(package)
-    
+
     # Validamos si el paquete tiene unidades de medida
     if package.unit_type_id.present?
       if package.unit_max > 0

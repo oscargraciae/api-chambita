@@ -47,9 +47,6 @@ namespace :send_manual_email do
       ]')
 
       response = sg.client.contactdb.recipients.post(request_body: data)
-      puts response.status_code
-      puts response.body
-      puts response.headers
 
       obj = JSON.parse(response.body, object_class: OpenStruct)
 
@@ -57,9 +54,6 @@ namespace :send_manual_email do
         list_id = "973432"
         recipient_id = x
         response = sg.client.contactdb.lists._(list_id).recipients._(recipient_id).post()
-        puts response.status_code
-        puts response.body
-        puts response.headers
       end
     end
 

@@ -62,7 +62,7 @@ class Api::V1::PackagesController < ApplicationController
   private
   def isPrincipal(service_id)
     packages = Package.where(service_id: service_id).size
-    puts packages
+    
     if packages === 0
       return true
 
