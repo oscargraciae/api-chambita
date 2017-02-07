@@ -67,7 +67,7 @@ class Api::V1::AuthenticationController < BaseController
       if user.save
         render json: {:user => user, :token => user.token}, status: 200
       else
-        render json: user.errors, status: :ok
+        render json: user.errors, status: 500
       end
 
     end
