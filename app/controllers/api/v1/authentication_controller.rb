@@ -67,7 +67,11 @@ class Api::V1::AuthenticationController < BaseController
       if user.save
         render json: {:user => user, :token => user.token}, status: 200
       else
-        render json: user.errors, status: 500
+        msj = ''
+        msj += user.errors[:email].any? ? 'Esa dirección de correo electrónico ya está en uso. ' : ' '
+        msj += user.errors[:password].any? ? 'Tu contraseña debe tener al menos 8 caracteres. ' : ' '
+
+        render json: { status: 'error', errors: user.errors, message: msj }, status: 200
       end
 
     end
