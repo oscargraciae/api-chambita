@@ -90,7 +90,7 @@ class Service < ActiveRecord::Base
     end
 
     services = Service.all
-    services = services.where(['lower(no_accent(services.name)) LIKE ? ', "%#{query.downcase}%"]) if query.present?
+    services = services.where(['lower(no_accent(services.name)) LIKE ? OR lower(no_accent(services.description)) LIKE ?', "%#{query.downcase.removeaccents}%", "%#{query.downcase.removeaccents}%"]) if query.present?
     # services = services.where(name: params[:category]) if params[:category].present?
     if params[:category].present?
       category = params[:category].gsub('-',' ')

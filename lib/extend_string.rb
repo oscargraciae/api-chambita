@@ -54,7 +54,7 @@ class String
     str = String.new(self)
     String::ACCENTS_MAPPING.each do |letter, accents|
       packed = accents.pack('U*')
-      rxp = Regexp.new("[#{packed}]", nil, 'U')
+      rxp = Regexp.new("[#{packed}]", nil)
       str.gsub!(rxp, letter)
     end
 
