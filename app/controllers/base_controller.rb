@@ -13,7 +13,6 @@ class BaseController < ApplicationController
   # Este metodo nos validara el token del usuaro
 
   private
-
     def auth
       # token = request.headers["Authorization"].split(' ')[1]
       token = request.headers['Authorization']
