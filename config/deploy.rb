@@ -12,8 +12,8 @@ set :linked_dirs, %w(bin log tmp/cache vendor/bundle public/system public/upload
 set :keep_releases, 5
 set :user, 'deploy'
 
-set :puma_threads, [0, 9]
-set :puma_workers, 3
+set :puma_threads, [0, 8]
+set :puma_workers, 0
 
 set :puma_rackup, -> { File.join(current_path, 'config.ru') }
 set :puma_state, "#{shared_path}/tmp/pids/puma.state"
