@@ -52,7 +52,11 @@ class Api::V1::InboxController < BaseController
     @inbMess.sender_user = @user.id
     @inbMess.inbox_id = @inb.id
 
-    sendNotification(@user.id) if @inbMess.save
+    if @inbMess.save
+      @inb.update_attribute(:updated_at, DateTime.now)
+      sendNotification(@user.id)
+    end
+
   end
 
   # metodo conversación
