@@ -20,4 +20,6 @@ class Inbox < ActiveRecord::Base
   def self.all_inbox_by_user(user_id)
     Inbox.where('SENDER_ID = ? OR RECIPIENT_ID = ?', user_id, user_id).order(updated_at: :desc).add_include
   end
+
+  
 end

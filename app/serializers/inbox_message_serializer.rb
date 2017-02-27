@@ -19,4 +19,13 @@ class InboxMessageSerializer < ActiveModel::Serializer
     object.sender.first_name
   end
 
+  def message
+    # m = object.message.to_s.gsub(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/, '(email hidden)')
+    m = object.message.to_s.gsub(/(?<=[ ])[\d \-+()]+$|(?<=[ ])[\d \-+()]+(?=[ ]\w)/, '(TELEFONO OCULTO)')
+    m = m.to_s.gsub(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i, '(EMAIL OCULTO)')
+
+    puts m
+    m
+  end
+
 end
