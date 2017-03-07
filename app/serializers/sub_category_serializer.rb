@@ -10,5 +10,6 @@
 #
 
 class SubCategorySerializer < ActiveModel::Serializer
-  attributes :id, :name
+  attributes :id, :name, :category_id
+  
 end
