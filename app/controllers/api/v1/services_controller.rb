@@ -63,7 +63,7 @@ class Api::V1::ServicesController < BaseController
       if ser.save
         user = User.find(service_params[:user_id])
         user.update_attribute(:is_supplier, true)
-        puts user.as_json
+        
         render json: ser, status: 201
       else
         render json: { errors: ser.errors }, status: 422

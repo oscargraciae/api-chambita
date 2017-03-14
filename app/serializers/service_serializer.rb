@@ -29,7 +29,7 @@ class ServiceSerializer < ActiveModel::Serializer
   # ESTE SERIALIZER ES UTILIZADO PARA ENVIAR EL RESUMEN DE LA INFORMACION DEL SERVICIO
   # UNICAMENTE LLENAMOS LOS service-card.html
 
-  attributes :id, :name, :price, :cover, :rating_general, :total_jobs
+  attributes :id, :name, :description, :price, :cover, :rating_general, :total_jobs
 
   has_one :unit_type
   has_one :sub_category

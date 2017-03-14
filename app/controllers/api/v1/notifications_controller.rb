@@ -24,7 +24,6 @@ class Api::V1::NotificationsController < ApplicationController
    end
 
     private
-
     def send_message(phone_number, alert_message, _image_url)
         @twilio_number = ENV['TWILIO_NUMBER']
         @client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
@@ -36,6 +35,5 @@ class Api::V1::NotificationsController < ApplicationController
             # US phone numbers can make use of an image as well.
             # :media_url => image_url
         )
-        puts message.to
     end
 end

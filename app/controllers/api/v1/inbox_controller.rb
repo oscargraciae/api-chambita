@@ -7,7 +7,6 @@ class Api::V1::InboxController < BaseController
   end
 
   def create
-    # validacion de primer mensaje
     if !params[:inbox_id]
       @inb = Inbox.where(sender_id: [@user.id, params[:user_id]], recipient_id: [@user.id, params[:user_id]]).first
     else
@@ -15,16 +14,8 @@ class Api::V1::InboxController < BaseController
     end
 
     if @inb
-      # user_res = User.find(params[:user_id])
-      # email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada"
-      # MailNotification.send_mail_notification(user_res, email_content).deliver
-
       save_inbMessage
     else
-      # user_res = User.find(params[:user_id])
-      # email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada"
-      # MailNotification.send_mail_notification(user_res, email_content).deliver
-
       save_inbox
       save_inbMessage
     end
@@ -33,7 +24,7 @@ class Api::V1::InboxController < BaseController
   end
 
   def preview_inbox
-    # inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.RECIPIENT_ID = #{@user.id} OR INBOXES.SENDER_ID = #{@user.id}) AND READIT = false").size
+
     inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.RECIPIENT_ID = #{@user.id} OR INBOXES.SENDER_ID = #{@user.id}) AND READIT = false").where.not(sender_user: @user.id).size
     render json: inboxes_preview, status: :ok
   end
@@ -42,8 +33,11 @@ class Api::V1::InboxController < BaseController
     inbox = Inbox.new
     inbox.sender_id = @user.id
     inbox.recipient_id = params[:user_id]
-    inbox.save
-    @inb = inbox
+    if inbox.save
+      @inb = inbox
+      reply
+    end
+
   end
 
   def save_inbMessage
@@ -70,7 +64,6 @@ class Api::V1::InboxController < BaseController
   end
 
   private
-
   def sendNotification(id)
     user_id = 0
 
@@ -86,4 +79,36 @@ class Api::V1::InboxController < BaseController
       MailNotification.send_mail_notification(user_res, email_content).deliver
     end
   end
+
+
+  private
+  def reply
+    user_id = 0
+    user_id = if @user.id == @inb.sender_id
+                @inb.recipient_id
+              else
+                @inb.sender_id
+              end
+
+    boot_twilio
+    user_res = User.find(user_id)
+    if user_res.cellphone
+      # from_number = "+528115258753"
+      from_number = "+52#{user_res.cellphone}"
+      sms = @client.messages.create(
+        from: '+18326267620',
+        to: from_number,
+        body: "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en chambita.mx"
+      )
+    end
+
+  end
+
+  private
+  def boot_twilio
+    account_sid = 'AC8d936b8298b25c1820624a58f0b67466'
+    auth_token = 'ee5404c1235be5117b91bb2919f87249'
+    @client = Twilio::REST::Client.new account_sid, auth_token
+  end
+
 end

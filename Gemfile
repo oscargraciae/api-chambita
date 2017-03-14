@@ -46,7 +46,7 @@ gem 'rake', '10.4.2'
 gem 'sendgrid-ruby'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'whenever', :require => false
-
+gem 'twilio-ruby'
 gem 'delayed_job_active_record'
 gem 'daemons'
 # gem 'websocket-rails'
