@@ -62,7 +62,7 @@ class Api::V1::RequestServicesController < BaseController
 
     if request.save
       create_notification(request, 'ha solicitado el servicio', request.user, request.supplier)
-
+      reply(request, 'ha solicitado el servicio', request.user, request.supplier)
       # Metodo de envio de correo
       # supplier = User.find(service.user_id)
       # PurchaseDetail.send_purchase_detail(@user, request, service, supplier).deliver
@@ -72,6 +72,7 @@ class Api::V1::RequestServicesController < BaseController
       render json: 'Error', status: 422
    end
   end
+
 
   def accept
     @request = RequestService.joins(:service).find(params[:id])
@@ -101,7 +102,7 @@ class Api::V1::RequestServicesController < BaseController
     elsif params[:finish_type] == 'customer'
       request = finish_customer(request)
     else
-      
+
     end
 
     render json: request, status: :ok
@@ -282,6 +283,32 @@ class Api::V1::RequestServicesController < BaseController
                         identifier: request.id,
                         type_notification: message,
                         read: false)
+  end
+
+  private
+  def reply(request, message, user_from, user_to)
+
+    user = User.find(user_to)
+    boot_twilio
+
+    if user.cellphone
+      puts "Envio de SMS solicitudes"
+      sms_content = "#{user_from.first_name} #{message} #{request.service.name} ingresa a www.chambita.mx para aceptar o rechazar el servicio"
+      from_number = "+52#{user.cellphone}"
+      sms = @client.messages.create(
+        from: '+18326267620',
+        to: from_number,
+        body: sms_content
+      )
+    end
+
+  end
+
+  private
+  def boot_twilio
+    account_sid = 'AC8d936b8298b25c1820624a58f0b67466'
+    auth_token = 'ee5404c1235be5117b91bb2919f87249'
+    @client = Twilio::REST::Client.new account_sid, auth_token
   end
 
   private

@@ -35,7 +35,7 @@ class Api::V1::InboxController < BaseController
     inbox.recipient_id = params[:user_id]
     if inbox.save
       @inb = inbox
-      reply
+
     end
 
   end
@@ -49,6 +49,7 @@ class Api::V1::InboxController < BaseController
     if @inbMess.save
       @inb.update_attribute(:updated_at, DateTime.now)
       sendNotification(@user.id)
+      reply
     end
 
   end
