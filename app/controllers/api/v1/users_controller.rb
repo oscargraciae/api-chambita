@@ -17,7 +17,6 @@ class Api::V1::UsersController < BaseController
   # GET api/v1/users/:id
   def me_show
     user = User.find(@user.id)
-    
     render json: user, serializer: MeSerializer, status: :ok
   end
 

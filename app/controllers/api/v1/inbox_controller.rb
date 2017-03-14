@@ -35,7 +35,7 @@ class Api::V1::InboxController < BaseController
     inbox.recipient_id = params[:user_id]
     if inbox.save
       @inb = inbox
-
+      reply
     end
 
   end
@@ -49,7 +49,7 @@ class Api::V1::InboxController < BaseController
     if @inbMess.save
       @inb.update_attribute(:updated_at, DateTime.now)
       sendNotification(@user.id)
-      reply
+
     end
 
   end
@@ -77,7 +77,7 @@ class Api::V1::InboxController < BaseController
 
       user_res = User.find(user_id)
       email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en www.chambita.mx"
-      MailNotification.send_mail_notification(user_res, email_content).deliver
+      MailNotification.send_mail_notification(user_res, email_content, user_res.email).deliver
     end
   end
 

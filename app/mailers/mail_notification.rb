@@ -3,7 +3,7 @@ class MailNotification < ApplicationMailer
   layout false
 
   # send a signup email to the user, pass in the user object that contains the user's email address
-  def send_mail_notification(user, notification)
+  def send_mail_notification(user, notification, email)
 
     headers "X-SMTPAPI" => {
       "sub": {
@@ -20,6 +20,7 @@ class MailNotification < ApplicationMailer
       }
     }.to_json
 
-    mail( :to => user.email,:subject => 'Notificacion' )
+    mail( :to => email,:subject => 'Notificacion' )
   end
+
 end

@@ -186,7 +186,6 @@ class Api::V1::RequestServicesController < BaseController
   private
   def price_by_package(package)
 
-    # Validamos si el paquete tiene unidades de medida
     if package.unit_type_id.present?
       if package.unit_max > 0
         subtotal = package.price * Integer(params[:unit_size])
@@ -259,14 +258,9 @@ class Api::V1::RequestServicesController < BaseController
                                      })
   rescue Conekta::ParameterValidationError => e
     @message_error = e
-    # render json: @message_error, status: 422
-    # alguno de los parámetros fueron inválidos
   rescue Conekta::ProcessingError => e
     @message_error = e
-    # render json: @message_error, status: 422
-    # la tarjeta no pudo ser procesada
   rescue Conekta::Error => e
-    # un error ocurrió que no sucede en el flujo normal de cobros como por ejemplo un auth_key incorrecto
   end
 
   private
@@ -275,7 +269,11 @@ class Api::V1::RequestServicesController < BaseController
     user = User.find(user_to)
 
     email_content = "#{user_from.first_name} #{message} #{request.service.name}"
-    MailNotification.send_mail_notification(user, email_content).deliver
+    MailNotification.send_mail_notification(user, email_content, user.email).deliver
+
+    if Rails.env.production?
+        MailNotification.send_mail_notification(user, email_content, "chambitamx@gmail.com").deliver
+    end
 
     Notification.create(user_id: user_to.id,
                         notified_by_id: user_from.id,
@@ -288,19 +286,20 @@ class Api::V1::RequestServicesController < BaseController
   private
   def reply(request, message, user_from, user_to)
 
-    user = User.find(user_to)
-    boot_twilio
-
-    if user.cellphone
-      puts "Envio de SMS solicitudes"
-      sms_content = "#{user_from.first_name} esta interesado en contrarar tu servicio para el dia #{request.request_date.strftime("%d/%m/%Y")}. Ingresa a www.chambita.mx para aceptar o rechazar."
-      # sms_content = "#{user_from.first_name} #{message} #{request.service.name} ingresa a www.chambita.mx para aceptar o rechazar el servicio"
-      from_number = "+52#{user.cellphone}"
-      sms = @client.messages.create(
-        from: '+18326267620',
-        to: from_number,
-        body: sms_content
-      )
+    if Rails.env.production?
+      user = User.find(user_to)
+      boot_twilio
+      if user.cellphone
+        puts "Envio de SMS solicitudes"
+        sms_content = "#{user_from.first_name} esta interesado en contrarar tu servicio para el dia #{request.request_date.strftime("%d/%m/%Y")}. Ingresa a www.chambita.mx para aceptar o rechazar."
+        # sms_content = "#{user_from.first_name} #{message} #{request.service.name} ingresa a www.chambita.mx para aceptar o rechazar el servicio"
+        from_number = "+52#{user.cellphone}"
+        sms = @client.messages.create(
+          from: '+18326267620',
+          to: from_number,
+          body: sms_content
+        )
+      end
     end
 
   end
