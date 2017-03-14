@@ -293,7 +293,8 @@ class Api::V1::RequestServicesController < BaseController
 
     if user.cellphone
       puts "Envio de SMS solicitudes"
-      sms_content = "#{user_from.first_name} #{message} #{request.service.name} ingresa a www.chambita.mx para aceptar o rechazar el servicio"
+      sms_content = "#{user_from.first_name} esta interesado en contrarar tu servicio para el dia #{request.request_date.strftime("%d/%m/%Y")}. Ingresa a www.chambita.mx para aceptar o rechazar."
+      # sms_content = "#{user_from.first_name} #{message} #{request.service.name} ingresa a www.chambita.mx para aceptar o rechazar el servicio"
       from_number = "+52#{user.cellphone}"
       sms = @client.messages.create(
         from: '+18326267620',
