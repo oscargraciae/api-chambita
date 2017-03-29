@@ -35,7 +35,10 @@ class Api::V1::InboxController < BaseController
     inbox.recipient_id = params[:user_id]
     if inbox.save
       @inb = inbox
-      reply
+
+      if Rails.env.production?
+        reply
+      end
     end
 
   end

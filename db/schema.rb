@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170215002215) do
+ActiveRecord::Schema.define(version: 20170322233737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -197,6 +197,7 @@ ActiveRecord::Schema.define(version: 20170215002215) do
     t.decimal  "subtotal",           precision: 8, scale: 2
     t.integer  "quantity",                                   default: 1
     t.integer  "package_id"
+    t.boolean  "is_declined_card",                           default: false
   end
 
   add_index "request_services", ["package_id"], name: "index_request_services_on_package_id", using: :btree

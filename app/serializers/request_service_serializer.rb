@@ -25,7 +25,7 @@
 #
 
 class RequestServiceSerializer < ActiveModel::Serializer
-  attributes :id, :message, :request_date, :request_time, :price, :subtotal, :fee, :total, :quantity, :created_at, :is_finish_supplier, :is_finish_customer, :is_evaluated, :updated_at
+  attributes :id, :message, :request_date, :request_time, :price, :subtotal, :fee, :total, :quantity, :created_at, :is_finish_supplier, :is_finish_customer, :is_evaluated, :updated_at, :is_declined_card
 
   has_one :request_status
   has_one :user, serializer: UserPrivateInfoSerializer
