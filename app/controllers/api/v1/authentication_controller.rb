@@ -24,7 +24,6 @@ class Api::V1::AuthenticationController < BaseController
     else
       render json: { :status => "error", :message => "Correo electrónico no existe o es incorrecto." }, status: 200
     end
-
   end
 
   def facebook
@@ -83,6 +82,15 @@ class Api::V1::AuthenticationController < BaseController
     user.generate_authentication_token!
     user.save
     head 204
+  end
+
+  def get_with_token
+    user = User.find_by(token: params[:token])
+    if user
+      render json: {:user => user, :token => user.token}, status: 200
+    else
+      render json: { :status => "error", :message => "Correo electrónico no existe o es incorrecto." }, status: 200
+    end
   end
 
 end

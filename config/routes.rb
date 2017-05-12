@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       resources :authentication, only: [:create, :destroy] do
         collection do
           post 'facebook'
+          post 'get_with_token'
         end
       end
       resources :me, only: :index

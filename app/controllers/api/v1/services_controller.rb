@@ -28,10 +28,14 @@ class Api::V1::ServicesController < BaseController
     render json: services, each_serializer: ServiceByUserSerializer, status: :ok
   end
 
-  def show
-    ser = Service.find_by(id: params[:id], isActive: true, published: true)
-    if ser
+  def similar_services
+    services = Service.where(sub_category: params[:subcategory]).active
+    render json: services, status: :ok
+  end
 
+  def show
+    ser = Service.includes(:sub_category, :unit_type).find_by(id: params[:id], isActive: true, published: true)
+    if ser
       visits = ser.visits + 1
       ser.update_attribute(:visits, visits)
 
@@ -63,7 +67,7 @@ class Api::V1::ServicesController < BaseController
       if ser.save
         user = User.find(service_params[:user_id])
         user.update_attribute(:is_supplier, true)
-        
+
         render json: ser, status: 201
       else
         render json: { errors: ser.errors }, status: 422
