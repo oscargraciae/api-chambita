@@ -173,7 +173,7 @@ class Api::V1::UsersController < BaseController
 
   # Validamos los parametros de entrada
   def user_params
-    params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :birthdate, :cellphone, :description, :encrypted_password, :address_street, :address_area, :address_zipcode, :cellphone)
+    params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :birthdate, :cellphone, :description, :encrypted_password, :address_street, :address_area, :address_zipcode, :cellphone, :lat, :lng)
   end
 
   def prueba

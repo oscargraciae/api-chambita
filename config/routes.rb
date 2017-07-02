@@ -62,7 +62,7 @@ Rails.application.routes.draw do
           get 'my_cards'
         end
       end
-      resources :inbox, only: [:index, :create] do
+      resources :inbox, only: [:index, :create, :show] do
         collection do
           get 'all_messages'
           get 'preview_inbox'

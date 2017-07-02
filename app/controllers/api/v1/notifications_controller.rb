@@ -2,7 +2,7 @@ class Api::V1::NotificationsController < ApplicationController
     rescue_from StandardError do |exception|
         trigger_sms_alerts(exception)
     end
-
+    
     def trigger_sms_alerts(e)
         @alert_message = "
           [This is a test] ALERT!

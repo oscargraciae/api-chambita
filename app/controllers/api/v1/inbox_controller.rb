@@ -1,9 +1,15 @@
 class Api::V1::InboxController < BaseController
-  before_filter :auth, only: [:index, :preview_inbox, :create, :all_messages]
+  before_filter :auth, only: [:index, :preview_inbox, :create, :all_messages, :show]
 
   def index
     inb = Inbox.all_inbox_by_user(@user.id)
     render json: inb, status: :ok
+  end
+
+  def show
+    # El id es es el id del usuario con el que se habla
+    inbox = Inbox.where(sender_id: [@user.id, params[:id]], recipient_id: [@user.id, params[:id]]).first
+    render json: inbox, status: 200
   end
 
   def create

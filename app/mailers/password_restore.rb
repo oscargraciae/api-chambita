@@ -8,7 +8,6 @@ class PasswordRestore < ApplicationMailer
     headers "X-SMTPAPI" => {
       "sub": {
         "%name%" => [user.first_name],
-        # "%url%" => ['http://localhost:9000/user/password-reset/'+user.token]
         "%url%" => ['https://chambita.mx/user/password-reset/'+user.token]
       },
       "filters": {

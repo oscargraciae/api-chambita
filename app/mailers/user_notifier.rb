@@ -8,7 +8,6 @@ class UserNotifier < ApplicationMailer
     headers "X-SMTPAPI" => {
       "sub": {
         "%name%" => [user.first_name],
-        #"%url%" => ['http://localhost:9000/#/user/active_account/'+user.token]
         "%url%" => ['https://chambita.mx/user/active_account/'+user.token]
       },
       "filters": {

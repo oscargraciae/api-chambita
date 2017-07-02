@@ -23,10 +23,10 @@ default: &default
 
 development:
   <<: *default
-  database: chambitas_development
-  username: chambita
-  password: ch4m8it4$123
-  host: chambita.cyzwdrnlmdwk.us-west-2.rds.amazonaws.com
+  database: chambita_development
+  username: desarrollo
+  password: desarrollo
+  host: localhost
   port: 5432
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
