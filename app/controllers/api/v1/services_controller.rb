@@ -1,6 +1,8 @@
 class Api::V1::ServicesController < BaseController
   before_filter :auth, only: [:create, :update, :destroy, :my_services, :show_service, :published]
+  before_filter :set_user, only: [:search, :sample]
   before_action :verify_params, only: [:create, :update]
+
 
   MODULE_NAME = 'service_controller'
 
@@ -11,12 +13,12 @@ class Api::V1::ServicesController < BaseController
   end
 
   def search
-    services = Service.search_service(params)
+    services = Service.search_service(params, @user)
     render json: services, status: :ok
   end
 
   def sample
-    lat, lng = Service.get_location(params)
+    lat, lng = Service.get_location(params, @user)
     services = Service.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).limit(16).includes(:sub_category, :user, :packages, :unit_type)
 
     render json: services, status: :ok

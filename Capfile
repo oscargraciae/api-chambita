@@ -27,9 +27,11 @@ require 'capistrano/puma'
 require 'capistrano/setup'
 require 'capistrano/deploy'
 require 'capistrano/rails'
-require 'capistrano/bundler'
 require 'capistrano/rvm'
+require 'capistrano/bundler'
 require 'capistrano/puma'
+install_plugin Capistrano::Puma  # Default puma tasks
+
 require "whenever/capistrano"
 
 

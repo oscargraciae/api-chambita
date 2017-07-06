@@ -15,4 +15,5 @@ stages.each do |stage|
     I18n.locale = fetch(:locale, :en)
     configure_backend
   end
+  
 end

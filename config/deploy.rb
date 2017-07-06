@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.5.0'
+lock '3.8.2'
 
 set :application, 'chambita'
 set :repo_url, 'git@gitlab.com:ogracia/api-chambita.git'
@@ -11,8 +11,6 @@ set :linked_files, %w(config/database.yml config/secrets.yml)
 set :linked_dirs, %w(bin log tmp/cache vendor/bundle public/system public/uploads)
 set :keep_releases, 5
 set :user, 'deploy'
-
-set :ssh_options, { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
 
 # set :puma_threads, [0, 8]
 set :puma_threads, [4, 16]
@@ -83,7 +81,7 @@ namespace :deploy do
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
-  after  :finishing,    :restart
+  #after  :finishing,    :restart
 end
 
 # ps aux | grep puma    # Get puma pid

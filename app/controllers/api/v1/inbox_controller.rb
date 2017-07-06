@@ -12,6 +12,11 @@ class Api::V1::InboxController < BaseController
     render json: inbox, status: 200
   end
 
+  def get_by_id
+    inbox = Inbox.find(params[:id])
+    render json: inbox, status: 200
+  end
+
   def create
     if !params[:inbox_id]
       @inb = Inbox.where(sender_id: [@user.id, params[:user_id]], recipient_id: [@user.id, params[:user_id]]).first

@@ -28,8 +28,6 @@
 class Service < ActiveRecord::Base
   validates :name, length: { maximum: 60 }
   validates :description, length: { maximum: 1000 }
-  # validates :price, length: { maximum: 25 }
-  # validate  :unit_type_validation
 
   reverse_geocoded_by 'users.lat', 'users.lng'
 
@@ -40,30 +38,24 @@ class Service < ActiveRecord::Base
   has_many :service_images
   has_many :packages
 
-  # before_create :total_service_for_user
-  # before_create :default_values
-
   do_not_validate_attachment_file_type :cover
   has_attached_file   :cover,
-                      #:styles => { :small => ["128x128!",:jpg], :meddium => ["230x230!",:jpg], :thumb => ["90x90#", :jpg]},
                       styles: { small: ['128x128!', :jpg], meddium: ['300x300!', :jpg], thumb: ['268x134#', :jpg] },
-                      #:styles => { :small => ["128x128!",:jpg], :meddium => ["460x230!",:jpg] },
                       default_style: :meddium,
                       storage: :s3,
                       url: ':s3_domain_url',
-                      #:default_url => 'https://chambita_production.s3.amazonaws.com/uploads/users/user_default.png',
                       default_url: 'https://s3.amazonaws.com/chambita_production/uploads/users/user_default.png',
-
                       path: 'uploads/services/cover/:file_id/:style/:filename'
 
-  # default_scope { includes(:service_images) }
   scope :active, -> { where(isActive: true) }
   scope :user, -> (user_id) { where user_id: user_id }
   scope :top, -> { limit(2) }
   scope :recent, -> { order(updated_at: :desc) }
   scope :add_include, -> { includes(:category, :user, :sub_category, :service_images) }
-  # scope :location, -> (km, lat, lng) { joins(:user).near([lat, lng], km, :order => false).where(published: true).order rating_general: :desc }
   scope :location, -> (km, lat, lng) { joins(:user).near([lat, lng], km, order: :distance).where(published: true).order rating_general: :desc }
+  scope :service_published, -> { where(isActive: true, published: true) }
+  scope :service_order, -> { order(rating_general: :desc, created_at: :desc).order("packages.price") }
+  scope :service_include, -> { includes(:sub_category, :user, packages: [:unit_type]) }
 
   def self.all_services(lat, lng)
     Service.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include.active
@@ -73,26 +65,14 @@ class Service < ActiveRecord::Base
     Service.where(user_id: user_id).recent.includes(:sub_category).active
   end
 
-  def self.search_service(params)
+  def self.search_service(params, user)
     query = params[:q]
 
-    if params[:lat] && params[:lng]
-      lat = params[:lat]
-      lng = params[:lng]
-    elsif params[:location]
-      location = Geocoder.search(params[:location])[0]
-      lat = location.coordinates[0]
-      lng = location.coordinates[1]
-    else
-      location = Geocoder.search('Monterrey, Nuevo Leon, Mexico')[0]
-      lat = location.coordinates[0]
-      lng = location.coordinates[1]
-    end
+    lat, lng = self.get_location(params, user)
 
     services = Service.all
     services = services.where(['lower(no_accent(services.name)) LIKE ? OR lower(no_accent(services.description)) LIKE ?', "%#{query.downcase.removeaccents}%", "%#{query.downcase.removeaccents}%"]) if query.present?
-    # services = services.where(['lower(no_accent(services.name)) LIKE ? OR lower(no_accent(services.description)) LIKE ? OR lower(no_accent(services.name)) LIKE ? OR lower(no_accent(services.name)) LIKE ? OR lower(no_accent(services.name)) LIKE ?', "%#{query.downcase.removeaccents}%", "%#{query.downcase.removeaccents}%", "%#{query.downcase.removeaccents}", "#{query.downcase.removeaccents}%", "#{query.downcase.removeaccents}"]) if query.present?
-    # services = services.where(name: params[:category]) if params[:category].present?
+    
     if params[:category].present?
       category = params[:category].gsub('-',' ')
       services = services.joins(:category).where('lower(no_accent(categories.name)) = ?', "#{category.downcase.removeaccents}")
@@ -103,8 +83,9 @@ class Service < ActiveRecord::Base
       services = services.joins(:sub_category).where('lower(no_accent(sub_categories.name)) = ?', "#{sub_category.downcase.removeaccents}")
     end
 
-    services = services.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).order(rating_general: :desc, created_at: :desc).order("packages.price").includes(:sub_category, :user, :packages, :unit_type)
-    # services.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include().active()
+    services = services.where(sub_category_id: params[:sub_category_id]).limit(16).order("RANDOM()") if params[:sub_category_id].present?
+
+    services = services.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).service_order.service_include
     services
   end
 
@@ -123,20 +104,15 @@ class Service < ActiveRecord::Base
   end
 
   def service_ratings
-    # service = Service.find(id)
     Rating.get_ratings_by_service_id(id)
   end
-
-  #def default_values
-  #  self.published = false
-  #end
 
   private
   def unit_type_validation
     self.unit_type_id = nil if self.unit_type_id == 0
   end
 
-  def self.get_location(params)
+  def self.get_location(params, user)
     if params[:lat] && params[:lng]
       lat = params[:lat]
       lng = params[:lng]
@@ -144,6 +120,9 @@ class Service < ActiveRecord::Base
       location = Geocoder.search(params[:location])[0]
       lat = location.coordinates[0]
       lng = location.coordinates[1]
+    elsif user
+      lat = user.lat
+      lng = user.lng
     else
       location = Geocoder.search(DEFAULT_LOCATION)[0]
       lat = location.coordinates[0]
@@ -152,16 +131,5 @@ class Service < ActiveRecord::Base
 
     return lat, lng
   end
-
-
-  # private
-  # def validate_company_id
-  #   self.unit
-
-  #   cp = Company.find_by_company_id(self.company)
-  #   if cp.nil?
-  #     errors.add(:company, 'Invalid Company ID')
-  #   end
-  # end
 
 end

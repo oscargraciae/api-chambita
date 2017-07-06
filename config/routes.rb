@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount RailsAdmin::Engine => '/admin_gigbox', as: 'rails_admin'
   # devise_for :users
 
   # namespace "api", constraints: { subdomain: 'api' }, path: '/api' do
@@ -66,6 +67,9 @@ Rails.application.routes.draw do
         collection do
           get 'all_messages'
           get 'preview_inbox'
+        end
+        member do
+          get 'get_by_id'
         end
       end
       resources :notification, only: [:index] do

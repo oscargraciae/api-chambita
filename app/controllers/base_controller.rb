@@ -14,7 +14,6 @@ class BaseController < ApplicationController
 
   private
     def auth
-      # token = request.headers["Authorization"].split(' ')[1]
       token = request.headers['Authorization']
 
       if !token
@@ -45,4 +44,14 @@ class BaseController < ApplicationController
                           type_notification: message,
                           read: false)
   end
+
+  private
+  def set_user
+    token = request.headers['Authorization']
+    if token
+      token = token.split(' ')[1]
+      @user = User.find_by(token: token)
+    end
+  end
+  
 end
