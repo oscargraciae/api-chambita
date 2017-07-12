@@ -37,6 +37,7 @@ class Service < ActiveRecord::Base
   belongs_to :category
   has_many :service_images
   has_many :packages
+  has_many :favorites
 
   do_not_validate_attachment_file_type :cover
   has_attached_file   :cover,
@@ -55,7 +56,7 @@ class Service < ActiveRecord::Base
   scope :location, -> (km, lat, lng) { joins(:user).near([lat, lng], km, order: :distance).where(published: true).order rating_general: :desc }
   scope :service_published, -> { where(isActive: true, published: true) }
   scope :service_order, -> { order(rating_general: :desc, created_at: :desc).order("packages.price") }
-  scope :service_include, -> { includes(:sub_category, :user, packages: [:unit_type]) }
+  scope :service_include, -> { includes(:sub_category, :favorites, :user, packages: [:unit_type]) }
 
   def self.all_services(lat, lng)
     Service.joins(:user).location(SEARCH_DEFAULT_KM, lat, lng).add_include.active

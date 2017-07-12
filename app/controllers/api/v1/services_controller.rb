@@ -1,6 +1,6 @@
 class Api::V1::ServicesController < BaseController
   before_filter :auth, only: [:create, :update, :destroy, :my_services, :show_service, :published]
-  before_filter :set_user, only: [:search, :sample]
+  before_filter :set_user, only: [:search, :sample, :favorite, :favorites]
   before_action :verify_params, only: [:create, :update]
 
 
@@ -47,6 +47,38 @@ class Api::V1::ServicesController < BaseController
     end
   end
 
+  def favorite
+    service = Service.find(params[:id])
+    
+    if service
+      favorite = Favorite.find_by(service_id: service.id, user_id: @user.id)
+      if !favorite
+        total = service.favorite_count + 1
+        service.update_attribute(:favorite_count, total)
+        Favorite.create(service_id: service.id, user_id: @user.id, active: true)
+      else
+        is_active = !favorite.active
+
+        if is_active
+          total = service.favorite_count + 1
+          service.update_attribute(:favorite_count, total)
+        else
+          total = service.favorite_count - 1
+          service.update_attribute(:favorite_count, total)
+        end
+
+        favorite.update_attribute(:active, is_active)
+      end
+    end
+
+    render json: { mensaje: "Agregado a favoritos" }, status: 200
+  end
+
+  def favorites
+    favorites = Service.joins(:favorites).where("favorites.user_id = ? and favorites.active = true", @user.id)
+    render json: favorites, status: 200
+  end
+  
   # METODOS PRIVADOR -> Estos metodos pueden ser consultados sin necesidad de estar autenticado.
   def my_services
     services = Service.service_by_user_id(@user.id)

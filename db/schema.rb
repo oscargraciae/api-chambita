@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170322233737) do
+ActiveRecord::Schema.define(version: 20170706005412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,17 @@ ActiveRecord::Schema.define(version: 20170322233737) do
 
   add_index "evaluations", ["service_id"], name: "index_evaluations_on_service_id", using: :btree
   add_index "evaluations", ["user_id"], name: "index_evaluations_on_user_id", using: :btree
+
+  create_table "favorites", force: :cascade do |t|
+    t.integer  "service_id"
+    t.integer  "user_id"
+    t.boolean  "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "favorites", ["service_id"], name: "index_favorites_on_service_id", using: :btree
+  add_index "favorites", ["user_id"], name: "index_favorites_on_user_id", using: :btree
 
   create_table "identities", force: :cascade do |t|
     t.integer  "user_id"
@@ -246,6 +257,7 @@ ActiveRecord::Schema.define(version: 20170322233737) do
     t.integer  "unit_type_id"
     t.integer  "unit_max"
     t.integer  "visits",                                     default: 0
+    t.integer  "favorite_count",                             default: 0
   end
 
   add_index "services", ["unit_type_id"], name: "index_services_on_unit_type_id", using: :btree
@@ -328,6 +340,8 @@ ActiveRecord::Schema.define(version: 20170322233737) do
   add_foreign_key "credit_cards", "users"
   add_foreign_key "evaluations", "services"
   add_foreign_key "evaluations", "users"
+  add_foreign_key "favorites", "services"
+  add_foreign_key "favorites", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "inbox_messages", "inboxes"
   add_foreign_key "notifications", "request_services"

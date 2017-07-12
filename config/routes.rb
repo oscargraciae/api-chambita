@@ -24,6 +24,7 @@ Rails.application.routes.draw do
         resources :evaluations, only: [:index, :create]
         member do
           get 'show_service'
+          get 'favorite'
           put 'published'
         end
         collection do
@@ -32,6 +33,7 @@ Rails.application.routes.draw do
           get 'user_services'
           get 'render_service'
           get 'sample'
+          get 'favorites'
         end
       end
       resources :service_images, only: [:index, :create, :destroy]
