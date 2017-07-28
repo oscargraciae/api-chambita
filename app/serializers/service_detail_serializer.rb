@@ -1,7 +1,7 @@
 class ServiceDetailSerializer < ActiveModel::Serializer
   # INFORMACION PUBLICA DE SERVICIO
   # ES UTILIZADA PARA MOSTRAR EL DETALLE DEL SERVICIO
-  attributes :id, :name, :description, :price, :cover, :rating_general, :service_ratings, :unit_max
+  attributes :id, :name, :description, :price, :cover, :rating_general, :service_ratings, :unit_max, :favorite_count
 
   has_one :sub_category
   has_one :category

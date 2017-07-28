@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin_gigbox', as: 'rails_admin'
   # devise_for :users
 
-  # namespace "api", constraints: { subdomain: 'api' }, path: '/api' do
-  namespace 'api' do
+  namespace "api", constraints: { subdomain: 'api' }, path: '/api' do
+  # namespace 'api' do
     namespace 'v1' do
       resources :users, only: [:index, :show, :create, :update, :destroy] do
         member do
