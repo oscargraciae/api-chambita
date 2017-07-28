@@ -51,14 +51,12 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 # gem 'websocket-rails'
 
-gem 'remotipart', github: 'mshibuya/remotipart'
-gem 'rails_admin', github: 'sferik/rails_admin'
-gem 'rails_admin_rollincode', '~> 1.0'
-
 gem 'puma'
+
 
 gem 'annotate'
 gem 'bullet', group: 'development'
+
 group :development do
   gem 'capistrano'
   gem 'foreman'
@@ -68,6 +66,10 @@ group :development do
   gem 'sqlite3'
   gem 'web-console', '~> 2.0'
   gem 'faker'
+
+  # gem 'remotipart', github: 'mshibuya/remotipart'
+  # gem 'rails_admin', github: 'sferik/rails_admin'
+  # gem 'rails_admin_rollincode', '~> 1.0'
 
   #	gem 'capistrano3-puma'
   gem 'capistrano-rails', require: false

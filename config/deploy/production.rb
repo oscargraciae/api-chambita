@@ -3,7 +3,12 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server '52.32.72.31', user: 'deploy', roles: %w(app db web) # , my_property: :my_value
+# Server de chambita 52.32.72.31
+# server '52.32.72.31', user: 'deploy', roles: %w(app db web) # , my_property: :my_value
+
+# Server de gigbox
+server '52.37.82.98', user: 'deploy', roles: %w(app db web) # , my_property: :my_value
+
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 #set :ssh_options, {["~/.ssh/chambita_server.pem"]}
