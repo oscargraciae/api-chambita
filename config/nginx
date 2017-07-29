@@ -1,0 +1,22 @@
+upstream apiurl {
+  server unix:/home/deploy/api-chambita/shared/tmp/sockets/puma.sock fail_timeout=0;
+}
+
+server {
+        listen 443;
+        server_name api.chambita.mx;
+        ssl on;
+        ssl_certificate /etc/ssl/apichambita.crt;
+	    ssl_certificate_key /etc/ssl/apichambitaserverout.key;
+        location / {
+            client_max_body_size 100M;
+
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarder-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-NginX-Proxy true;
+
+            proxy_pass http://apiurl;
+
+        }
+}
