@@ -51,9 +51,6 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 # gem 'websocket-rails'
 
-gem 'puma'
-
-
 gem 'annotate'
 gem 'bullet', group: 'development'
 
