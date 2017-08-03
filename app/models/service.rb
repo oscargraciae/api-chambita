@@ -70,7 +70,10 @@ class Service < ActiveRecord::Base
     query = params[:q]
 
     lat, lng = self.get_location(params, user)
-
+    puts "####################################"
+    puts lat
+    puts lng
+    puts "####################################"
     services = Service.all
     services = services.where(['lower(no_accent(services.name)) LIKE ? OR lower(no_accent(services.description)) LIKE ?', "%#{query.downcase.removeaccents}%", "%#{query.downcase.removeaccents}%"]) if query.present?
     
@@ -83,9 +86,10 @@ class Service < ActiveRecord::Base
       sub_category = params[:sub_category].gsub('-',' ')
       services = services.joins(:sub_category).where('lower(no_accent(sub_categories.name)) = ?', "#{sub_category.downcase.removeaccents}")
     end
-
-    services = services.where(sub_category_id: params[:sub_category_id]).limit(16).order("RANDOM()") if params[:sub_category_id].present?
-
+    if params[:sub_category_id].present?
+      services = services.where(sub_category_id: params[:sub_category_id]).limit(16).order("RANDOM()") 
+    end
+    
     services = services.joins(:user).near([lat, lng], 40, order: false).where(isActive: true, published: true).service_order.service_include
     services
   end
