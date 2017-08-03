@@ -75,7 +75,7 @@ class Api::V1::UsersController < BaseController
     end
   end
 
-  def send_Password_Email
+  def send_password_email
     user = User.find_by(email: params[:email])
 
     if user
