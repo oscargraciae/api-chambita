@@ -51,9 +51,9 @@ class Api::V1::UsersController < BaseController
     end
   end
 
-  def valid_Token
+  def valid_token
     user = User.find_by(token: params[:token_user])
-
+    
     if user
       render json: user.id, status: 200
     else

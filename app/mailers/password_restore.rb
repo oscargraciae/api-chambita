@@ -1,6 +1,6 @@
 class PasswordRestore < ApplicationMailer
 
-  default :from => 'Chambita <hello@chambita.mx>'
+  default :from => 'Gigbox <hello@gigbox.mx>'
   layout false
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def send_password_reset(user)
@@ -8,7 +8,7 @@ class PasswordRestore < ApplicationMailer
     headers "X-SMTPAPI" => {
       "sub": {
         "%name%" => [user.first_name],
-        "%url%" => ['https://chambita.mx/user/password-reset/'+user.token]
+        "%url%" => ['https://gigbox.mx/password-reset?t='+user.token]
       },
       "filters": {
         "templates": {

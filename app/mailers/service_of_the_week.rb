@@ -1,5 +1,5 @@
 class ServiceOfTheWeek < ApplicationMailer
-  default from: 'Chambita <hello@chambita.mx>'
+  default from: 'Gigbox <hello@gigbox.mx>'
   layout 'send_email'
 
   def send_email(services, email, nombre)

@@ -1,6 +1,6 @@
 class UserNotifier < ApplicationMailer
 
-  default :from => 'Chambita <hello@chambita.mx>'
+  default :from => 'Gigbox <hello@gigbox.mx>'
   layout "send_signup_email"
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def send_signup_email(user)
@@ -8,7 +8,7 @@ class UserNotifier < ApplicationMailer
     headers "X-SMTPAPI" => {
       "sub": {
         "%name%" => [user.first_name],
-        "%url%" => ['https://chambita.mx/user/active_account/'+user.token]
+        "%url%" => ['https://gigbox.mx/user/active_account/'+user.token]
       },
       "filters": {
         "templates": {

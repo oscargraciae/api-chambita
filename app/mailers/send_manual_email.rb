@@ -4,7 +4,7 @@ class SendManualEmail < ActionMailer::Base
 
   def manual_email
     puts "Enviando email"
-    mail(to: "oscar@chambita.mx", subject: 'Hola!')
+    mail(to: "oscar@gigbox.mx", subject: 'Hola!')
   end
 end
 

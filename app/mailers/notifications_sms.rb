@@ -1,10 +1,8 @@
 class NotificationsSms < ApplicationMailer
-  default from: 'Chambita <ayuda@chambita.mx>'
+  default from: 'Gigbox <ayuda@gigbox.mx>'
   layout false
 
   def send_email(email)
-    puts "Envio de correo"
-
     headers "X-SMTPAPI" => {
       "sub": {},
       "filters": {
@@ -18,6 +16,6 @@ class NotificationsSms < ApplicationMailer
     }.to_json
 
     # mail(to: 'oscar@chambita.mx', subject: 'No pierdas ventas - Chambita')
-    mail(to: email, subject: "No pierdas ventas - Chambita")
+    mail(to: email, subject: "No pierdas ventas - Gigbox")
   end
 end

@@ -78,6 +78,7 @@ class User < ActiveRecord::Base
                     url: ':s3_domain_url',
                     # :default_url => 'https://s3-us-west-1.amazonaws.com/chambita_production/uploads/users/user1.png',
                     default_url: 'https://s3.amazonaws.com/chambita_production/uploads/users/user1.png',
+                    processors: [:thumbnail, :compression],
                     path: 'uploads/users/:file_id/:style/:filename'
 
   def generate_authentication_token!

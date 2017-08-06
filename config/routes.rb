@@ -16,7 +16,7 @@ Rails.application.routes.draw do
         collection do
           get 'send_password_email'
           get 'active_account'
-          get 'valid_Token'
+          get 'valid_token'
           get 'resend_email'
         end
       end

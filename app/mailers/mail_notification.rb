@@ -1,5 +1,5 @@
 class MailNotification < ApplicationMailer
-  default :from => 'Chambita <hello@chambita.mx>'
+  default :from => 'Gigbox <hello@gigbox.mx>'
   layout false
 
   # send a signup email to the user, pass in the user object that contains the user's email address

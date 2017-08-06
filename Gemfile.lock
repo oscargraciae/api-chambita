@@ -178,11 +178,16 @@ GEM
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
     orm_adapter (0.5.0)
+    os (0.9.6)
     paperclip (4.2.0)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
       cocaine (~> 0.5.3)
       mime-types
+    paperclip-compression (0.3.7)
+      os (~> 0.9.6)
+      paperclip (>= 3.3)
+      ruby-imagespec (~> 0.3.1)
     pg (0.21.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -253,6 +258,7 @@ GEM
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
     ruby-graphviz (1.2.3)
+    ruby-imagespec (0.3.1)
     ruby_http_client (3.1.0)
     sendgrid-ruby (5.0.0)
       ruby_http_client (~> 3.0)
@@ -332,6 +338,7 @@ DEPENDENCIES
   memcachier
   minitest
   paperclip (= 4.2)
+  paperclip-compression
   pg
   pry-rails
   puma

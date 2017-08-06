@@ -1,5 +1,5 @@
 class UserDetail < ApplicationMailer
-  default from: '<hello@chambita.mx>'
+  default from: '<hello@gigbox.mx>'
   layout 'user_signup_detail'
 
   def user_signup_detail(user)
