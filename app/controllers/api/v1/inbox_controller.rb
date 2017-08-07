@@ -48,7 +48,7 @@ class Api::V1::InboxController < BaseController
       save_inbox_message
       if Rails.env.production?
         reply
-        sendNotification
+        sendNotification(params[:recipient_id])
       end
     end
 
@@ -99,7 +99,6 @@ class Api::V1::InboxController < BaseController
 
   private
   def sendNotification(id)
-    user_id = 0
     if @inbox
       user_res = User.find(id)
       email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en www.gigbox.mx"
