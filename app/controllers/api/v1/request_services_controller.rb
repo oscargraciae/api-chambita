@@ -254,7 +254,7 @@ class Api::V1::RequestServicesController < BaseController
                                                  'quantity' => 1
                                              },
                                                               {
-                                                                  'name' => 'Comision chambita',
+                                                                  'name' => 'Comision gigbox',
                                                                   'description' => 'Cobro por uso de plataforma',
                                                                   'unit_price' => (@request.fee * 100).to_i,
                                                                   'quantity' => 1
@@ -281,7 +281,7 @@ class Api::V1::RequestServicesController < BaseController
         MailNotification.send_mail_notification(user, email_content, user.email).deliver
 
         if Rails.env.production?
-            MailNotification.send_mail_notification(user, email_content, 'chambitamx@gmail.com').deliver
+            MailNotification.send_mail_notification(user, email_content, 'gigbox@gmail.com').deliver
         end
 
         Notification.create(user_id: user_to.id,
@@ -300,7 +300,7 @@ class Api::V1::RequestServicesController < BaseController
             boot_twilio
             if user.cellphone
                 puts 'Envio de SMS solicitudes'
-                sms_content = "#{user_from.first_name} esta interesado en contrarar tu servicio para el dia #{request.request_date.strftime('%d/%m/%Y')}. Ingresa a www.chambita.mx para aceptar o rechazar."
+                sms_content = "#{user_from.first_name} esta interesado en contrarar tu servicio para el dia #{request.request_date.strftime('%d/%m/%Y')}. Ingresa a gigbox.mx para aceptar o rechazar."
                 # sms_content = "#{user_from.first_name} #{message} #{request.service.name} ingresa a www.chambita.mx para aceptar o rechazar el servicio"
                 from_number = "+52#{user.cellphone}"
                 sms = @client.messages.create(

@@ -46,6 +46,10 @@ class Api::V1::InboxController < BaseController
     else
       @inbox = Inbox.create!(conversation_params)
       save_inbox_message
+      if Rails.env.production?
+        reply
+        sendNotification
+      end
     end
 
     render json: @inbMess, status: 201
@@ -78,7 +82,7 @@ class Api::V1::InboxController < BaseController
 
     if @inbMess.save
       @inbox.update_attribute(:updated_at, DateTime.now)
-      sendNotification(params[:recipient_id])
+      # sendNotification(params[:recipient_id])
     end
 
   end
@@ -96,8 +100,7 @@ class Api::V1::InboxController < BaseController
   private
   def sendNotification(id)
     user_id = 0
-
-    if @inb
+    if @inbox
       user_res = User.find(id)
       email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en www.gigbox.mx"
       MailNotification.send_mail_notification(user_res, email_content, user_res.email).deliver
@@ -108,21 +111,21 @@ class Api::V1::InboxController < BaseController
   private
   def reply
     user_id = 0
-    user_id = if @user.id == @inb.sender_id
-                @inb.recipient_id
-              else
-                @inb.sender_id
-              end
+    # user_id = if @user.id == @inb.sender_id
+    #             @inb.recipient_id
+    #           else
+    #             @inb.sender_id
+    #           end
 
     boot_twilio
-    user_res = User.find(user_id)
+    user_res = User.find(params[:recipient_id])
     if user_res.cellphone
       # from_number = "+528115258753"
       from_number = "+52#{user_res.cellphone}"
       sms = @client.messages.create(
         from: '+18326267620',
         to: from_number,
-        body: "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en chambita.mx"
+        body: "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en gigbox.mx"
       )
     end
 

@@ -1,5 +1,5 @@
 class MailNotification < ApplicationMailer
-  default :from => 'Gigbox <hello@gigbox.mx>'
+  default :from => 'Gigbox <hello@chambita.mx>'
   layout false
 
   # send a signup email to the user, pass in the user object that contains the user's email address
@@ -20,7 +20,7 @@ class MailNotification < ApplicationMailer
       }
     }.to_json
 
-    mail( :to => email,:subject => 'Notificacion' )
+    mail( :to => email,:subject => 'Notificación' )
   end
 
 end
