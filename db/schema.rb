@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170706005412) do
+ActiveRecord::Schema.define(version: 20170806215745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20170706005412) do
     t.integer  "inbox_id"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
-    t.boolean  "readit",      default: false
+    t.boolean  "read",        default: false
   end
 
   add_index "inbox_messages", ["inbox_id"], name: "index_inbox_messages_on_inbox_id", using: :btree

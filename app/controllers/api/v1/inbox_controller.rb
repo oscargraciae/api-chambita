@@ -14,56 +14,71 @@ class Api::V1::InboxController < BaseController
 
   def get_by_id
     inbox = Inbox.find(params[:id])
+    messages = InboxMessage.where(inbox_id: inbox.id)
+    if messages
+      messages.update_all(read: true)
+    end
+
     render json: inbox, status: 200
   end
 
-  def create
-    if !params[:inbox_id]
-      @inb = Inbox.where(sender_id: [@user.id, params[:user_id]], recipient_id: [@user.id, params[:user_id]]).first
-    else
-      @inb = Inbox.find(params[:inbox_id])
-    end
+  # def create
+  #   if !params[:inbox_id]
+  #     @inb = Inbox.where(sender_id: [@user.id, params[:user_id]], recipient_id: [@user.id, params[:user_id]]).first
+  #   else
+  #     @inb = Inbox.find(params[:inbox_id])
+  #   end
 
-    if @inb
-      save_inbMessage
+  #   if @inb
+  #     save_inbMessage
+  #   else
+  #     save_inbox
+  #     save_inbMessage
+  #   end
+
+  #   render json: @inbMess, status: 201
+  # end
+
+  def create
+    if Inbox.between(params[:sender_id], params[:recipient_id]).present?
+      @inbox = Inbox.between(params[:sender_id], params[:recipient_id]).first
+      save_inbox_message
     else
-      save_inbox
-      save_inbMessage
+      @inbox = Inbox.create!(conversation_params)
+      save_inbox_message
     end
 
     render json: @inbMess, status: 201
   end
 
   def preview_inbox
-
-    inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.RECIPIENT_ID = #{@user.id} OR INBOXES.SENDER_ID = #{@user.id}) AND READIT = false").where.not(sender_user: @user.id).size
+    inboxes_preview = InboxMessage.joins(:inbox).where("(INBOXES.RECIPIENT_ID = #{@user.id} OR INBOXES.SENDER_ID = #{@user.id}) AND READ = false").where.not(sender_user: @user.id).size
     render json: inboxes_preview, status: :ok
   end
 
-  def save_inbox
-    inbox = Inbox.new
-    inbox.sender_id = @user.id
-    inbox.recipient_id = params[:user_id]
-    if inbox.save
-      @inb = inbox
+  # def save_inbox
+  #   inbox = Inbox.new
+  #   inbox.sender_id = @user.id
+  #   inbox.recipient_id = params[:user_id]
+  #   if inbox.save
+  #     @inb = inbox
 
-      if Rails.env.production?
-        reply
-      end
-    end
+  #     if Rails.env.production?
+  #       reply
+  #     end
+  #   end
 
-  end
+  # end
 
-  def save_inbMessage
+  def save_inbox_message
     @inbMess = InboxMessage.new
     @inbMess.message = params[:message]
-    @inbMess.sender_user = @user.id
-    @inbMess.inbox_id = @inb.id
+    @inbMess.sender_user = params[:sender_id]
+    @inbMess.inbox_id = @inbox.id
 
     if @inbMess.save
-      @inb.update_attribute(:updated_at, DateTime.now)
-      sendNotification(@user.id)
-
+      @inbox.update_attribute(:updated_at, DateTime.now)
+      sendNotification(params[:recipient_id])
     end
 
   end
@@ -73,7 +88,7 @@ class Api::V1::InboxController < BaseController
     inb = InboxMessage.where(inbox_id: params[:inboxId])
 
     read = inb.where('sender_user != ?', @user.id)
-    read.update_all "readit = 'true'"
+    read.update_all "read = 'true'"
 
     render json: inb.order(id: :asc), status: :ok
   end
@@ -83,14 +98,8 @@ class Api::V1::InboxController < BaseController
     user_id = 0
 
     if @inb
-      user_id = if id == @inb.sender_id
-                  @inb.recipient_id
-                else
-                  @inb.sender_id
-                end
-
-      user_res = User.find(user_id)
-      email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en www.chambita.mx"
+      user_res = User.find(id)
+      email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en www.gigbox.mx"
       MailNotification.send_mail_notification(user_res, email_content, user_res.email).deliver
     end
   end
@@ -125,5 +134,10 @@ class Api::V1::InboxController < BaseController
     auth_token = 'ee5404c1235be5117b91bb2919f87249'
     @client = Twilio::REST::Client.new account_sid, auth_token
   end
+
+  private
+  def conversation_params
+    params.permit(:sender_id, :recipient_id)
+  end  
 
 end
