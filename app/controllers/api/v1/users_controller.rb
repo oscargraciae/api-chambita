@@ -82,7 +82,7 @@ class Api::V1::UsersController < BaseController
       PasswordRestore.send_password_reset(user).deliver
       render json: user, status: 200
     else
-      render json: { status: false, message: 'El correo ingresado no es válido' }, status: 422
+      render json: { status: false, message: 'El correo ingresado no existe' }, status: 200
     end
   end
 
