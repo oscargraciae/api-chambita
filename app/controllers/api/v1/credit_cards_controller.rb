@@ -4,7 +4,7 @@ class Api::V1::CreditCardsController < BaseController
   def create
     if @user.conektaid
       customer = Conekta::Customer.find(@user.conektaid)
-      conektaResp = customer.create_card(token: params[:conektaTokenId])
+      conektaResp = customer.create_payment_source(type: "card", token_id: params[:conektaTokenId])
 
       card = CreditCard.new
       card.last4 = conektaResp.last4
@@ -27,13 +27,16 @@ class Api::V1::CreditCardsController < BaseController
 
       customer = Conekta::Customer.create(name: @user.first_name + ' ' + last_name,
                                           email: @user.email,
-                                          phone: '88888888',
-                                          cards: [params[:conektaTokenId]])
+                                          phone: @user.cellphone,
+                                          payment_sources: [{
+                                            :token_id => params[:conektaTokenId],
+                                            :type => "card"
+                                          }])
 
       card = CreditCard.new
-      card.last4 = customer.cards[0].last4
-      card.brand = customer.cards[0].brand
-      card.token = customer.cards[0].id
+      card.last4 = customer.payment_sources[0].last4
+      card.brand = customer.payment_sources[0].brand
+      card.token = customer.payment_sources[0].id
       card.user_id = @user.id
 
       if card.save
@@ -67,11 +70,11 @@ class Api::V1::CreditCardsController < BaseController
     customer = Conekta::Customer.find(@user.conektaid)
     pos = 0
 
-    customer.cards.each_with_index do |val, index|
+    customer.payment_sources.each_with_index do |val, index|
       pos = index if val[1].id === credit_cards_parms[:id]
     end
 
-    card = customer.cards[pos].delete
+    card = customer.payment_sources[pos].delete
 
     if card.deleted
       credit_card = CreditCard.find_by(token: credit_cards_parms[:id])

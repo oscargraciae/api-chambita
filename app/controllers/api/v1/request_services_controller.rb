@@ -90,7 +90,7 @@ class Api::V1::RequestServicesController < BaseController
         if @message_error
             create_notification(@request, @message_error.message_to_purchaser, @request.supplier, @request.user)
 
-            render json: @message_error, status: 500
+            render json: @message_error, status: 200
         else
 
             if @request.update_attribute(:request_status_id, REQUEST_STATUS_INPROCESS)
@@ -238,28 +238,46 @@ class Api::V1::RequestServicesController < BaseController
     private
 
     def payment_conekta
-        @charge = Conekta::Charge.create('amount' => (@request.total * 100).to_i,
-                                         'currency' => 'MXN',
-                                         'description' => @request.message,
-                                         'reference_id' => @request.id,
-                                         'card' => @request.token_card,
-                                         'details' => {
-                                             'name' => @user.first_name,
-                                             'phone' => '8182002386',
-                                             'email' => @user.email,
-                                             'line_items' => [{
-                                                 'name' => @request.service.name,
-                                                 'description' => @request.service.description,
-                                                 'unit_price' => (@request.subtotal * 100).to_i,
-                                                 'quantity' => 1
-                                             },
-                                                              {
-                                                                  'name' => 'Comision gigbox',
-                                                                  'description' => 'Cobro por uso de plataforma',
-                                                                  'unit_price' => (@request.fee * 100).to_i,
-                                                                  'quantity' => 1
-                                                              }]
-                                         })
+        # @charge = Conekta::Charge.create('amount' => (@request.total * 100).to_i,
+        #                                  'currency' => 'MXN',
+        #                                  'description' => @request.message,
+        #                                  'reference_id' => @request.id,
+        #                                  'card' => @request.token_card,
+        #                                  'details' => {
+        #                                      'name' => @user.first_name,
+        #                                      'phone' => '8182002386',
+        #                                      'email' => @user.email,
+        #                                      'line_items' => [{
+        #                                          'name' => @request.service.name,
+        #                                          'description' => @request.service.description,
+        #                                          'unit_price' => (@request.subtotal * 100).to_i,
+        #                                          'quantity' => 1
+        #                                      },
+        #                                                       {
+        #                                                           'name' => 'Comision gigbox',
+        #                                                           'description' => 'Cobro por uso de plataforma',
+        #                                                           'unit_price' => (@request.fee * 100).to_i,
+        #                                                           'quantity' => 1
+        #                                                       }]
+        #                                  })
+  
+        @charge = Conekta::Order.create({
+            :line_items => [{
+                :name => @request.service.name,
+                :unit_price => (@request.total * 100).to_i,
+                :quantity => 1
+            }], #line_items
+            :currency => "MXN",
+            :customer_info => {
+                :customer_id =>  @request.user.conektaid
+            }, #customer_info
+            :charges => [{
+                :payment_method => {
+                    :payment_source_id => @request.token_card,
+                    :type => "card"
+                } # payment_method
+            }],
+        })                         
         return true
 
     rescue Conekta::ParameterValidationError => e

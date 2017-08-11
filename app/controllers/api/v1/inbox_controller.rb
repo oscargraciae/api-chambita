@@ -1,5 +1,5 @@
 class Api::V1::InboxController < BaseController
-  before_filter :auth, only: [:index, :preview_inbox, :create, :all_messages, :show]
+  before_filter :auth, only: [:index, :preview_inbox, :create, :all_messages, :show, :get_by_user]
 
   def index
     inb = Inbox.all_inbox_by_user(@user.id)
@@ -20,6 +20,28 @@ class Api::V1::InboxController < BaseController
     end
 
     render json: inbox, status: 200
+  end
+
+  def get_by_user
+    from_user = User.find_by(username: params[:id])
+
+    if from_user
+      inbox = Inbox.between(@user.id, from_user.id).first
+      if inbox
+        messages = InboxMessage.where(inbox_id: inbox.id)
+        if messages
+          messages.update_all(read: true)
+        end
+
+        render json: inbox, status: 200
+      else
+        
+        render json: {error: true, message: "No hay mensajes con esté usuario"}, status: 200
+      end
+    else
+      render json: {error: true, message: "Usuario no encontrado"}, status: 200
+    end
+    
   end
 
   # def create

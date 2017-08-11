@@ -74,6 +74,7 @@ Rails.application.routes.draw do
         end
         member do
           get 'get_by_id'
+          get 'get_by_user'
         end
       end
       resources :notification, only: [:index] do
