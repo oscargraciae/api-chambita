@@ -51,7 +51,7 @@ namespace :send_manual_email do
       obj = JSON.parse(response.body, object_class: OpenStruct)
 
       obj.persisted_recipients.each do |x|
-        list_id = "973432"
+        list_id = "1792128"
         recipient_id = x
         response = sg.client.contactdb.lists._(list_id).recipients._(recipient_id).post()
       end
