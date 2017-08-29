@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
   # validates_attachment :avatar, :content_type => { :content_type => ["image/jpeg", "image/gif", "image/png"] }
   # validates_attachment :avatar, presence: true, content_type: { content_type: "image/jpeg" }, size: { in: 0..10.kilobytes }
   has_attached_file :avatar,
-                    styles: { small: ['40x40!', :jpg], meddium: ['230x230!', :jpg], thumb: ['216x144#', :jpg] },
+                    styles: { small: ['40x40!', :jpg], meddium: ['230x230!', :jpg], thumb: ['230x230#', :jpg] },
                     default_style: :meddium,
                     storage: :s3,
                     url: ':s3_domain_url',
