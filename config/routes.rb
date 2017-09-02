@@ -107,7 +107,11 @@ Rails.application.routes.draw do
         end
       end
       resources :request, only: [:index]
-      resources :inbox, only: [:index]
+      resources :inbox, only: [:index] do
+        member do
+          get 'get_by_id'
+        end
+      end
       resources :orders, only: [:index] do
         member do
           put 'pay'
