@@ -11,7 +11,7 @@ class Api::Admin::InboxController < ApplicationController
       messages.update_all(read: true)
     end
 
-    render json: inbox, status: 200
+    render json: {resp: inbox}, status: 200
   end
-  
+
 end
