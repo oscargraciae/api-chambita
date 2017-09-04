@@ -64,13 +64,23 @@ class Api::V1::InboxController < BaseController
   def create
     if Inbox.between(params[:sender_id], params[:recipient_id]).present?
       @inbox = Inbox.between(params[:sender_id], params[:recipient_id]).first
+
+      inbox_message = InboxMessage.where(inbox_id: @inbox.id).last
+      puts "#####################"
+      puts inbox_message.as_json
+
+      if inbox_message.sender_user != params[:sender_id]
+        sendNotification(params[:recipient_id], params[:message])
+      end
+      
       save_inbox_message
+
     else
       @inbox = Inbox.create!(conversation_params)
       save_inbox_message
       if Rails.env.production?
         reply
-        sendNotification(params[:recipient_id])
+        sendNotification(params[:recipient_id], params[:message])
       end
     end
 
@@ -120,11 +130,13 @@ class Api::V1::InboxController < BaseController
   end
 
   private
-  def sendNotification(id)
+  def sendNotification(id, message)
     if @inbox
       user_res = User.find(id)
       email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en www.gigbox.mx"
-      MailNotification.send_mail_notification(user_res, email_content, user_res.email).deliver
+      subject = "#{@user.first_name} te ha enviado un mensaje"
+      url = "http://localhost:3000/conversation/#{@user.username}"
+      MessageNotification.send_mail_notification(user_res, email_content, user_res.email, message, url, @user.first_name, subject).deliver
     end
   end
 
