@@ -135,7 +135,7 @@ class Api::V1::InboxController < BaseController
       user_res = User.find(id)
       email_content = "#{@user.first_name} te ha enviado un mensaje, revisa tu bandeja de entrada en www.gigbox.mx"
       subject = "#{@user.first_name} te ha enviado un mensaje"
-      url = "http://localhost:3000/conversation/#{@user.username}"
+      url = "https://gigbox.mx/conversation/#{@user.username}"
       MessageNotification.send_mail_notification(user_res, email_content, user_res.email, message, url, @user.first_name, subject).deliver
     end
   end
